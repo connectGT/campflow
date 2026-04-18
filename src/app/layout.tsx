@@ -23,25 +23,40 @@ const syne = Syne({
 
 export const metadata: Metadata = {
   title: {
-    default: "CampFlow — Summer Camp Registration",
+    default: "CampFlow — Modern Summer Camp Registration",
     template: "%s | CampFlow",
   },
   description:
-    "Register your child for the best summer sports camps across India. Cricket, swimming, football, basketball, tennis, and badminton — all in one place.",
+    "Register your child for pro-level summer sports camps across India. Cricket, swimming, football, basketball, tennis, and badminton — all-inclusive package at ₹12,000.",
   keywords: [
-    "summer camp",
-    "sports camp",
-    "kids registration",
-    "India",
-    "cricket camp",
-    "swimming camp",
+    "summer camp india",
+    "sports training for kids",
+    "cricket coaching",
+    "swimming lessons",
+    "campflow registration",
+    "razorpay payments",
   ],
+  authors: [{ name: "CampFlow" }],
   openGraph: {
     title: "CampFlow — Summer Camp Registration",
-    description:
-      "Register your child for the best summer sports camps across India.",
-    type: "website",
+    description: "Multi-sport training, NSNIS coaches, and all-inclusive packages.",
+    url: "https://campflow.me",
+    siteName: "CampFlow",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
     locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CampFlow — Summer Camp Simplified",
+    description: "Register for top-tier sports camps in minutes.",
+    images: ["/og-image.png"],
   },
 };
 
