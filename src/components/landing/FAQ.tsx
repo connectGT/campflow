@@ -35,36 +35,59 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="section-alt py-24 px-8">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+    <section className="section-alt py-24 px-8 relative overflow-hidden">
+      <div className="orb w-[350px] h-[350px] bg-[#aacae6] top-[-80px] right-[-80px]" />
+
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 relative z-10">
         {/* Left — Header */}
         <div className="lg:sticky lg:top-8 self-start">
           <div className="section-label mb-3">Got Questions?</div>
           <div className="accent-divider" />
-          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4 mb-6">
-            Everything You <span className="text-primary">Need to Know</span>
+          <h2 className="font-display font-extrabold uppercase text-4xl md:text-5xl text-text-primary tracking-tight mt-4 mb-6 leading-tight">
+            Everything You{" "}
+            <span className="gradient-text">Need to Know</span>
           </h2>
-          <p className="text-text-muted text-base leading-relaxed">
-            Complete answers before you commit. If you have a question we haven't answered, reach us at muktabhinav@gmail.com or call +91-9074063030.
+          <p className="text-text-muted text-base leading-relaxed font-medium">
+            Complete answers before you commit. If you have a question we haven&apos;t answered, reach us at{" "}
+            <a href="mailto:muktabhinav@gmail.com" className="text-primary hover:text-primary-hover transition-colors">
+              muktabhinav@gmail.com
+            </a>{" "}
+            or call{" "}
+            <a href="tel:+919074063030" className="text-primary hover:text-primary-hover transition-colors">
+              +91-9074063030
+            </a>.
           </p>
         </div>
 
         {/* Right — Accordion */}
-        <div className="space-y-0 border border-white/10">
+        <div className="space-y-2">
           {faqs.map((faq, i) => (
-            <div key={i} className={`border-b border-white/10 last:border-0 ${openIndex === i ? "bg-primary/5" : ""}`}>
+            <div
+              key={i}
+              className={`glass-subtle rounded-xl overflow-hidden transition-all duration-300 ${
+                openIndex === i ? "border-primary/20" : ""
+              }`}
+            >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between p-6 text-left cursor-pointer group"
+                className="w-full flex items-center justify-between p-5 text-left cursor-pointer group"
               >
-                <span className="font-black uppercase text-white text-sm tracking-wide group-hover:text-primary transition-colors pr-4">
+                <span className="font-display font-semibold text-text-primary text-sm tracking-wide group-hover:text-primary transition-colors pr-4">
                   {faq.q}
                 </span>
-                <div className="w-8 h-8 border border-white/20 flex items-center justify-center shrink-0 group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+                <div
+                  className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 transition-all duration-300"
+                  style={{
+                    background: openIndex === i
+                      ? "linear-gradient(135deg, #ffb4a9, #ff5745)"
+                      : "rgba(91, 64, 60, 0.25)",
+                    border: openIndex === i ? "none" : "1px solid rgba(91, 64, 60, 0.35)",
+                  }}
+                >
                   {openIndex === i ? (
-                    <Minus className="w-4 h-4 text-primary" />
+                    <Minus className="w-3.5 h-3.5 text-[#111316]" strokeWidth={2.5} />
                   ) : (
-                    <Plus className="w-4 h-4 text-text-muted" />
+                    <Plus className="w-3.5 h-3.5 text-text-muted" strokeWidth={2} />
                   )}
                 </div>
               </button>
@@ -77,7 +100,10 @@ export function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                   >
-                    <p className="px-6 pb-6 text-text-muted text-sm leading-relaxed border-t border-white/5 pt-3">
+                    <p
+                      className="px-5 pb-5 text-text-muted text-sm leading-relaxed border-t pt-3 font-medium"
+                      style={{ borderColor: "rgba(255, 218, 213, 0.08)" }}
+                    >
                       {faq.a}
                     </p>
                   </motion.div>

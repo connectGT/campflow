@@ -59,39 +59,48 @@ export function Testimonials() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 overflow-hidden bg-background">
-      <div className="px-8 mb-16">
+    <section ref={containerRef} className="py-24 overflow-hidden bg-background relative">
+      <div className="orb w-[500px] h-[500px] bg-[#ffb4a9] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]" />
+
+      <div className="px-8 mb-16 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="section-label mb-3">Parent Testimonials</div>
           <div className="accent-divider" />
-          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4">
-            What Families <span className="text-primary">Say</span>
+          <h2 className="font-display font-extrabold uppercase text-4xl md:text-5xl text-text-primary tracking-tight mt-4 leading-tight">
+            What Families{" "}
+            <span className="gradient-text">Say</span>
           </h2>
         </div>
       </div>
 
       <div
         ref={scrollRef}
-        className="flex gap-6 px-8 overflow-x-hidden"
+        className="flex gap-5 px-8 overflow-x-hidden relative z-10"
         style={{ scrollBehavior: "auto" }}
       >
         {testimonials.map((t) => (
           <div
             key={t.name}
-            className="bg-surface border border-white/5 p-8 min-w-[340px] md:min-w-[420px] shrink-0 hover:border-primary/30 transition-colors"
+            className="glass-subtle rounded-2xl p-8 min-w-[340px] md:min-w-[400px] shrink-0 hover:border-primary/20 transition-all duration-300 card-lift"
           >
             {/* Quote mark */}
-            <div className="text-primary text-5xl font-black leading-none mb-4">"</div>
-            <p className="text-white leading-relaxed mb-8 text-base font-medium">
+            <div className="text-5xl font-black leading-none mb-4 gradient-text">&ldquo;</div>
+            <p className="text-text-primary leading-relaxed mb-8 text-base font-medium">
               {t.text}
             </p>
-            <div className="flex items-center gap-4 border-t border-white/10 pt-6">
-              <div className="w-10 h-10 bg-primary flex items-center justify-center text-white font-black text-sm">
+            <div
+              className="flex items-center gap-4 border-t pt-6"
+              style={{ borderColor: "rgba(255, 218, 213, 0.08)" }}
+            >
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-[#111316] font-black text-sm shrink-0"
+                style={{ background: "linear-gradient(135deg, #ffb4a9, #ff5745)" }}
+              >
                 {t.name.charAt(0)}
               </div>
               <div>
-                <p className="font-black uppercase text-white text-sm tracking-wide">{t.name}</p>
-                <p className="text-primary text-xs font-bold uppercase tracking-[0.15em]">{t.city}</p>
+                <p className="font-display font-bold text-text-primary text-sm tracking-wide">{t.name}</p>
+                <p className="text-secondary text-xs font-semibold uppercase tracking-[0.12em] mt-0.5">{t.city}</p>
               </div>
             </div>
           </div>

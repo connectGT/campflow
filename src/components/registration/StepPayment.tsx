@@ -1,167 +1,226 @@
 "use client";
 
 import { useCartStore } from "@/store/cart.store";
-import { useState } from "react";
-import { ChevronLeft, CreditCard, ShieldCheck, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
+import { ChevronLeft, QrCode, Upload, ShieldCheck, Loader2, RefreshCcw, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-declare global {
-  interface Window {
-    Razorpay: any;
-  }
-}
+import QRCode from "react-qr-code";
 
 export function StepPayment() {
   const { childName, childAge, selectedSports, parentPhone, prevStep, reset } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [step, setStep] = useState<"pay" | "upload" | "verifying">("pay");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const loadScript = (src: string) => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
+  const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "campflow@okaxis"; // Default placeholder
+  const PAYEE_NAME = "CampFlow Summer Camp";
+  const AMOUNT = 12000;
+  
+  // UPI deep link
+  const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${AMOUNT}&cu=INR&tn=Registration for ${childName}`;
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
-    setError("");
-
-    try {
-      const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-
-      if (!res) {
-        setError("Razorpay SDK failed to load. Are you online?");
-        setIsProcessing(false);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size should be less than 5MB");
         return;
       }
+      setScreenshot(file);
+      setPreview(URL.createObjectURL(file));
+      setError("");
+    }
+  };
 
-      // 1. Create Order
-      const orderRes = await fetch("/api/register/order", {
+  const startRegistration = async () => {
+    setIsProcessing(true);
+    setError("");
+    try {
+      const res = await fetch("/api/register/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          childName,
-          childAge,
-          selectedSports,
-        }),
+        body: JSON.stringify({ childName, childAge, selectedSports }),
       });
-
-      const orderData = await orderRes.json();
-
-      if (!orderRes.ok) throw new Error(orderData.error || "Failed to create order");
-
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: "CampFlow Summer Camp",
-        description: `Registration for ${childName}`,
-        order_id: orderData.order_id,
-        handler: async function (response: any) {
-          // 2. Verify Payment
-          setIsProcessing(true);
-          const verifyRes = await fetch("/api/register/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            }),
-          });
-
-          const verifyData = await verifyRes.json();
-
-          if (verifyRes.ok) {
-            reset(); // Clear store
-            router.push("/register/success");
-          } else {
-            setError(verifyData.error || "Payment verification failed");
-          }
-          setIsProcessing(false);
-        },
-        prefill: {
-          name: childName,
-          contact: parentPhone,
-        },
-        theme: {
-          color: "#6C63FF",
-        },
-        modal: {
-          ondismiss: function () {
-            setIsProcessing(false);
-          },
-        },
-      };
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
-
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setRegistrationId(data.registrationId);
+      setStep("upload");
     } catch (err: any) {
-      console.error(err);
-      setError(err.message || "An error occurred during payment");
+      setError(err.message);
+    } finally {
       setIsProcessing(false);
     }
   };
 
+  const handleVerify = async () => {
+    if (!screenshot || !registrationId) {
+      setError("Please upload a screenshot first");
+      return;
+    }
+
+    setIsProcessing(true);
+    setStep("verifying");
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("registration_id", registrationId);
+      formData.append("screenshot", screenshot);
+
+      const res = await fetch("/api/register/verify", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        reset();
+        router.push("/register/success");
+      } else {
+        // Handle specific AI errors
+        if (data.status === "duplicate_utr") {
+          setError("Fraud Detected: This Transaction ID has already been used.");
+        } else if (data.status === "failed_ocr") {
+          setError("AI could not read the screenshot. Ensure UTR is visible and try again.");
+        } else {
+          setError(data.error || "Verification failed");
+        }
+        setStep("upload");
+      }
+    } catch (err: any) {
+      setError("Network error. Please try again.");
+      setStep("upload");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  if (step === "verifying") {
+    return (
+      <div className="glass rounded-2xl p-10 shadow-lg text-center animate-pulse">
+        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6 relative">
+          <Loader2 className="w-10 h-10 text-primary animate-spin" />
+        </div>
+        <h2 className="font-display text-2xl font-bold mb-4">AI Auditor <span className="gradient-text">Working...</span></h2>
+        <p className="text-text-muted mb-2">Analyzing your payment screenshot for authenticity.</p>
+        <p className="text-xs text-primary/70 font-mono">EXTRACTING UTR + VERIFYING LEDGERS</p>
+      </div>
+    );
+  }
+
   return (
     <div className="glass rounded-2xl p-6 md:p-10 shadow-lg text-center">
-      <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
-        <CreditCard className="w-8 h-8 text-primary" />
-      </div>
+      {step === "pay" ? (
+        <>
+          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
+            <QrCode className="w-8 h-8 text-primary" />
+          </div>
 
-      <h2 className="font-display text-2xl font-bold mb-2">Finalize Payment</h2>
-      <p className="text-text-muted mb-8 text-sm max-w-sm mx-auto">
-        Secure your spot instantly. We use Razorpay for 256-bit encrypted, safe transactions.
-      </p>
+          <h2 className="font-display text-2xl font-bold mb-2">Scan & Pay</h2>
+          <p className="text-text-muted mb-8 text-sm max-w-sm mx-auto">
+            Scan the QR code below using any UPI app (GPay, PhonePe, Paytm).
+          </p>
 
-      {error && (
-        <div className="bg-destructive/20 text-destructive border border-destructive/50 rounded-lg p-3 mb-6 text-sm">
-          {error}
-        </div>
+          <div className="bg-white p-4 rounded-3xl w-fit mx-auto shadow-2xl mb-8 border-4 border-primary/20">
+            <QRCode value={upiLink} size={200} />
+          </div>
+
+          <div className="bg-surface/50 border border-glass-border rounded-2xl p-6 mb-10">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-text-muted text-sm">Payable to:</span>
+              <span className="font-bold text-sm">{PAYEE_NAME}</span>
+            </div>
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-text-muted text-sm">VPA:</span>
+              <span className="font-mono text-xs">{UPI_ID}</span>
+            </div>
+            <div className="border-t border-glass-border pt-4 flex justify-between items-center font-bold text-lg">
+              <span>Amount</span>
+              <span className="text-primary">₹12,000.00</span>
+            </div>
+          </div>
+
+          <button
+            onClick={startRegistration}
+            disabled={isProcessing}
+            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
+          >
+            {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : "I've Paid, Continue ➔"}
+          </button>
+        </>
+      ) : (
+        <>
+          <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
+            <Upload className="w-8 h-8 text-primary" />
+          </div>
+
+          <h2 className="font-display text-2xl font-bold mb-2">Upload Proof</h2>
+          <p className="text-text-muted mb-6 text-sm max-w-sm mx-auto">
+            Take a screenshot of your payment success screen and upload it here.
+          </p>
+
+          {error && (
+            <div className="bg-destructive/10 text-destructive border border-destructive/20 rounded-xl p-4 mb-6 text-sm flex items-center gap-3 text-left">
+              <AlertTriangle className="w-5 h-5 shrink-0" />
+              <p>{error}</p>
+            </div>
+          )}
+
+          <div 
+            onClick={() => fileInputRef.current?.click()}
+            className={`border-2 border-dashed rounded-2xl p-8 mb-8 cursor-pointer transition-all ${
+              screenshot ? "border-green-500 bg-green-500/5" : "border-glass-border hover:border-primary/50 bg-white/5"
+            }`}
+          >
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileChange} 
+              accept="image/*" 
+              className="hidden" 
+            />
+            {preview ? (
+              <div className="relative group">
+                <img src={preview} alt="Success proof" className="max-h-64 mx-auto rounded-lg shadow-md" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-lg">
+                  <RefreshCcw className="text-white w-8 h-8" />
+                </div>
+              </div>
+            ) : (
+              <div className="py-6">
+                <Upload className="w-10 h-10 text-text-muted mx-auto mb-4" />
+                <p className="text-sm font-medium">Click to upload screenshot</p>
+                <p className="text-xs text-text-muted mt-1">PNG, JPG up to 5MB</p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <button
+              onClick={handleVerify}
+              disabled={!screenshot || isProcessing}
+              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg disabled:opacity-50"
+            >
+              Verify with AI Auditor <ShieldCheck className="w-6 h-6" />
+            </button>
+            <button
+              onClick={() => setStep("pay")}
+              className="text-text-muted hover:text-text-primary transition-colors text-sm font-medium"
+            >
+              Back to QR Code
+            </button>
+          </div>
+        </>
       )}
 
-      <div className="bg-surface/50 border border-glass-border rounded-2xl p-6 mb-10">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-text-muted">Summer Camp Admission</span>
-          <span className="font-bold">₹12,000.00</span>
-        </div>
-        <div className="border-t border-glass-border pt-4 flex justify-between items-center font-bold text-lg">
-          <span>Amount to Pay</span>
-          <span className="text-primary">₹12,000.00</span>
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <button
-          onClick={handlePayment}
-          disabled={isProcessing}
-          className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isProcessing ? (
-            <Loader2 className="w-6 h-6 animate-spin" />
-          ) : (
-            <>Pay Now & Register <ShieldCheck className="w-6 h-6" /></>
-          )}
-        </button>
-
-        <button
-          onClick={prevStep}
-          disabled={isProcessing}
-          className="text-text-muted hover:text-text-primary transition-colors text-sm font-medium"
-        >
-          Go back to review
-        </button>
-      </div>
-
-      <div className="mt-8 pt-8 border-t border-glass-border flex justify-center gap-6 opacity-50 grayscale hover:grayscale-0 transition-all">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="h-6" />
-        {/* Add UPI, Visa, Mastercard icons if needed */}
+      <div className="mt-8 pt-8 border-t border-glass-border flex justify-center items-center gap-2 text-[10px] text-text-muted uppercase tracking-widest">
+        <ShieldCheck className="w-3 h-3" /> AI-Augmented Security Powered by Gemini 1.5
       </div>
     </div>
   );

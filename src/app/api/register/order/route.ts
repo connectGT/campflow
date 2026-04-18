@@ -45,35 +45,31 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to save child details" }, { status: 500 });
     }
 
-    // 2. Create Razorpay Order
-    const amount = 12000 * 100; // in paise
-    const options = {
-      amount,
-      currency: "INR",
-      receipt: `receipt_${Date.now()}`,
-    };
-
-    const order = await razorpay.orders.create(options);
+    // 2. Skip Razorpay Order (Manual QR Flow)
+    const amount = 12000;
 
     // 3. Create Registration record (Pending)
-    const { error: regError } = await supabase.from("registrations").insert({
-      parent_id: user.id,
-      child_id: child.id,
-      sports: selectedSports,
-      amount: 12000,
-      payment_status: "pending",
-      razorpay_order_id: order.id,
-    });
+    const { data: reg, error: regError } = await supabase
+      .from("registrations")
+      .insert({
+        parent_id: user.id,
+        child_id: child.id,
+        sports: selectedSports,
+        amount,
+        payment_status: "pending",
+      })
+      .select()
+      .single();
 
-    if (regError) {
+    if (regError || !reg) {
       console.error("Registration Save Error:", regError);
       return NextResponse.json({ error: "Failed to create registration" }, { status: 500 });
     }
 
     return NextResponse.json({
-      order_id: order.id,
-      amount: order.amount,
-      currency: order.currency,
+      registrationId: reg.id,
+      amount: reg.amount,
+      currency: "INR",
     });
   } catch (error: any) {
     console.error("Order Creation Logic Error:", error);

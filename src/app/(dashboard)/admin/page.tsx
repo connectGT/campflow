@@ -17,15 +17,15 @@ export default async function AdminDashboardPage() {
     redirect("/dashboard");
   }
 
-  // Fetch Paid Registrations with Joined Data
+  // Fetch Paid and Pending Approval Registrations
   const { data: registrations, error } = await supabase
     .from("registrations")
     .select(`
       *,
       child:children(name, age),
-      parent:profiles(full_name, email)
+      parent:profiles(full_name, email, phone)
     `)
-    .eq("payment_status", "paid")
+    .in("payment_status", ["paid", "pending_approval"])
     .order("created_at", { ascending: false });
 
   return (
@@ -79,9 +79,9 @@ export default async function AdminDashboardPage() {
               <tr className="bg-surface/50 text-xs uppercase tracking-wider text-text-muted">
                 <th className="px-6 py-4 font-semibold">Child Details</th>
                 <th className="px-6 py-4 font-semibold">Parent Info</th>
-                <th className="px-6 py-4 font-semibold">Selected Sports</th>
-                <th className="px-6 py-4 font-semibold">Date Paid</th>
-                <th className="px-6 py-4 font-semibold text-right">Order ID</th>
+                <th className="px-6 py-4 font-semibold">Sports</th>
+                <th className="px-6 py-4 font-semibold text-center">Payment Details</th>
+                <th className="px-6 py-4 font-semibold text-right">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-glass-border">
@@ -92,25 +92,40 @@ export default async function AdminDashboardPage() {
                     <p className="text-xs text-text-muted">{reg.child?.age} yrs</p>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-sm">{reg.parent?.full_name}</p>
-                    <p className="text-xs text-text-muted">{reg.parent?.email}</p>
+                    <p className="text-sm font-medium">{reg.parent?.full_name}</p>
+                    <p className="text-xs text-text-muted">{reg.parent?.phone}</p>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 text-xs">
                     <div className="flex flex-wrap gap-1">
                       {reg.sports?.map((sport: string) => (
-                        <span key={sport} className="px-2 py-0.5 rounded text-[10px] bg-primary/10 text-primary border border-primary/20 capitalize">
+                        <span key={sport} className="px-1.5 py-0.5 rounded-md bg-stone-800 border border-stone-700 capitalize">
                           {sport}
                         </span>
                       ))}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm">
-                    {format(new Date(reg.created_at), "MMM d, yyyy")}
+                  <td className="px-6 py-4 text-center">
+                    <div className="text-[10px] font-mono mb-1">{reg.utr_number || "NO-UTR"}</div>
+                    {reg.proof_image_url && (
+                      <a 
+                        href={reg.proof_image_url} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="text-[10px] text-primary hover:underline font-bold"
+                      >
+                        VIEW PROOF ➔
+                      </a>
+                    )}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <code className="text-[10px] bg-background px-2 py-1 rounded border border-glass-border">
-                      {reg.razorpay_order_id?.slice(0, 10)}...
-                    </code>
+                    <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded-full border ${
+                      reg.payment_status === "paid" 
+                        ? "bg-green-500/10 text-green-500 border-green-500/20" 
+                        : "bg-amber-500/10 text-amber-500 border-amber-500/20"
+                    }`}>
+                      {reg.payment_status === "paid" ? "Paid" : "Review"}
+                    </span>
+                    <p className="text-[10px] text-text-muted mt-1">{format(new Date(reg.created_at), "MMM d, HH:mm")}</p>
                   </td>
                 </tr>
               ))}

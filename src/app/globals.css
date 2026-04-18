@@ -1,175 +1,219 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens: Aqua Pro Athletic ─── */
+/* ─── Design Tokens: Aqua Pro Inspired ─── */
 @theme inline {
-  --color-background: #153243;       /* Deep Navy Blue */
-  --color-surface: #0B1B25;          /* Dark Navy (alternate sections) */
-  --color-primary: #D8473D;          /* Bold Red-Orange */
-  --color-primary-hover: #C03830;    /* Darker Red on hover */
-  --color-secondary: #FFFFFF;        /* Clean White */
-  --color-accent: #F5A623;           /* Energy Yellow-Orange accent */
-  --color-destructive: #FF4D6D;
-  --color-text-primary: #FFFFFF;
-  --color-text-muted: #B0C4CE;       /* Muted blue-grey */
-  --color-text-dark: #153243;        /* Navy text for light sections */
-  --color-glass-bg: rgba(21, 50, 67, 0.8);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
+  /* Backgrounds */
+  --color-background:      #111316;
+  --color-surface:         #1a1c1f;
+  --color-surface-high:    #1e2023;
+  --color-surface-highest: #282a2d;
+  --color-surface-variant: #333538;
 
-  --font-sans: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Courier New", monospace;
+  /* Primary — warm coral/orange */
+  --color-primary:           #ffb4a9;
+  --color-primary-dim:       #ffb4a9;
+  --color-primary-container: #ff5745;
+  --color-primary-hover:     #ff8a7d;
+
+  /* Secondary — oceanic blue */
+  --color-secondary:           #aacae6;
+  --color-secondary-container: #2a4a61;
+
+  /* Tertiary — teal accent */
+  --color-tertiary: #5ed9d6;
+
+  /* Text */
+  --color-text-primary: #e2e2e6;
+  --color-text-muted:   #aacae6;
+  --color-text-subtle:  #7a9bb5;
+
+  /* Borders */
+  --color-outline:         rgba(91, 64, 60, 0.4);
+  --color-outline-variant: rgba(91, 64, 60, 0.2);
+  --color-glass-border:    rgba(255, 218, 213, 0.08);
+
+  /* Error */
+  --color-destructive: #ffb4ab;
+
+  /* Fonts */
+  --font-sans:    var(--font-manrope),  "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    "Courier New", monospace;
 }
 
 /* ─── Base Styles ─── */
-html {
-  scroll-behavior: smooth;
-  color-scheme: dark;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background-color: rgba(255, 87, 69, 0.35);
+    color: #ffffff;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: #111316; }
+  ::-webkit-scrollbar-thumb {
+    background: #5b403c;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: #ffb4a9; }
 }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ─── Custom Utilities (Tailwind v4 @utility) ─── */
+
+@utility font-display {
+  font-family: var(--font-display);
 }
 
-/* ─── Selection ─── */
-::selection {
-  background-color: rgba(216, 71, 61, 0.4);
-  color: #FFFFFF;
+@utility glass {
+  background: rgba(51, 53, 56, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 218, 213, 0.1);
+  border-left: 1px solid rgba(255, 218, 213, 0.1);
+  border-right: 1px solid rgba(255, 218, 213, 0.05);
+  border-bottom: 1px solid rgba(255, 218, 213, 0.05);
+  box-shadow: 0 40px 60px rgba(12, 14, 17, 0.35);
 }
 
-/* ─── Scrollbar ─── */
-::-webkit-scrollbar {
-  width: 6px;
+@utility glass-subtle {
+  background: rgba(30, 32, 35, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 218, 213, 0.07);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-::-webkit-scrollbar-track {
-  background: #0B1B25;
+@utility glass-strong {
+  background: rgba(51, 53, 56, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 218, 213, 0.1);
+  border-left: 1px solid rgba(255, 218, 213, 0.1);
+  border-right: 1px solid rgba(255, 218, 213, 0.05);
+  border-bottom: 1px solid rgba(255, 218, 213, 0.05);
+  box-shadow: 0 40px 60px rgba(12, 14, 17, 0.35);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #D8473D;
-  border-radius: 3px;
+@utility gradient-text {
+  background: linear-gradient(135deg, #ffb4a9, #ff5745);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #F5A623;
-}
-
-/* ─── Athletic Card (solid, no blur) ─── */
-.glass {
-  background: rgba(11, 27, 37, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-}
-
-.glass-strong {
-  background: #0B1B25;
-  border: 1px solid rgba(216, 71, 61, 0.3);
-  border-radius: 4px;
-}
-
-/* ─── Primary Button ─── */
-.btn-primary {
+@utility btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background-color: #D8473D;
-  color: #FFFFFF;
-  font-family: var(--font-sans);
+  background: linear-gradient(135deg, #ffb4a9, #ff5745);
+  color: #111316;
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8125rem;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.875rem 2rem;
-  border-radius: 4px;
+  border-radius: 9999px;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 87, 69, 0.2);
+  &:hover {
+    box-shadow: 0 10px 30px rgba(255, 87, 69, 0.35);
+    transform: translateY(-2px);
+  }
 }
 
-.btn-primary:hover {
-  background-color: #C03830;
-  transform: translateY(-1px);
-}
-
-/* ─── Ghost Button ─── */
-.btn-ghost {
+@utility btn-ghost {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  background-color: transparent;
-  color: #FFFFFF;
-  font-family: var(--font-sans);
+  background: rgba(51, 53, 56, 0.4);
+  backdrop-filter: blur(10px);
+  color: #ffb4a9;
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8125rem;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.875rem 2rem;
-  border-radius: 4px;
-  border: 2px solid #FFFFFF;
+  border-radius: 9999px;
+  border: 1px solid rgba(91, 64, 60, 0.35);
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.3s ease;
+  &:hover {
+    background: rgba(51, 53, 56, 0.7);
+    border-color: rgba(255, 180, 169, 0.4);
+    transform: translateY(-1px);
+  }
 }
 
-.btn-ghost:hover {
-  background-color: #FFFFFF;
-  color: #153243;
-}
-
-/* ─── Section Labels ─── */
-.section-label {
+@utility section-label {
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #D8473D;
+  color: #ffb4a9;
+  font-family: var(--font-display);
 }
 
-/* ─── Gradient Text ─── */
-.gradient-text {
-  color: #D8473D;
+@utility accent-divider {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #ff5745, #ffb4a9);
+  margin: 0.6rem 0;
+  border-radius: 2px;
 }
 
-/* ─── Accent Divider ─── */
-.accent-divider {
-  width: 48px;
-  height: 3px;
-  background-color: #D8473D;
-  margin: 0.75rem 0;
+@utility card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  }
 }
 
-/* ─── Card hover lift ─── */
-.card-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* ─── Orb (kept for compatibility, but mostly removed) ─── */
-.orb {
+@utility orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.15;
+  filter: blur(90px);
+  opacity: 0.12;
   pointer-events: none;
 }
 
-/* ─── Glow Effects (kept for compatibility) ─── */
-.glow-primary {
-  box-shadow: 0 0 30px rgba(216, 71, 61, 0.2);
+@utility glow-primary {
+  box-shadow: 0 0 40px rgba(255, 87, 69, 0.2);
 }
 
-.glow-secondary {
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+@utility glow-secondary {
+  box-shadow: 0 0 30px rgba(170, 202, 230, 0.12);
 }
 
-/* ─── Section Alternating ─── */
-.section-alt {
-  background-color: #0B1B25;
+@utility section-alt {
+  background-color: var(--color-surface);
+}
+
+@utility nav-blur {
+  background: rgba(17, 19, 22, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 218, 213, 0.06);
 }

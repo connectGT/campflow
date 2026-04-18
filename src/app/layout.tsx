@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Plus_Jakarta_Sans, Manrope } from "next/font/google";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
-const montserrat = Montserrat({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-montserrat",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-jakarta",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -23,7 +30,6 @@ export const metadata: Metadata = {
     "cricket coaching",
     "swimming lessons",
     "campflow registration",
-    "razorpay payments",
   ],
   authors: [{ name: "CampFlow" }],
   openGraph: {
@@ -57,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montserrat.variable} dark`}
+      className={`${jakarta.variable} ${manrope.variable} dark`}
     >
       <body className="min-h-screen bg-background text-text-primary font-sans antialiased">
         <QueryProvider>{children}</QueryProvider>
