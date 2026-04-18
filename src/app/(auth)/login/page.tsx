@@ -1,13 +1,23 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const supabase = createClient();
+
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/api/auth/callback?next=${callbackUrl}`,
+      },
+    });
+  };
 
   return (
     <main className="min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
@@ -34,10 +44,10 @@ function LoginForm() {
         <motion.button
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => signIn("google", { callbackUrl })}
+          onClick={handleLogin}
           className="w-full flex items-center justify-center gap-3 bg-white text-gray-800 rounded-xl px-6 py-4 font-semibold text-base transition-all hover:shadow-lg hover:shadow-white/10 cursor-pointer"
         >
-          <svg className="w-5 h-5" viewBox="0 0 24 24">
+           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
               fill="#4285F4"

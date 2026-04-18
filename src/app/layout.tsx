@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Syne } from "next/font/google";
-import { SessionProvider } from "@/components/providers/SessionProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
@@ -57,9 +56,7 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} ${syne.variable} dark`}
     >
       <body className="min-h-screen bg-background text-text-primary font-sans antialiased">
-        <SessionProvider>
-          <QueryProvider>{children}</QueryProvider>
-        </SessionProvider>
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
