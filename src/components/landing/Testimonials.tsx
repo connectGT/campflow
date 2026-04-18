@@ -59,36 +59,36 @@ export function Testimonials() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 overflow-hidden relative">
+    <section ref={containerRef} className="py-24 overflow-hidden">
       <div className="px-6 mb-16">
-        <h2 className="font-display text-4xl md:text-6xl font-bold text-center mb-6 tracking-wide">
-          What Parents <span className="gradient-text italic font-mono">Say</span>
+        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
+          What Parents <span className="gradient-text">Say</span>
         </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto text-lg">
-          Transformations from families across India.
+        <p className="text-text-muted text-center max-w-xl mx-auto">
+          Real stories from real families across India.
         </p>
       </div>
 
       <div
         ref={scrollRef}
-        className="flex gap-8 px-6 overflow-x-hidden"
+        className="flex gap-6 px-6 overflow-x-hidden"
         style={{ scrollBehavior: "auto" }}
       >
-        {testimonials.map((t, i) => (
+        {testimonials.map((t) => (
           <div
             key={t.name}
-            className={`glass rounded-none border-secondary/20 p-8 min-w-[340px] md:min-w-[420px] shrink-0 transform ${i % 2 === 1 ? 'translate-y-4' : 'translate-y-0'}`}
+            className="glass rounded-2xl p-8 min-w-[340px] md:min-w-[400px] shrink-0"
           >
-            <p className="text-text-primary leading-relaxed mb-8 text-base md:text-lg font-sans italic">
+            <p className="text-text-primary leading-relaxed mb-6 text-sm md:text-base">
               &ldquo;{t.text}&rdquo;
             </p>
-            <div className="flex items-center gap-4 pt-6 border-t border-secondary/20">
-              <div className="w-12 h-12 rounded-none bg-primary border border-secondary/50 flex items-center justify-center text-secondary font-display font-bold">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold">
                 {t.name.charAt(0)}
               </div>
               <div>
-                <p className="font-display font-semibold text-lg tracking-wide">{t.name}</p>
-                <p className="text-secondary font-mono text-xs uppercase tracking-widest">{t.city}</p>
+                <p className="font-semibold text-sm">{t.name}</p>
+                <p className="text-text-muted text-xs">{t.city}</p>
               </div>
             </div>
           </div>

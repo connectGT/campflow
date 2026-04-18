@@ -35,34 +35,33 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-24 px-6 bg-surface-container-low/10">
+    <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto">
-        <h2 className="font-display text-4xl md:text-6xl font-bold text-center mb-6 tracking-wide">
-          Intelligence & <span className="gradient-text italic font-mono">Answers</span>
+        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
+          Common <span className="gradient-text">Questions</span>
         </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16 text-lg">
-          Complete logistical clarity before you secure your spot.
+        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
+          Everything you need to know before registering.
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className={`glass rounded-none border-secondary/20 overflow-hidden transition-colors ${openIndex === i ? 'bg-surface-bright/5 border-secondary/40' : 'hover:border-secondary/30'}`}
+              className="glass rounded-xl overflow-hidden"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between p-6 text-left cursor-pointer group"
+                className="w-full flex items-center justify-between p-5 text-left cursor-pointer"
               >
-                <span className="font-display font-semibold text-lg md:text-xl tracking-wide group-hover:text-text-primary transition-colors pr-4">
+                <span className="font-semibold text-sm md:text-base pr-4">
                   {faq.q}
                 </span>
                 <motion.div
                   animate={{ rotate: openIndex === i ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
-                  className={`${openIndex === i ? 'text-secondary' : 'text-text-muted group-hover:text-secondary'}`}
                 >
-                  <ChevronDown className="w-6 h-6 shrink-0" />
+                  <ChevronDown className="w-5 h-5 text-text-muted shrink-0" />
                 </motion.div>
               </button>
 
@@ -74,11 +73,9 @@ export function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                   >
-                    <div className="px-6 pb-6 pt-2 border-t border-secondary/10 mx-6">
-                      <p className="text-text-muted text-base leading-relaxed font-sans">
-                        {faq.a}
-                      </p>
-                    </div>
+                    <p className="px-5 pb-5 text-text-muted text-sm leading-relaxed">
+                      {faq.a}
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>
