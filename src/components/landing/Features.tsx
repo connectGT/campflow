@@ -56,10 +56,11 @@ export function Features() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".feature-card",
-        { opacity: 0, y: 60 },
+        { opacity: 0, y: 60, rotateX: -20 },
         {
           opacity: 1,
           y: 0,
+          rotateX: 0,
           duration: 0.6,
           stagger: 0.1,
           ease: "power3.out",
