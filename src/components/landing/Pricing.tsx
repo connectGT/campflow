@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 const included = [
@@ -24,33 +24,15 @@ export function Pricing() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".pricing-card",
-        { opacity: 0, y: 60, scale: 0.95 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.8,
-          ease: "power3.out",
+          duration: 0.6,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-
-      gsap.fromTo(
-        ".check-item",
-        { opacity: 0, x: -20 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.4,
-          stagger: 0.06,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ".pricing-card",
-            start: "top 70%",
             toggleActions: "play none none none",
           },
         }
@@ -61,50 +43,69 @@ export function Pricing() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-6">
-      <div className="max-w-lg mx-auto text-center">
-        <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-          Simple <span className="gradient-text">Pricing</span>
-        </h2>
-        <p className="text-text-muted mb-16">
-          One price. Everything included. No hidden fees.
-        </p>
-
-        <div className="pricing-card glass-strong rounded-2xl p-8 md:p-10 glow-primary relative overflow-hidden">
-          {/* Popular badge */}
-          <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
-            Most Popular
-          </div>
-
-          <p className="text-text-muted text-sm uppercase tracking-wider mb-2">
-            Summer Camp Package
+    <section ref={containerRef} className="section-alt py-24 px-8">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+        {/* Left — Heading */}
+        <div>
+          <div className="section-label mb-3">Simple, Transparent</div>
+          <div className="accent-divider" />
+          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4 mb-6">
+            One Price. <span className="text-primary">Everything</span> Included.
+          </h2>
+          <p className="text-text-muted text-base leading-relaxed mb-8">
+            No hidden fees. No upsells. One flat rate for a summer that will change your child forever.
           </p>
-          <div className="flex items-baseline justify-center gap-1 mb-6">
-            <span className="text-text-muted text-2xl">₹</span>
-            <span className="font-display text-6xl md:text-7xl font-bold">
-              12,000
-            </span>
-          </div>
-          <p className="text-text-muted text-sm mb-8">per child · one-time</p>
-
-          <div className="text-left space-y-3 mb-8">
+          <ul className="space-y-3">
             {included.map((item) => (
-              <div key={item} className="check-item flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                  <Check className="w-3 h-3 text-secondary" />
+              <li key={item} className="flex items-center gap-3">
+                <div className="w-5 h-5 bg-primary flex items-center justify-center shrink-0">
+                  <Check className="w-3 h-3 text-white" />
                 </div>
-                <span className="text-sm text-text-primary">{item}</span>
-              </div>
+                <span className="text-white text-sm font-medium">{item}</span>
+              </li>
             ))}
+          </ul>
+        </div>
+
+        {/* Right — Price Card */}
+        <div className="pricing-card bg-background border border-white/10 p-10 relative overflow-hidden">
+          {/* Red corner accent */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10" />
+          <div className="absolute top-0 right-0 w-0 h-0 border-t-[80px] border-t-primary border-l-[80px] border-l-transparent opacity-30" />
+
+          <p className="section-label mb-3">Transformation Package</p>
+          <div className="flex items-start gap-2 mb-2">
+            <span className="text-3xl text-text-muted font-bold mt-3">₹</span>
+            <span className="font-black text-8xl text-white leading-none">12</span>
+            <span className="font-black text-4xl text-text-muted self-end mb-4">,000</span>
+          </div>
+          <p className="text-text-muted text-sm mb-8 uppercase font-bold tracking-wider">
+            Per athlete · One-time fee
+          </p>
+
+          <div className="border-t border-white/10 pt-8 space-y-3 mb-8">
+            <div className="flex justify-between text-sm">
+              <span className="text-text-muted">Duration</span>
+              <span className="text-white font-bold">35 Days (06 May – 09 Jun)</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-text-muted">Sports Included</span>
+              <span className="text-white font-bold">Any 3 of 6</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-text-muted">Batch Size</span>
+              <span className="text-white font-bold">Max 15 children</span>
+            </div>
           </div>
 
           <Link href="/register" className="block">
             <motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-primary hover:bg-primary-hover text-white rounded-xl px-6 py-4 font-semibold text-lg transition-colors text-center cursor-pointer"
+              className="btn-primary w-full justify-center text-center"
             >
-              Register Now
+              Apply Now
+              <ArrowRight className="w-4 h-4" />
             </motion.div>
           </Link>
         </div>

@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
 
 const sports = [
-  { name: "Cricket", emoji: "🏏", color: "#6C63FF", trainer: "Rajesh Sharma", time: "6:00 – 8:00 AM" },
-  { name: "Swimming", emoji: "🏊", color: "#00D4AA", trainer: "Priya Menon", time: "7:00 – 9:00 AM" },
-  { name: "Football", emoji: "⚽", color: "#FF4D6D", trainer: "Arjun Nair", time: "5:00 – 7:00 PM" },
-  { name: "Basketball", emoji: "🏀", color: "#FF8C42", trainer: "Deepika Rao", time: "4:00 – 6:00 PM" },
-  { name: "Tennis", emoji: "🎾", color: "#FFD93D", trainer: "Vikram Singh", time: "6:30 – 8:30 AM" },
-  { name: "Badminton", emoji: "🏸", color: "#6C63FF", trainer: "Sneha Patil", time: "5:30 – 7:30 PM" },
+  { name: "Cricket", emoji: "🏏", color: "#D8473D", trainer: "Rajesh Sharma", time: "6:00 – 8:00 AM" },
+  { name: "Swimming", emoji: "🏊", color: "#D8473D", trainer: "Priya Menon", time: "7:00 – 9:00 AM" },
+  { name: "Football", emoji: "⚽", color: "#D8473D", trainer: "Arjun Nair", time: "5:00 – 7:00 PM" },
+  { name: "Basketball", emoji: "🏀", color: "#D8473D", trainer: "Deepika Rao", time: "4:00 – 6:00 PM" },
+  { name: "Tennis", emoji: "🎾", color: "#D8473D", trainer: "Vikram Singh", time: "6:30 – 8:30 AM" },
+  { name: "Badminton", emoji: "🏸", color: "#D8473D", trainer: "Sneha Patil", time: "5:30 – 7:30 PM" },
 ];
 
 export function SportsGrid() {
@@ -20,14 +20,13 @@ export function SportsGrid() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".sport-card",
-        { opacity: 0, scale: 0.8, y: 40 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
-          scale: 1,
           y: 0,
           duration: 0.5,
           stagger: 0.08,
-          ease: "back.out(1.4)",
+          ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 80%",
@@ -41,42 +40,40 @@ export function SportsGrid() {
   }, []);
 
   return (
-    <section ref={containerRef} id="sports" className="py-24 px-6">
+    <section ref={containerRef} id="sports" className="py-24 px-8 bg-background">
       <div className="max-w-6xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          Pick Your <span className="gradient-text">3 Sports</span>
-        </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
-          Choose any 3 from our roster. All included in the ₹12,000 package.
-        </p>
+        {/* Header */}
+        <div className="mb-16">
+          <div className="section-label mb-3">6 Disciplines Available</div>
+          <div className="accent-divider" />
+          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4">
+            Choose Your <span className="text-primary">3 Sports</span>
+          </h2>
+          <p className="text-text-muted mt-4 max-w-xl text-base leading-relaxed">
+            All included in the elite ₹12,000 package.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {sports.map((sport) => (
             <motion.div
               key={sport.name}
-              whileHover={{ scale: 1.04, y: -4 }}
-              whileTap={{ scale: 0.97 }}
-              className="sport-card glass rounded-2xl p-6 md:p-8 cursor-pointer transition-shadow duration-300"
-              style={{
-                boxShadow: `0 0 0px ${sport.color}00`,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 30px ${sport.color}30, 0 0 60px ${sport.color}10`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = `0 0 0px ${sport.color}00`;
-              }}
+              whileHover={{ y: -6 }}
+              className="sport-card group cursor-pointer"
             >
-              <span className="text-4xl md:text-5xl mb-4 block">{sport.emoji}</span>
-              <h3 className="font-display text-xl md:text-2xl font-bold mb-2">
-                {sport.name}
-              </h3>
-              <p className="text-text-muted text-sm mb-1">
-                Coach: {sport.trainer}
-              </p>
-              <p className="text-text-muted text-sm font-mono">
-                {sport.time}
-              </p>
+              <div className="bg-surface border border-white/5 p-6 text-center group-hover:border-primary/50 transition-colors h-full">
+                <div className="text-4xl mb-4 block">{sport.emoji}</div>
+                <h3 className="font-black uppercase text-white text-sm tracking-wide mb-3">
+                  {sport.name}
+                </h3>
+                <div className="w-8 h-0.5 bg-primary mx-auto mb-3" />
+                <p className="text-text-muted text-xs font-medium uppercase tracking-wider mb-1">
+                  {sport.trainer}
+                </p>
+                <p className="text-primary text-xs font-bold">
+                  {sport.time}
+                </p>
+              </div>
             </motion.div>
           ))}
         </div>

@@ -59,36 +59,39 @@ export function Testimonials() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 overflow-hidden">
-      <div className="px-6 mb-16">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          What Parents <span className="gradient-text">Say</span>
-        </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto">
-          Real stories from real families across India.
-        </p>
+    <section ref={containerRef} className="py-24 overflow-hidden bg-background">
+      <div className="px-8 mb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="section-label mb-3">Parent Testimonials</div>
+          <div className="accent-divider" />
+          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4">
+            What Families <span className="text-primary">Say</span>
+          </h2>
+        </div>
       </div>
 
       <div
         ref={scrollRef}
-        className="flex gap-6 px-6 overflow-x-hidden"
+        className="flex gap-6 px-8 overflow-x-hidden"
         style={{ scrollBehavior: "auto" }}
       >
         {testimonials.map((t) => (
           <div
             key={t.name}
-            className="glass rounded-2xl p-8 min-w-[340px] md:min-w-[400px] shrink-0"
+            className="bg-surface border border-white/5 p-8 min-w-[340px] md:min-w-[420px] shrink-0 hover:border-primary/30 transition-colors"
           >
-            <p className="text-text-primary leading-relaxed mb-6 text-sm md:text-base">
-              &ldquo;{t.text}&rdquo;
+            {/* Quote mark */}
+            <div className="text-primary text-5xl font-black leading-none mb-4">"</div>
+            <p className="text-white leading-relaxed mb-8 text-base font-medium">
+              {t.text}
             </p>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold">
+            <div className="flex items-center gap-4 border-t border-white/10 pt-6">
+              <div className="w-10 h-10 bg-primary flex items-center justify-center text-white font-black text-sm">
                 {t.name.charAt(0)}
               </div>
               <div>
-                <p className="font-semibold text-sm">{t.name}</p>
-                <p className="text-text-muted text-xs">{t.city}</p>
+                <p className="font-black uppercase text-white text-sm tracking-wide">{t.name}</p>
+                <p className="text-primary text-xs font-bold uppercase tracking-[0.15em]">{t.city}</p>
               </div>
             </div>
           </div>

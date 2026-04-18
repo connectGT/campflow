@@ -1,21 +1,23 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens ─── */
+/* ─── Design Tokens: Aqua Pro Athletic ─── */
 @theme inline {
-  --color-background: #0A0A0F;
-  --color-surface: #12121A;
-  --color-primary: #6C63FF;
-  --color-primary-hover: #5A52E0;
-  --color-secondary: #00D4AA;
+  --color-background: #153243;       /* Deep Navy Blue */
+  --color-surface: #0B1B25;          /* Dark Navy (alternate sections) */
+  --color-primary: #D8473D;          /* Bold Red-Orange */
+  --color-primary-hover: #C03830;    /* Darker Red on hover */
+  --color-secondary: #FFFFFF;        /* Clean White */
+  --color-accent: #F5A623;           /* Energy Yellow-Orange accent */
   --color-destructive: #FF4D6D;
-  --color-text-primary: #F0F0FF;
-  --color-text-muted: #8888AA;
-  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-text-primary: #FFFFFF;
+  --color-text-muted: #B0C4CE;       /* Muted blue-grey */
+  --color-text-dark: #153243;        /* Navy text for light sections */
+  --color-glass-bg: rgba(21, 50, 67, 0.8);
   --color-glass-border: rgba(255, 255, 255, 0.1);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Courier New", monospace;
 }
 
 /* ─── Base Styles ─── */
@@ -34,8 +36,8 @@ body {
 
 /* ─── Selection ─── */
 ::selection {
-  background-color: rgba(108, 99, 255, 0.3);
-  color: #F0F0FF;
+  background-color: rgba(216, 71, 61, 0.4);
+  color: #FFFFFF;
 }
 
 /* ─── Scrollbar ─── */
@@ -44,69 +46,130 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #0B1B25;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2A3A;
+  background: #D8473D;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6C63FF;
+  background: #F5A623;
 }
 
-/* ─── Glassmorphism Utility ─── */
+/* ─── Athletic Card (solid, no blur) ─── */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  background: rgba(11, 27, 37, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1rem;
+  background: #0B1B25;
+  border: 1px solid rgba(216, 71, 61, 0.3);
+  border-radius: 4px;
 }
 
-/* ─── Glow Effects ─── */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 30px rgba(108, 99, 255, 0.15),
-                0 0 60px rgba(108, 99, 255, 0.05);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(108, 99, 255, 0.25),
-                0 0 80px rgba(108, 99, 255, 0.15);
-  }
+/* ─── Primary Button ─── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #D8473D;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.875rem 2rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-.glow-primary {
-  animation: pulse-glow 3s infinite ease-in-out;
+.btn-primary:hover {
+  background-color: #C03830;
+  transform: translateY(-1px);
 }
 
-.glow-secondary {
-  box-shadow: 0 0 30px rgba(0, 212, 170, 0.15),
-              0 0 60px rgba(0, 212, 170, 0.05);
+/* ─── Ghost Button ─── */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.875rem 2rem;
+  border-radius: 4px;
+  border: 2px solid #FFFFFF;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background-color: #FFFFFF;
+  color: #153243;
+}
+
+/* ─── Section Labels ─── */
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #D8473D;
 }
 
 /* ─── Gradient Text ─── */
 .gradient-text {
-  background: linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #D8473D;
 }
 
-/* ─── Floating Orb (reusable background element) ─── */
+/* ─── Accent Divider ─── */
+.accent-divider {
+  width: 48px;
+  height: 3px;
+  background-color: #D8473D;
+  margin: 0.75rem 0;
+}
+
+/* ─── Card hover lift ─── */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Orb (kept for compatibility, but mostly removed) ─── */
 .orb {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
+  opacity: 0.15;
   pointer-events: none;
+}
+
+/* ─── Glow Effects (kept for compatibility) ─── */
+.glow-primary {
+  box-shadow: 0 0 30px rgba(216, 71, 61, 0.2);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Section Alternating ─── */
+.section-alt {
+  background-color: #0B1B25;
 }

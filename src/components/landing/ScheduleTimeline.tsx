@@ -17,40 +17,19 @@ export function ScheduleTimeline() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Timeline scrub — cards reveal as user scrolls
-      const cards = gsap.utils.toArray<HTMLElement>(".timeline-card");
-
-      cards.forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { opacity: 0, x: i % 2 === 0 ? -80 : 80 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              end: "top 50%",
-              scrub: 1,
-            },
-          }
-        );
-      });
-
-      // Animate the vertical line
       gsap.fromTo(
-        ".timeline-line",
-        { scaleY: 0 },
+        ".timeline-row",
+        { opacity: 0, x: -40 },
         {
-          scaleY: 1,
-          ease: "none",
+          opacity: 1,
+          x: 0,
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
-            start: "top 70%",
-            end: "bottom 60%",
-            scrub: true,
+            start: "top 80%",
+            toggleActions: "play none none none",
           },
         }
       );
@@ -60,46 +39,57 @@ export function ScheduleTimeline() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-6">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          A Day at <span className="gradient-text">CampFlow</span>
-        </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
-          Morning and evening sessions to fit your schedule.
-        </p>
+    <section ref={containerRef} className="section-alt py-24 px-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-16 grid lg:grid-cols-2 gap-8 items-end">
+          <div>
+            <div className="section-label mb-3">Daily Programme</div>
+            <div className="accent-divider" />
+            <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4">
+              A Day at <span className="text-primary">Camp</span>
+            </h2>
+          </div>
+          <p className="text-text-muted text-base leading-relaxed lg:text-right">
+            Morning and evening sessions, Monday through Saturday. 7 AM – 10 AM daily.
+          </p>
+        </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div
-            className="timeline-line absolute left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-primary via-secondary to-primary origin-top"
-          />
-
-          <div className="space-y-12">
-            {schedule.map((item, i) => (
+        {/* Schedule Table */}
+        <div className="border border-white/10">
+          {/* Table Header */}
+          <div className="grid grid-cols-4 bg-primary/10 border-b border-white/10">
+            {["Time", "Sport", "Coach", ""].map((h) => (
               <div
-                key={item.sport}
-                className={`timeline-card flex items-center gap-6 ${
-                  i % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                }`}
+                key={h}
+                className="px-6 py-4 text-xs font-black uppercase tracking-[0.2em] text-text-muted"
               >
-                <div className={`flex-1 ${i % 2 === 0 ? "text-right" : "text-left"}`}>
-                  <div className="glass rounded-2xl p-6 inline-block">
-                    <span className="text-3xl mb-2 block">{item.emoji}</span>
-                    <h3 className="font-display text-lg font-bold">{item.sport}</h3>
-                    <p className="text-text-muted text-sm">{item.trainer}</p>
-                    <p className="text-secondary font-mono text-sm mt-1">{item.time}</p>
-                  </div>
-                </div>
-
-                {/* Center dot */}
-                <div className="relative z-10 w-4 h-4 rounded-full bg-primary border-2 border-background shrink-0" />
-
-                <div className="flex-1" />
+                {h}
               </div>
             ))}
           </div>
+
+          {/* Rows */}
+          {schedule.map((item, i) => (
+            <div
+              key={item.sport}
+              className={`timeline-row grid grid-cols-4 border-b border-white/5 group hover:bg-primary/5 transition-colors ${i % 2 === 1 ? "bg-white/[0.02]" : ""}`}
+            >
+              <div className="px-6 py-5 flex items-center">
+                <span className="font-black text-primary text-sm tracking-wide">{item.time}</span>
+              </div>
+              <div className="px-6 py-5 flex items-center gap-3">
+                <span className="text-2xl">{item.emoji}</span>
+                <span className="font-black uppercase text-white text-sm tracking-wide">{item.sport}</span>
+              </div>
+              <div className="px-6 py-5 flex items-center">
+                <span className="text-text-muted text-sm font-medium">{item.trainer}</span>
+              </div>
+              <div className="px-6 py-5 flex items-center justify-end">
+                <div className="w-6 h-0.5 bg-primary/40 group-hover:w-10 group-hover:bg-primary transition-all duration-300" />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

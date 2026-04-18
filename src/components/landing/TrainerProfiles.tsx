@@ -19,14 +19,13 @@ export function TrainerProfiles() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ".trainer-card",
-        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power3.out",
+          duration: 0.5,
+          stagger: 0.08,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top 80%",
@@ -40,35 +39,47 @@ export function TrainerProfiles() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-6">
+    <section ref={containerRef} className="py-24 px-8 bg-background">
       <div className="max-w-6xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          Learn from the <span className="gradient-text">Best</span>
-        </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
-          Our trainers bring decades of competitive experience to every session.
-        </p>
+        {/* Header */}
+        <div className="mb-16">
+          <div className="section-label mb-3">Meet the Coaches</div>
+          <div className="accent-divider" />
+          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4">
+            World-Class <span className="text-primary">Instruction</span>
+          </h2>
+          <p className="text-text-muted mt-4 max-w-xl text-base leading-relaxed">
+            Every coach is a former competitive athlete with years of coaching experience.
+          </p>
+        </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {trainers.map((trainer) => (
             <div
               key={trainer.name}
-              className="trainer-card glass rounded-2xl p-6 hover:translate-y-[-4px] transition-transform duration-300"
+              className="trainer-card bg-surface border border-white/5 p-8 card-lift group hover:border-primary/40 transition-colors"
             >
-              {/* Avatar placeholder */}
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-2xl font-bold mb-4">
+              {/* Avatar */}
+              <div className="w-16 h-16 bg-primary/10 border-2 border-primary/30 flex items-center justify-center text-2xl font-black text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
                 {trainer.name.charAt(0)}
               </div>
 
-              <h3 className="font-display text-lg font-bold">{trainer.name}</h3>
-              <p className="text-primary text-sm font-semibold">{trainer.sport}</p>
-              <div className="flex items-center gap-2 mt-3">
-                <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary">
-                  {trainer.exp}
-                </span>
-                <span className="text-xs px-2 py-1 rounded-full bg-secondary/20 text-secondary">
-                  {trainer.badge}
-                </span>
+              <h3 className="font-black uppercase text-white text-lg tracking-wide mb-1">
+                {trainer.name}
+              </h3>
+              <p className="text-primary text-xs font-black uppercase tracking-[0.2em] mb-5">
+                {trainer.sport}
+              </p>
+
+              <div className="border-t border-white/10 pt-5 space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-text-muted uppercase text-xs tracking-wider font-bold">Experience</span>
+                  <span className="text-white font-bold">{trainer.exp}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-text-muted uppercase text-xs tracking-wider font-bold">Credentials</span>
+                  <span className="text-primary text-xs font-black uppercase tracking-wide">{trainer.badge}</span>
+                </div>
               </div>
             </div>
           ))}

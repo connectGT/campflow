@@ -3,81 +3,45 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
-import { ArrowRight, Zap } from "lucide-react";
+import { ArrowRight, Phone, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 
 export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Staggered heading word reveal
-      const words = headingRef.current?.querySelectorAll(".word");
-      if (words) {
-        gsap.fromTo(
-          words,
-          { opacity: 0, y: 60, rotateX: -40 },
-          {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: "power3.out",
-            delay: 0.3,
-          }
-        );
-      }
+      gsap.fromTo(
+        ".hero-word",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          stagger: 0.08,
+          ease: "power3.out",
+          delay: 0.2,
+        }
+      );
 
-      // Stats counter animation
-      const statNumbers = statsRef.current?.querySelectorAll(".stat-num");
-      statNumbers?.forEach((el) => {
-        const target = parseInt(el.getAttribute("data-value") || "0", 10);
-        gsap.fromTo(
-          el,
-          { textContent: "0" },
-          {
-            textContent: target,
-            duration: 2,
-            delay: 1,
-            ease: "power2.out",
-            snap: { textContent: 1 },
-            scrollTrigger: {
-              trigger: el,
-              start: "top 90%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      });
+      gsap.fromTo(
+        ".hero-sub",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, delay: 0.8, ease: "power2.out" }
+      );
 
-      // Floating orbs parallax
-      gsap.to(".orb-hero-1", {
-        y: -80,
-        x: 30,
-        duration: 6,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-      gsap.to(".orb-hero-2", {
-        y: 60,
-        x: -40,
-        duration: 8,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-      gsap.to(".orb-hero-3", {
-        y: -40,
-        x: 50,
-        duration: 7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
+      gsap.fromTo(
+        ".stat-block",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          delay: 1.1,
+          ease: "power2.out",
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();
@@ -86,95 +50,143 @@ export function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
+      className="relative min-h-screen bg-background overflow-hidden"
     >
-      {/* Floating orbs */}
-      <div className="orb orb-hero-1 w-96 h-96 bg-primary -top-48 -left-48" />
-      <div className="orb orb-hero-2 w-80 h-80 bg-secondary -bottom-40 -right-40" />
-      <div className="orb orb-hero-3 w-64 h-64 bg-primary/50 top-1/3 right-1/4" />
-
-      <div className="relative z-10 text-center max-w-4xl mx-auto">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm text-text-muted mb-8"
-        >
-          <Zap className="w-4 h-4 text-secondary" />
-          <span>Registrations open for Summer 2025</span>
-        </motion.div>
-
-        {/* Heading with word-by-word reveal */}
-        <h1
-          ref={headingRef}
-          className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight mb-6"
-          style={{ perspective: "800px" }}
-        >
-          <span className="word inline-block">Where</span>{" "}
-          <span className="word inline-block gradient-text">Champions</span>{" "}
-          <span className="word inline-block">Begin</span>
-        </h1>
-
-        {/* Subtext */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-lg md:text-xl text-text-muted max-w-2xl mx-auto mb-10 leading-relaxed"
-        >
-          India&apos;s most exciting summer sports camp. Cricket, swimming,
-          football, basketball, tennis, and badminton — all for just{" "}
-          <span className="text-secondary font-mono font-bold">₹12,000</span>.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <Link href="/register">
-            <motion.div
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white rounded-xl px-8 py-4 font-semibold text-lg transition-colors shadow-lg shadow-primary/25 cursor-pointer"
-            >
-              Register Now
-              <ArrowRight className="w-5 h-5" />
-            </motion.div>
-          </Link>
-          <Link href="#sports">
-            <motion.div
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 border border-glass-border hover:border-primary bg-transparent text-text-primary rounded-xl px-8 py-4 font-semibold text-lg transition-colors cursor-pointer"
-            >
-              Explore Sports
-            </motion.div>
-          </Link>
-        </motion.div>
-
-        {/* Stats */}
-        <div ref={statsRef} className="grid grid-cols-3 gap-8 mt-20 max-w-lg mx-auto">
-          <div>
-            <p className="stat-num font-display text-3xl md:text-4xl font-bold text-primary" data-value="500">
-              0
-            </p>
-            <p className="text-sm text-text-muted mt-1">Registrations</p>
+      {/* Top Contact Bar */}
+      <div className="bg-surface border-b border-white/5 px-8 py-3 flex justify-between items-center text-sm">
+        <div className="flex items-center gap-1">
+          <div className="w-8 h-8 bg-primary flex items-center justify-center text-white font-black text-xs mr-3">
+            D
           </div>
-          <div>
-            <p className="stat-num font-display text-3xl md:text-4xl font-bold text-secondary" data-value="6">
-              0
-            </p>
-            <p className="text-sm text-text-muted mt-1">Sports</p>
+          <span className="font-black text-white tracking-widest uppercase text-sm">
+            Dheera Sports Foundation
+          </span>
+        </div>
+        <div className="hidden md:flex items-center gap-6 text-text-muted text-xs font-medium">
+          <span className="flex items-center gap-1.5">
+            <Phone className="w-3 h-3 text-primary" /> +91-9074063030
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Mail className="w-3 h-3 text-primary" /> muktabhinav@gmail.com
+          </span>
+          <span className="flex items-center gap-1.5">
+            <MapPin className="w-3 h-3 text-primary" /> Shivpuri Link Road, Gwalior
+          </span>
+        </div>
+      </div>
+
+      {/* Main Hero */}
+      <div className="grid lg:grid-cols-2 min-h-[calc(100vh-49px)]">
+        {/* Left — Content */}
+        <div className="flex flex-col justify-center px-8 md:px-16 lg:px-20 py-20 relative z-10">
+          {/* Eyebrow */}
+          <div className="hero-sub section-label mb-4">
+            Section 8 Non-Profit · Gwalior, MP · Est. 2025
           </div>
-          <div>
-            <p className="stat-num font-display text-3xl md:text-4xl font-bold text-primary" data-value="12">
-              0
-            </p>
-            <p className="text-sm text-text-muted mt-1">Cities</p>
+
+          {/* Headline */}
+          <h1 className="font-sans font-black uppercase leading-none mb-6">
+            <span className="hero-word block text-white text-5xl md:text-6xl lg:text-7xl tracking-tight">
+              Dheera Sports
+            </span>
+            <span className="hero-word block text-white text-4xl md:text-5xl lg:text-6xl tracking-tight mt-1">
+              Transformation
+            </span>
+            <span
+              className="hero-word block text-primary text-5xl md:text-7xl lg:text-8xl tracking-tight mt-2"
+            >
+              Summer Camp
+            </span>
+            <span className="hero-word block text-white/40 text-3xl md:text-4xl tracking-[0.2em] mt-4">
+              2026
+            </span>
+          </h1>
+
+          {/* Tagline */}
+          <p className="hero-sub text-xl md:text-2xl text-text-muted font-medium mb-10 leading-relaxed max-w-lg">
+            Send us a child.{" "}
+            <span className="text-white font-bold italic">
+              We give you back an athlete.
+            </span>
+          </p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4 }}
+            className="flex flex-wrap gap-4"
+          >
+            <Link href="/register">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-primary inline-flex"
+              >
+                Secure Your Spot
+                <ArrowRight className="w-4 h-4" />
+              </motion.div>
+            </Link>
+            <Link href="#sports">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="btn-ghost inline-flex"
+              >
+                View Disciplines
+              </motion.div>
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Right — Stats + Visual */}
+        <div className="section-alt flex flex-col justify-end relative overflow-hidden">
+          {/* Background accent */}
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(45deg, #D8473D 0px, #D8473D 1px, transparent 1px, transparent 40px)",
+            }}
+          />
+
+          {/* Stats Grid */}
+          <div className="relative z-10 grid grid-cols-2 border-t border-white/10 mt-auto">
+            {[
+              { value: "120", label: "Seats Only" },
+              { value: "35", sublabel: "06 MAY – 09 JUN", label: "Days" },
+              { value: "6", label: "Sports" },
+              { value: "7–20", label: "Years Age" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="stat-block border-b border-r border-white/10 p-8 hover:bg-primary/5 transition-colors"
+              >
+                <p className="font-black text-5xl md:text-6xl text-primary leading-none">
+                  {stat.value}
+                </p>
+                {stat.sublabel && (
+                  <p className="text-xs text-text-muted uppercase tracking-widest mt-2 font-bold">
+                    {stat.sublabel}
+                  </p>
+                )}
+                <p className="text-xs text-text-muted uppercase tracking-[0.2em] mt-2 font-bold">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Time block */}
+          <div className="relative z-10 border-t border-white/10 p-8 flex justify-between items-center">
+            <div>
+              <p className="font-black text-5xl text-primary">7 AM</p>
+              <p className="text-xs text-text-muted uppercase tracking-[0.2em] font-bold mt-1">– 10 AM Daily</p>
+            </div>
+            <div className="text-right">
+              <p className="section-label">Session Timing</p>
+              <p className="text-text-muted text-sm mt-1">Mon – Sat</p>
+            </div>
           </div>
         </div>
       </div>

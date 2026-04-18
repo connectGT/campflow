@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { Plus, Minus } from "lucide-react";
 
 const faqs = [
   {
     q: "What age group is CampFlow for?",
-    a: "CampFlow is designed for children aged 4 to 17 years. We group kids by age and skill level to ensure the best experience for everyone.",
+    a: "CampFlow is designed for children aged 7 to 20 years. We group kids by age and skill level to ensure the best experience for everyone.",
   },
   {
     q: "How long does the camp run?",
-    a: "Each summer camp session runs for 4 weeks (Monday to Saturday). Morning batches run from 6 AM to 9 AM, and evening batches from 4 PM to 7 PM.",
+    a: "Each summer camp session runs for 35 days (06 May to 09 June, Monday to Saturday). Sessions run from 7 AM to 10 AM daily.",
   },
   {
     q: "Can my child switch sports mid-camp?",
@@ -35,34 +35,38 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="py-24 px-6">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          Common <span className="gradient-text">Questions</span>
-        </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
-          Everything you need to know before registering.
-        </p>
+    <section className="section-alt py-24 px-8">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+        {/* Left — Header */}
+        <div className="lg:sticky lg:top-8 self-start">
+          <div className="section-label mb-3">Got Questions?</div>
+          <div className="accent-divider" />
+          <h2 className="font-sans font-black uppercase text-4xl md:text-5xl text-white tracking-tight mt-4 mb-6">
+            Everything You <span className="text-primary">Need to Know</span>
+          </h2>
+          <p className="text-text-muted text-base leading-relaxed">
+            Complete answers before you commit. If you have a question we haven't answered, reach us at muktabhinav@gmail.com or call +91-9074063030.
+          </p>
+        </div>
 
-        <div className="space-y-3">
+        {/* Right — Accordion */}
+        <div className="space-y-0 border border-white/10">
           {faqs.map((faq, i) => (
-            <div
-              key={i}
-              className="glass rounded-xl overflow-hidden"
-            >
+            <div key={i} className={`border-b border-white/10 last:border-0 ${openIndex === i ? "bg-primary/5" : ""}`}>
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full flex items-center justify-between p-5 text-left cursor-pointer"
+                className="w-full flex items-center justify-between p-6 text-left cursor-pointer group"
               >
-                <span className="font-semibold text-sm md:text-base pr-4">
+                <span className="font-black uppercase text-white text-sm tracking-wide group-hover:text-primary transition-colors pr-4">
                   {faq.q}
                 </span>
-                <motion.div
-                  animate={{ rotate: openIndex === i ? 180 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ChevronDown className="w-5 h-5 text-text-muted shrink-0" />
-                </motion.div>
+                <div className="w-8 h-8 border border-white/20 flex items-center justify-center shrink-0 group-hover:border-primary group-hover:bg-primary/10 transition-colors">
+                  {openIndex === i ? (
+                    <Minus className="w-4 h-4 text-primary" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-text-muted" />
+                  )}
+                </div>
               </button>
 
               <AnimatePresence>
@@ -73,7 +77,7 @@ export function FAQ() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                   >
-                    <p className="px-5 pb-5 text-text-muted text-sm leading-relaxed">
+                    <p className="px-6 pb-6 text-text-muted text-sm leading-relaxed border-t border-white/5 pt-3">
                       {faq.a}
                     </p>
                   </motion.div>
