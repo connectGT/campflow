@@ -3,7 +3,6 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { LogIn } from "lucide-react";
 import { Suspense } from "react";
 
 function LoginForm() {

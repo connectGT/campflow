@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { gsap, ScrollTrigger } from "@/lib/gsap/config";
+import { gsap } from "@/lib/gsap/config";
 import { ArrowRight, Zap } from "lucide-react";
 import Link from "next/link";
 
