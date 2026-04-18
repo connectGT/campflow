@@ -79,24 +79,24 @@ export function Features() {
   return (
     <section ref={containerRef} id="features" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          Why Parents <span className="gradient-text">Choose Us</span>
+        <h2 className="font-display text-4xl md:text-6xl font-bold text-left mb-6 tracking-wide">
+          Why Parents <span className="gradient-text italic font-mono">Choose Us</span>
         </h2>
-        <p className="text-text-muted text-center max-w-2xl mx-auto mb-16">
-          Trusted by 500+ families across India. Here&apos;s what sets CampFlow apart.
+        <p className="text-text-muted text-left max-w-2xl mb-16 text-lg">
+          Trusted by 500+ families across India. A premier athletic transformation.
         </p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature) => (
+          {features.map((feature, i) => (
             <div
               key={feature.title}
-              className={`feature-card glass rounded-2xl p-8 transition-all duration-300 hover:translate-y-[-4px] hover:shadow-lg ${feature.glow}`}
+              className={`feature-card glass p-8 transition-all duration-300 hover:bg-surface-bright/5 hover:translate-y-[-4px] hover:shadow-2xl hover:shadow-primary/20 ${feature.glow} ${i % 2 === 1 ? 'md:mt-12' : ''}`}
             >
-              <feature.icon className="w-10 h-10 text-primary mb-4" />
-              <h3 className="font-display text-xl font-semibold mb-3">
+              <feature.icon className="w-10 h-10 text-secondary mb-6" />
+              <h3 className="font-display text-2xl font-semibold mb-3 tracking-wide">
                 {feature.title}
               </h3>
-              <p className="text-text-muted leading-relaxed">
+              <p className="text-text-muted leading-relaxed font-mono">
                 {feature.description}
               </p>
             </div>

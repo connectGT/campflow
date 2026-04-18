@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Syne } from "next/font/google";
+import { Cinzel, Cormorant_Garamond, EB_Garamond } from "next/font/google";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
-const inter = Inter({
+const cinzel = Cinzel({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-cinzel",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-const syne = Syne({
+const ebGaramond = EB_Garamond({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-eb-garamond",
   display: "swap",
 });
 
@@ -68,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${syne.variable} dark`}
+      className={`${cinzel.variable} ${cormorant.variable} ${ebGaramond.variable} dark`}
     >
       <body className="min-h-screen bg-background text-text-primary font-sans antialiased">
         <QueryProvider>{children}</QueryProvider>

@@ -2,20 +2,21 @@
 
 /* ─── Design Tokens ─── */
 @theme inline {
-  --color-background: #0A0A0F;
-  --color-surface: #12121A;
-  --color-primary: #6C63FF;
-  --color-primary-hover: #5A52E0;
-  --color-secondary: #00D4AA;
+  --color-background: #06101E; /* Navy */
+  --color-surface: #0D0508; /* Dark Surface */
+  --color-primary: #6B0F1A; /* Maroon */
+  --color-primary-hover: #3D0008; /* Deep Maroon */
+  --color-secondary: #C9A84C; /* Gold */
+  --color-secondary-bright: #F5D87A; /* Bright Gold */
   --color-destructive: #FF4D6D;
-  --color-text-primary: #F0F0FF;
-  --color-text-muted: #8888AA;
-  --color-glass-bg: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-text-primary: #FDF8EE; /* Cream */
+  --color-text-muted: rgba(253, 248, 238, 0.7);
+  --color-glass-bg: rgba(6, 16, 30, 0.6);
+  --color-glass-border: rgba(201, 168, 76, 0.3);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: var(--font-eb-garamond), "Cormorant Garamond", serif;
+  --font-display: var(--font-cinzel), serif;
+  --font-mono: var(--font-cormorant), serif;
 }
 
 /* ─── Base Styles ─── */
@@ -34,8 +35,8 @@ body {
 
 /* ─── Selection ─── */
 ::selection {
-  background-color: rgba(108, 99, 255, 0.3);
-  color: #F0F0FF;
+  background-color: rgba(201, 168, 76, 0.3);
+  color: #FDF8EE;
 }
 
 /* ─── Scrollbar ─── */
@@ -44,44 +45,44 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0F;
+  background: #06101E;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2A3A;
+  background: #3D0008;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6C63FF;
+  background: #C9A84C;
 }
 
 /* ─── Glassmorphism Utility ─── */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(30px) saturate(125%);
+  -webkit-backdrop-filter: blur(30px) saturate(125%);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 0.75rem; /* xl */
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1rem;
+  background: rgba(6, 16, 30, 0.85);
+  backdrop-filter: blur(40px) saturate(150%);
+  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  border: 1px solid rgba(201, 168, 76, 0.5);
+  border-radius: 0.75rem; /* xl */
 }
 
 /* ─── Glow Effects ─── */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 30px rgba(108, 99, 255, 0.15),
-                0 0 60px rgba(108, 99, 255, 0.05);
+    box-shadow: 0 0 30px rgba(107, 15, 26, 0.15),
+                0 0 60px rgba(107, 15, 26, 0.05);
   }
   50% {
-    box-shadow: 0 0 40px rgba(108, 99, 255, 0.25),
-                0 0 80px rgba(108, 99, 255, 0.15);
+    box-shadow: 0 0 40px rgba(107, 15, 26, 0.25),
+                0 0 80px rgba(107, 15, 26, 0.15);
   }
 }
 
@@ -90,13 +91,13 @@ body {
 }
 
 .glow-secondary {
-  box-shadow: 0 0 30px rgba(0, 212, 170, 0.15),
-              0 0 60px rgba(0, 212, 170, 0.05);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.15),
+              0 0 60px rgba(201, 168, 76, 0.05);
 }
 
 /* ─── Gradient Text ─── */
 .gradient-text {
-  background: linear-gradient(135deg, #6C63FF 0%, #00D4AA 100%);
+  background: linear-gradient(135deg, #C9A84C 0%, #F5D87A 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -107,6 +108,6 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.3;
+  opacity: 0.25;
   pointer-events: none;
 }

@@ -60,20 +60,20 @@ export function ScheduleTimeline() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-6">
+    <section ref={containerRef} className="py-24 px-6 relative bg-surface-container-low/30">
       <div className="max-w-4xl mx-auto">
-        <h2 className="font-display text-3xl md:text-5xl font-bold text-center mb-4">
-          A Day at <span className="gradient-text">CampFlow</span>
+        <h2 className="font-display text-4xl md:text-6xl font-bold text-center mb-6 tracking-wide">
+          A Day at <span className="gradient-text italic font-mono">CampFlow</span>
         </h2>
-        <p className="text-text-muted text-center max-w-xl mx-auto mb-16">
-          Morning and evening sessions to fit your schedule.
+        <p className="text-text-muted text-center max-w-xl mx-auto mb-16 text-lg">
+          Morning and evening sessions to fit your family's schedule.
         </p>
 
         {/* Timeline */}
         <div className="relative">
           {/* Vertical line */}
           <div
-            className="timeline-line absolute left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-primary via-secondary to-primary origin-top"
+            className="timeline-line absolute left-1/2 -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-secondary/10 via-secondary/50 to-secondary/10 origin-top"
           />
 
           <div className="space-y-12">
@@ -85,16 +85,16 @@ export function ScheduleTimeline() {
                 }`}
               >
                 <div className={`flex-1 ${i % 2 === 0 ? "text-right" : "text-left"}`}>
-                  <div className="glass rounded-2xl p-6 inline-block">
-                    <span className="text-3xl mb-2 block">{item.emoji}</span>
-                    <h3 className="font-display text-lg font-bold">{item.sport}</h3>
-                    <p className="text-text-muted text-sm">{item.trainer}</p>
-                    <p className="text-secondary font-mono text-sm mt-1">{item.time}</p>
+                  <div className="glass rounded-none border-secondary/20 p-6 inline-block w-full max-w-sm hover:bg-surface-bright/5 transition-colors">
+                    <span className="text-3xl mb-4 block text-secondary/70">{item.emoji}</span>
+                    <h3 className="font-display text-2xl font-bold tracking-wide">{item.sport}</h3>
+                    <p className="text-text-muted text-base font-mono uppercase tracking-widest mt-2">{item.trainer}</p>
+                    <p className="text-secondary font-mono text-sm mt-4 pt-4 border-t border-secondary/20 block">{item.time}</p>
                   </div>
                 </div>
 
                 {/* Center dot */}
-                <div className="relative z-10 w-4 h-4 rounded-full bg-primary border-2 border-background shrink-0" />
+                <div className="relative z-10 w-3 h-3 rounded-none bg-primary border border-secondary shadow-[0_0_10px_rgba(201,168,76,0.6)] shrink-0" />
 
                 <div className="flex-1" />
               </div>

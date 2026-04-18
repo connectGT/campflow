@@ -61,39 +61,39 @@ export function Pricing() {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-6">
+    <section ref={containerRef} className="py-24 px-6 relative">
       <div className="max-w-lg mx-auto text-center">
-        <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-          Simple <span className="gradient-text">Pricing</span>
+        <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 tracking-wide">
+          Sovereign <span className="gradient-text italic font-mono">Pricing</span>
         </h2>
-        <p className="text-text-muted mb-16">
-          One price. Everything included. No hidden fees.
+        <p className="text-text-muted mb-16 text-lg">
+          One elite tier. Everything included. No hidden fees.
         </p>
 
-        <div className="pricing-card glass-strong rounded-2xl p-8 md:p-10 glow-primary relative overflow-hidden">
+        <div className="pricing-card glass-strong rounded-none border border-secondary/40 p-8 md:p-10 relative overflow-hidden shadow-2xl shadow-primary/10">
           {/* Popular badge */}
-          <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
-            Most Popular
+          <div className="absolute top-4 right-4 bg-primary text-text-primary text-xs font-mono tracking-widest uppercase px-4 py-1.5 rounded-none border border-secondary/30">
+            Gold Tier
           </div>
 
-          <p className="text-text-muted text-sm uppercase tracking-wider mb-2">
-            Summer Camp Package
+          <p className="text-secondary text-sm uppercase tracking-widest mb-4 font-mono font-bold">
+            Transformation Package
           </p>
-          <div className="flex items-baseline justify-center gap-1 mb-6">
-            <span className="text-text-muted text-2xl">₹</span>
-            <span className="font-display text-6xl md:text-7xl font-bold">
+          <div className="flex items-baseline justify-center gap-2 mb-8">
+            <span className="text-text-muted text-3xl font-mono">₹</span>
+            <span className="font-display text-7xl md:text-8xl font-bold text-text-primary drop-shadow-[0_0_15px_rgba(201,168,76,0.2)]">
               12,000
             </span>
           </div>
-          <p className="text-text-muted text-sm mb-8">per child · one-time</p>
+          <p className="text-text-muted text-sm mb-10 font-mono tracking-wide">per athlete · one-time</p>
 
-          <div className="text-left space-y-3 mb-8">
+          <div className="text-left space-y-4 mb-10 pt-8 border-t border-secondary/20">
             {included.map((item) => (
-              <div key={item} className="check-item flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full bg-secondary/20 flex items-center justify-center shrink-0">
-                  <Check className="w-3 h-3 text-secondary" />
+              <div key={item} className="check-item flex items-center gap-4">
+                <div className="w-6 h-6 border border-secondary/40 bg-background/50 flex items-center justify-center shrink-0">
+                  <Check className="w-3.5 h-3.5 text-secondary glow-secondary" />
                 </div>
-                <span className="text-sm text-text-primary">{item}</span>
+                <span className="text-base text-text-primary font-mono">{item}</span>
               </div>
             ))}
           </div>
@@ -102,9 +102,9 @@ export function Pricing() {
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="w-full bg-primary hover:bg-primary-hover text-white rounded-xl px-6 py-4 font-semibold text-lg transition-colors text-center cursor-pointer"
+              className="w-full bg-primary hover:bg-primary-hover text-text-primary rounded-none border border-secondary/30 px-6 py-4 font-mono font-bold tracking-widest uppercase text-lg transition-colors text-center cursor-pointer shadow-lg shadow-primary/20"
             >
-              Register Now
+              Secure Application
             </motion.div>
           </Link>
         </div>
