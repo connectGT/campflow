@@ -15,8 +15,29 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+// ─── Log a message to DB ───────────────────────────────────────────
+async function logMessage(
+  phone: string,
+  direction: "inbound" | "outbound",
+  message: string,
+  intent?: string,
+  waMsgId?: string
+) {
+  try {
+    await supabase.from("whatsapp_messages").insert({
+      phone,
+      direction,
+      message,
+      intent: intent || null,
+      wa_msg_id: waMsgId || null,
+    });
+  } catch (e) {
+    console.error("[WA Bot] Failed to log message:", e);
+  }
+}
+
 // ─── Send a WhatsApp text message ──────────────────────────────────
-async function sendMessage(to: string, body: string) {
+async function sendMessage(to: string, body: string, intent?: string) {
   if (!TOKEN || !PHONE_ID) {
     console.warn("[WA Bot] Missing credentials — cannot send message.");
     return;
@@ -34,8 +55,13 @@ async function sendMessage(to: string, body: string) {
       }),
     });
     const data = await res.json();
-    if (!res.ok) console.error("[WA Bot] Send error:", JSON.stringify(data));
-    else console.log(`[WA Bot] ✅ Sent to ${to}: ${body.substring(0, 60)}...`);
+    if (!res.ok) {
+      console.error("[WA Bot] Send error:", JSON.stringify(data));
+    } else {
+      console.log(`[WA Bot] ✅ Sent to ${to}`);
+      // Log outbound message
+      await logMessage(to, "outbound", body, intent);
+    }
   } catch (e) {
     console.error("[WA Bot] Network error:", e);
   }
@@ -133,6 +159,9 @@ export async function POST(request: Request) {
       const localPhone = from.replace(/^91/, ""); // 10-digit local number
 
       console.log(`[WA Bot] Message from +${from}: "${text}"`);
+
+      // Log inbound message to DB for admin history view
+      await logMessage(from, "inbound", text, undefined, msg.id);
 
       // Get or create session
       const { data: session } = await supabase

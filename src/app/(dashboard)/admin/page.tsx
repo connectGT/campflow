@@ -2,12 +2,13 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createHmac } from "crypto";
 import { format } from "date-fns";
-import { Users, CreditCard, Calendar, ArrowLeft, Activity, ImageIcon, LogOut } from "lucide-react";
+import { Users, CreditCard, Calendar, ArrowLeft, Activity, ImageIcon, LogOut, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { ExportButton } from "@/components/admin/ExportButton";
 import { ApproveRejectButtons } from "@/components/admin/ApproveRejectButtons";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 import { OfflineRegistrationForm } from "@/components/admin/OfflineRegistrationForm";
+import { WhatsAppConversations } from "@/components/admin/WhatsAppConversations";
 import { createClient } from "@/lib/supabase/server";
 import { SPORTS, CAMP } from "@/data/camp";
 
@@ -18,7 +19,12 @@ function getExpectedToken() {
   return createHmac("sha256", secret).update(user + ":" + pass).digest("hex");
 }
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: { tab?: string };
+}) {
+  const activeTab = searchParams?.tab || "registrations";
   // Cookie-based auth — must have valid admin_token cookie from /dheera-control login
   const cookieStore = await cookies();
   const adminToken = cookieStore.get("admin_token")?.value;
@@ -101,6 +107,35 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
+      {/* Tab switcher */}
+      <div className="flex items-center gap-2 mb-6">
+        <a href="?tab=registrations"
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+            activeTab === "registrations"
+              ? "bg-primary/20 text-primary border border-primary/30"
+              : "bg-surface border border-glass-border text-text-muted hover:border-primary/50"
+          }`}>
+          <Users className="w-4 h-4" /> Registrations
+        </a>
+        <a href="?tab=whatsapp"
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+            activeTab === "whatsapp"
+              ? "bg-green-500/20 text-green-400 border border-green-500/30"
+              : "bg-surface border border-glass-border text-text-muted hover:border-green-500/50"
+          }`}>
+          <MessageCircle className="w-4 h-4" /> WhatsApp Chats
+        </a>
+      </div>
+
+      {/* WhatsApp tab */}
+      {activeTab === "whatsapp" && (
+        <div className="mb-10">
+          <WhatsAppConversations />
+        </div>
+      )}
+
+      {activeTab !== "whatsapp" && (
+        <>
       {/* Live Capacities Section */}
       <div className="mb-10">
         <h2 className="text-xl font-bold mb-4">Live Seat Availability</h2>
@@ -271,6 +306,8 @@ export default async function AdminDashboardPage() {
           </table>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }
