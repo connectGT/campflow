@@ -20,6 +20,7 @@ export function StepPayment() {
   const [preview, setPreview] = useState<string | null>(null);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [step, setStep] = useState<"pay" | "upload" | "verifying">("pay");
+  const [utr, setUtr] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -69,19 +70,19 @@ export function StepPayment() {
   };
 
   const handleVerify = async () => {
-    if (!screenshot || !registrationId) {
-      setError("Please upload a screenshot first");
+    if (!screenshot || !registrationId || !utr || utr.trim() === "") {
+      setError("Please provide both the screenshot and the Transaction UTR ID.");
       return;
     }
 
     setIsProcessing(true);
-    setStep("verifying");
     setError("");
 
     try {
       const formData = new FormData();
       formData.append("registration_id", registrationId);
       formData.append("screenshot", screenshot);
+      formData.append("utr", utr);
       if (cartSessionId) formData.append("session_id", cartSessionId);
 
       const res = await fetch("/api/register/verify", {
@@ -95,36 +96,18 @@ export function StepPayment() {
         reset();
         router.push("/register/success");
       } else {
-        // Handle specific AI errors
         if (data.status === "duplicate_utr") {
           setError("Fraud Detected: This Transaction ID has already been used.");
-        } else if (data.status === "failed_ocr") {
-          setError("AI could not read the screenshot. Ensure UTR is visible and try again.");
         } else {
           setError(data.error || "Verification failed");
         }
-        setStep("upload");
       }
     } catch (err: any) {
       setError("Network error. Please try again.");
-      setStep("upload");
     } finally {
       setIsProcessing(false);
     }
   };
-
-  if (step === "verifying") {
-    return (
-      <div className="glass rounded-2xl p-10 shadow-lg text-center animate-pulse">
-        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6 relative">
-          <Loader2 className="w-10 h-10 text-primary animate-spin" />
-        </div>
-        <h2 className="font-display text-2xl font-bold mb-4">AI Auditor <span className="gradient-text">Working...</span></h2>
-        <p className="text-text-muted mb-2">Analyzing your payment screenshot for authenticity.</p>
-        <p className="text-xs text-primary/70 font-mono">EXTRACTING UTR + VERIFYING LEDGERS</p>
-      </div>
-    );
-  }
 
   return (
     <div className="glass rounded-2xl p-6 md:p-10 shadow-lg text-center">
@@ -153,8 +136,8 @@ export function StepPayment() {
               <span className="font-mono text-xs">{UPI_ID}</span>
             </div>
             <div className="border-t border-glass-border pt-4 flex justify-between items-center font-bold text-lg">
-              <span>Amount</span>
-              <span className="text-primary">₹12,000.00</span>
+               <span>Amount</span>
+               <span className="text-primary">₹{AMOUNT.toLocaleString()}</span>
             </div>
           </div>
 
@@ -181,7 +164,7 @@ export function StepPayment() {
 
           <h2 className="font-display text-2xl font-bold mb-2">Upload Proof</h2>
           <p className="text-text-muted mb-6 text-sm max-w-sm mx-auto">
-            Take a screenshot of your payment success screen and upload it here.
+            Please enter your Transaction UTR ID and upload the payment screenshot.
           </p>
 
           {error && (
@@ -190,6 +173,17 @@ export function StepPayment() {
               <p>{error}</p>
             </div>
           )}
+
+          <div className="mb-6 text-left">
+            <label className="block text-sm font-semibold mb-2 text-text-muted">Transaction ID (UTR Number)</label>
+            <input 
+              type="text" 
+              value={utr}
+              onChange={(e) => setUtr(e.target.value)}
+              placeholder="e.g. 312345678901"
+              className="w-full bg-background border border-glass-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+            />
+          </div>
 
           <div 
             onClick={() => fileInputRef.current?.click()}
@@ -223,10 +217,10 @@ export function StepPayment() {
           <div className="space-y-4">
             <button
               onClick={handleVerify}
-              disabled={!screenshot || isProcessing}
+              disabled={!screenshot || !utr || utr.trim() === "" || isProcessing}
               className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg disabled:opacity-50"
             >
-              Verify with AI Auditor <ShieldCheck className="w-6 h-6" />
+              {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : "Submit Payment Proof"}
             </button>
             <button
               onClick={() => setStep("pay")}
@@ -239,7 +233,7 @@ export function StepPayment() {
       )}
 
       <div className="mt-8 pt-8 border-t border-glass-border flex justify-center items-center gap-2 text-[10px] text-text-muted uppercase tracking-widest">
-        <ShieldCheck className="w-3 h-3" /> AI-Augmented Security Powered by Gemini 1.5
+        <ShieldCheck className="w-3 h-3" /> Secure Registration Portal
       </div>
     </div>
   );

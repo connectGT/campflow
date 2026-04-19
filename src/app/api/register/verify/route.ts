@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-import { parsePaymentScreenshot } from "@/lib/ai/gemini";
 
 export const dynamic = "force-dynamic";
 
@@ -11,10 +10,13 @@ export async function POST(request: Request) {
     
     const registrationId = formData.get("registration_id") as string;
     const screenshot = formData.get("screenshot") as File;
+    const utr = formData.get("utr") as string;
 
-    if (!registrationId || !screenshot) {
-      return NextResponse.json({ error: "Missing data or screenshot" }, { status: 400 });
+    if (!registrationId || !screenshot || !utr || utr.trim() === "") {
+      return NextResponse.json({ error: "Missing data, UTR, or screenshot" }, { status: 400 });
     }
+
+    const cleanUtr = utr.trim().toUpperCase();
 
     // 1. Upload to Supabase Storage
     const fileName = `${registrationId}_${Date.now()}.png`;
@@ -31,22 +33,11 @@ export async function POST(request: Request) {
       .from("payment-proofs")
       .getPublicUrl(fileName);
 
-    // 2. AI Parsing (Gemini)
-    const buffer = Buffer.from(await screenshot.arrayBuffer());
-    const aiResult = await parsePaymentScreenshot(buffer, screenshot.type);
-
-    if (!aiResult.utr) {
-      return NextResponse.json({ 
-        error: "AI could not find a UTR number. Please ensure the screenshot is clear.",
-        status: "failed_ocr"
-      }, { status: 422 });
-    }
-
-    // 3. Duplicate/Fraud Check
+    // 2. Duplicate/Fraud Check
     const { data: existing } = await supabase
       .from("registrations")
       .select("id")
-      .eq("utr_number", aiResult.utr)
+      .eq("utr_number", cleanUtr)
       .maybeSingle();
 
     if (existing) {
@@ -56,19 +47,17 @@ export async function POST(request: Request) {
       }, { status: 409 });
     }
 
-    // 4. Update Registration Status
-    // If amount matches exactly, we can mark as paid. If not, mark as pending_approval.
-    const isAmountValid = aiResult.amount === 12000;
-    const finalStatus = isAmountValid ? "paid" : "pending_approval";
+    // 3. Update Registration Status (Directly Paid on blind trust + image existing)
+    const finalStatus = "paid";
 
     const { data: reg, error: updateError } = await supabase
       .from("registrations")
       .update({
         payment_status: finalStatus,
-        utr_number: aiResult.utr,
+        utr_number: cleanUtr,
         proof_image_url: publicUrl,
-        ai_confidence: aiResult.confidence,
-        verification_log: { ai_result: aiResult }
+        ai_confidence: 1.0,
+        verification_log: { method: "manual_utr_entry" }
       })
       .eq("id", registrationId)
       .select(`
@@ -82,13 +71,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to update record" }, { status: 500 });
     }
 
-    // 5. Trigger Automation if status is paid
+    // 4. Trigger Automation if status is paid
     if (finalStatus === "paid") {
       try {
         const { sendRegistrationWhatsApp } = await import("@/lib/whatsapp");
         await sendRegistrationWhatsApp(reg.parent?.phone || "", reg.child?.name || "your child");
         
         const { appendRegistrationToSheet } = await import("@/lib/google");
+        
+        // Convert explicitly mapped slots to array for sheet stringification
+        const sports = [];
+        if (reg.slot_1_sport) sports.push(`7-8AM: ${reg.slot_1_sport}`);
+        if (reg.slot_2_sport) sports.push(`8-9AM: ${reg.slot_2_sport}`);
+        if (reg.slot_3_sport) sports.push(`9-10AM: ${reg.slot_3_sport}`);
+
         await appendRegistrationToSheet({
           childName: reg.child?.name || "Unknown",
           childAge: reg.child?.age || 0,
@@ -99,7 +95,7 @@ export async function POST(request: Request) {
           emergencyName: reg.emergency_contact_name || "N/A",
           emergencyPhone: reg.emergency_contact_phone || "N/A",
           transportPoint: reg.transport_pickup || "Self Drop",
-          sports: reg.sports || [],
+          sports: sports,
           amount: reg.amount || 12000,
           orderId: reg.id
         });
@@ -116,10 +112,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ 
       success: true, 
       status: finalStatus,
-      utr: aiResult.utr 
+      utr: cleanUtr 
     });
   } catch (error: any) {
     console.error("Verification Logic Error:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
   }
 }
+
