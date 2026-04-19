@@ -41,7 +41,22 @@ export default function RegisterSuccessPage() {
           <Link href="/dashboard" className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-xl font-semibold transition-colors">
             Go to Dashboard
           </Link>
-          <button className="flex items-center justify-center gap-2 border border-glass-border hover:bg-surface text-text-primary px-8 py-3 rounded-xl font-semibold transition-colors">
+          <button 
+            onClick={() => {
+              const shareData = {
+                title: 'Dheera Sports Summer Camp',
+                text: 'I just registered for the Dheera Sports Summer Camp! Join me for an amazing summer of sports and fun.',
+                url: window.location.origin
+              };
+              if (navigator.share) {
+                navigator.share(shareData);
+              } else {
+                navigator.clipboard.writeText(shareData.url);
+                alert("Link copied to clipboard! Share it with your friends.");
+              }
+            }}
+            className="flex items-center justify-center gap-2 border border-glass-border hover:bg-surface text-text-primary px-8 py-3 rounded-xl font-semibold transition-colors"
+          >
             Share with Friends <Share2 className="w-4 h-4" />
           </button>
         </div>
