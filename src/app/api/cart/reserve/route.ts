@@ -18,7 +18,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid sport selection" }, { status: 400 });
     }
 
-    const slotCap = Math.floor(sportConfig.seats_total / 3);
+    // seats_total in camp.ts is per-slot capacity directly
+    const slotCap = sportConfig.seats_total;
 
     if (action === "reserve") {
       // 1. Check current capacity for THIS SPECIFIC SLOT
