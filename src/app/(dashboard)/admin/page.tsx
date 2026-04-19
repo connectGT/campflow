@@ -57,6 +57,17 @@ export default async function AdminDashboardPage() {
   const paid = registrations?.filter((r: any) => r.payment_status === "paid") || [];
   const pending = registrations?.filter((r: any) => r.payment_status === "pending_approval") || [];
 
+  // Compute slot-wise counts from paid registrations
+  const slotMap: Record<string, [number, number, number]> = {};
+  SPORTS.forEach(s => { slotMap[s.id] = [0, 0, 0]; });
+  paid.forEach((r: any) => {
+    const norm = (v: string | null) => v?.toLowerCase().replace("-", "_").replace(" ", "_") || "";
+    const s1 = norm(r.slot_1_sport); const s2 = norm(r.slot_2_sport); const s3 = norm(r.slot_3_sport);
+    if (slotMap[s1]) slotMap[s1][0]++;
+    if (slotMap[s2]) slotMap[s2][1]++;
+    if (slotMap[s3]) slotMap[s3][2]++;
+  });
+
   return (
     <div className="py-8">
       <div className="flex items-center justify-between mb-8">
@@ -105,33 +116,61 @@ export default async function AdminDashboardPage() {
       <AdminTabbedContent
         capacityContent={
           <div className="mb-10">
-            <h2 className="text-xl font-bold mb-4">Live Seat Availability</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {SPORTS.map(sport => {
-                const taken = capacityMap.get(sport.id) || 0;
-                const remaining = sport.seats_total - taken;
-                const percentTaken = Math.min(((taken / sport.seats_total) * 100), 100);
-                return (
-                  <div key={sport.id} className="glass p-4 rounded-xl border border-glass-border">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span>{sport.emoji}</span>
-                      <p className="font-semibold text-sm truncate">{sport.name}</p>
-                    </div>
-                    <div className="flex justify-between items-end mb-2">
-                      <p className="text-2xl font-bold" style={{ color: remaining <= 5 ? '#ef4444' : 'inherit' }}>
-                        {remaining}
-                      </p>
-                      <p className="text-xs text-text-muted pb-1">/ {sport.seats_total}</p>
-                    </div>
-                    <div className="w-full bg-surface rounded-full h-1.5 hidden md:block">
-                      <div
-                        className="h-1.5 rounded-full"
-                        style={{ width: `${percentTaken}%`, backgroundColor: remaining <= 5 ? '#ef4444' : sport.color }}
-                      ></div>
-                    </div>
-                  </div>
-                );
-              })}
+            <h2 className="text-xl font-bold mb-1">Live Seat Availability</h2>
+            <p className="text-xs text-text-muted mb-4">Per time slot — based on confirmed (paid) registrations</p>
+            <div className="glass rounded-2xl overflow-hidden border border-glass-border">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-surface/60 text-[11px] uppercase tracking-wider text-text-muted font-mono border-b border-glass-border">
+                    <th className="px-4 py-3 text-left">Sport</th>
+                    <th className="px-4 py-3 text-center">Total / Slot</th>
+                    <th className="px-4 py-3 text-center">7–8 AM</th>
+                    <th className="px-4 py-3 text-center">8–9 AM</th>
+                    <th className="px-4 py-3 text-center">9–10 AM</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-glass-border">
+                  {SPORTS.map(sport => {
+                    const [t1, t2, t3] = slotMap[sport.id] || [0, 0, 0];
+                    const r1 = sport.seats_total - t1;
+                    const r2 = sport.seats_total - t2;
+                    const r3 = sport.seats_total - t3;
+                    const cell = (remaining: number) => {
+                      const color = remaining <= 0 ? "text-red-400" : remaining <= 3 ? "text-yellow-400" : "text-green-400";
+                      return (
+                        <td className="px-4 py-3 text-center">
+                          <span className={`font-bold text-base ${color}`}>
+                            {remaining <= 0 ? "FULL" : remaining}
+                          </span>
+                          <span className="text-text-muted text-xs"> /{sport.seats_total}</span>
+                        </td>
+                      );
+                    };
+                    return (
+                      <tr key={sport.id} className="hover:bg-surface/30 transition-colors">
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg">{sport.emoji}</span>
+                            <div>
+                              <p className="font-semibold text-sm">{sport.name}</p>
+                              <div className="w-24 bg-surface rounded-full h-1 mt-1">
+                                <div className="h-1 rounded-full" style={{
+                                  width: `${Math.min(100, Math.round(((t1+t2+t3) / (sport.seats_total * 3)) * 100))}%`,
+                                  backgroundColor: sport.color
+                                }} />
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-center text-text-muted font-mono text-sm">{sport.seats_total}</td>
+                        {cell(r1)}
+                        {cell(r2)}
+                        {cell(r3)}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         }
