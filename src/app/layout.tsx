@@ -55,6 +55,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { ChatwootWidget } from "@/components/chatwoot/ChatwootWidget";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +69,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-background text-text-primary font-sans antialiased">
         <QueryProvider>{children}</QueryProvider>
+        <ChatwootWidget />
       </body>
     </html>
   );
