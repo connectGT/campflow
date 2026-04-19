@@ -121,29 +121,22 @@ export const MSG = {
   // ─── 7: Seats Availability (dynamic) ────────────────────────────
   SEATS_CHECKING: "🪑 Seats availability check हो रही है...",
 
-  SEATS_AVAILABLE: (sports: { name: string; emoji: string; remaining: number; total: number }[]) => {
-    const lines = sports
-      .map(s => {
-        const pct = Math.round(((s.total - s.remaining) / s.total) * 100);
-        const bar = pct >= 90 ? "🔴" : pct >= 60 ? "🟡" : "🟢";
-        const label = s.remaining <= 0 ? "*FULL*" : `*${s.remaining}* seats left`;
-        return `${bar} ${s.emoji} ${s.name} — ${label} (/${s.total})`;
-      })
-      .join("\n");
+  SEATS_AVAILABLE: (sports: { name: string; emoji: string; total: number; slot1Remaining: number; slot2Remaining: number; slot3Remaining: number }[]) => {
+    const lines = sports.map(s => {
+      const b = (n: number) => n <= 0 ? "🔴 FULL" : n <= 3 ? `🟡 ${n}` : `🟢 ${n}`;
+      return `${s.emoji} *${s.name}*\n   7-8AM: ${b(s.slot1Remaining)}  |  8-9AM: ${b(s.slot2Remaining)}  |  9-10AM: ${b(s.slot3Remaining)}`;
+    }).join("\n\n");
 
-    const anyFull = sports.some(s => s.remaining <= 0);
-    const critical = sports.some(s => s.remaining > 0 && s.remaining <= 5);
+    const anyFull = sports.some(s => s.slot1Remaining <= 0 || s.slot2Remaining <= 0 || s.slot3Remaining <= 0);
 
     return (
-      `🪑 *Seats Availability — Live*\n` +
+      `🪑 *Seats Availability (Slot-wise Live)*\n` +
       `━━━━━━━━━━━━━━━━━━━━\n\n` +
       lines +
       `\n\n` +
       (anyFull
-        ? `⚠️ कुछ sports *Full* हो चुके हैं! जल्दी करें।\n`
-        : critical
-        ? `⚡ Seats तेज़ी से भर रहे हैं!\n`
-        : `✅ अभी seats उपलब्ध हैं।\n`) +
+        ? `⚠️ कुछ slots *Full* हो चुके हैं! जल्दी करें।\n`
+        : `✅ अभी सभी slots में seats उपलब्ध हैं।\n`) +
       `\n👉 Register Now: https://campflow-rho.vercel.app\n\n` +
       `_मुख्य मेनू के लिए *menu* टाइप करें।_`
     );

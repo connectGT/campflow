@@ -94,7 +94,7 @@ async function lookupStatus(phone: string) {
   return { childName: (reg.child as any)?.name || "your child", status: reg.payment_status };
 }
 
-// ─── Fetch live seat availability from DB ─────────────────────────
+// ─── Fetch live SLOT-WISE seat availability ────────────────────────
 async function lookupSeats() {
   const SPORT_META: Record<string, { name: string; emoji: string; total: number }> = {
     swimming:     { name: "Swimming",    emoji: "🏊", total: 40 },
@@ -105,20 +105,32 @@ async function lookupSeats() {
     self_defence: { name: "Self-Defence",emoji: "🥋", total: 10 },
   };
 
-  const { data: capacities } = await supabase
-    .from("realtime_sport_capacity")
-    .select("sport_id, total_seats_taken");
+  // Count how many PAID registrations have each sport in each time slot
+  const { data: regs } = await supabase
+    .from("registrations")
+    .select("slot_1_sport, slot_2_sport, slot_3_sport")
+    .eq("payment_status", "paid");
 
-  const takenMap: Record<string, number> = {};
-  (capacities || []).forEach((c: any) => {
-    takenMap[c.sport_id] = parseInt(c.total_seats_taken || "0");
+  // Tally per sport per slot
+  const slotCount: Record<string, [number, number, number]> = {};
+  for (const id of Object.keys(SPORT_META)) slotCount[id] = [0, 0, 0];
+
+  (regs || []).forEach((r: any) => {
+    const s1 = r.slot_1_sport?.toLowerCase().replace("-", "_").replace(" ", "_");
+    const s2 = r.slot_2_sport?.toLowerCase().replace("-", "_").replace(" ", "_");
+    const s3 = r.slot_3_sport?.toLowerCase().replace("-", "_").replace(" ", "_");
+    if (s1 && slotCount[s1]) slotCount[s1][0]++;
+    if (s2 && slotCount[s2]) slotCount[s2][1]++;
+    if (s3 && slotCount[s3]) slotCount[s3][2]++;
   });
 
   return Object.entries(SPORT_META).map(([id, meta]) => ({
     name: meta.name,
     emoji: meta.emoji,
     total: meta.total,
-    remaining: Math.max(0, meta.total - (takenMap[id] || 0)),
+    slot1Remaining: Math.max(0, meta.total - slotCount[id][0]),
+    slot2Remaining: Math.max(0, meta.total - slotCount[id][1]),
+    slot3Remaining: Math.max(0, meta.total - slotCount[id][2]),
   }));
 }
 
