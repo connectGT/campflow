@@ -26,9 +26,9 @@ export async function GET() {
     localSports.forEach((sport) => {
       availability[sport.id] = {};
       
-      // Determine per-slot capability (Total Global Seats / 3 Hours = per slot cap)
-      // e.g. 120 global seats = 40 per slot. 75 global = 25 per slot.
-      const slotCap = Math.floor(sport.seats_total / 3);
+      // seats_total in camp.ts = direct per-slot capacity
+      // e.g. Swimming=40, Football=25, Cricket=25, Basketball=15, Badminton=10, Self-Defence=10
+      const slotCap = sport.seats_total;
 
       slots.forEach((slot) => {
         // find usage in DB
