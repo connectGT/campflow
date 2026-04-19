@@ -11,15 +11,26 @@ export function ExportButton({ data, filename }: ExportButtonProps) {
   const exportToCSV = () => {
     if (!data || data.length === 0) return;
 
-    const headers = ["Child Name", "Age", "Parent Name", "Email", "Sports", "Date Paid", "Order ID"];
+    const headers = [
+      "Child Name", "Age", "School", 
+      "Parent Name", "Email", "Phone", "Emergency Contact", 
+      "Sports", "Transport Point", 
+      "Date Paid", "Status", "UTR Number", "Order ID"
+    ];
     const rows = data.map((reg) => [
       reg.child?.name,
       reg.child?.age,
+      reg.child?.school || "N/A",
       reg.parent?.full_name,
       reg.parent?.email,
+      reg.parent?.phone,
+      `${reg.emergency_contact_name || "N/A"} (${reg.emergency_contact_phone || ""})`,
       reg.sports?.join("; "),
+      reg.transport_pickup || "Self Drop",
       reg.created_at,
-      reg.razorpay_order_id,
+      reg.payment_status,
+      reg.utr_number || "N/A",
+      reg.id,
     ]);
 
     const csvContent = [
