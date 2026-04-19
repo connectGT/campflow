@@ -22,7 +22,7 @@ export default function RegisterPage() {
     <div className="py-8 max-w-4xl mx-auto">
       <div className="mb-10 text-center">
         <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
-          Register for <span className="gradient-text">CampFlow</span>
+          Register on <span className="gradient-text">Dheera Cart</span>
         </h1>
         <p className="text-text-muted">
           Complete these simple steps to secure your child&apos;s spot.
