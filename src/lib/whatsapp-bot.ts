@@ -121,29 +121,30 @@ export const MSG = {
   // ─── 7: Seats Availability (dynamic) ────────────────────────────
   SEATS_CHECKING: "🪑 Seats availability check हो रही है...",
 
-  SEATS_AVAILABLE: (sports: { name: string; emoji: string; remaining: number; total: number }[]) => {
-    const lines = sports
-      .map(s => {
-        const pct = Math.round(((s.total - s.remaining) / s.total) * 100);
-        const bar = pct >= 90 ? "🔴" : pct >= 60 ? "🟡" : "🟢";
-        const label = s.remaining <= 0 ? "*FULL*" : `*${s.remaining}* seats left`;
-        return `${bar} ${s.emoji} ${s.name.padEnd(12)} — ${label}`;
-      })
-      .join("\n");
+  SEATS_AVAILABLE: (sports: { name: string; emoji: string; total: number; slot1Remaining: number; slot2Remaining: number; slot3Remaining: number }[]) => {
+    const sportLines = sports.map(s => {
+      const bar = (n: number) => n <= 0 ? "🔴 *FULL*" : n <= 3 ? `🟡 *${n}* left` : `🟢 *${n}* left`;
+      return (
+        `${s.emoji} *${s.name}* (${s.total}/slot)\n` +
+        `   7–8 AM  : ${bar(s.slot1Remaining)}\n` +
+        `   8–9 AM  : ${bar(s.slot2Remaining)}\n` +
+        `   9–10 AM : ${bar(s.slot3Remaining)}`
+      );
+    }).join("\n\n");
 
-    const anyFull = sports.some(s => s.remaining <= 0);
-    const allGood = sports.every(s => s.remaining > 10);
+    const anyFull = sports.some(s => s.slot1Remaining <= 0 || s.slot2Remaining <= 0 || s.slot3Remaining <= 0);
+    const critical = sports.some(s => s.slot1Remaining <= 3 || s.slot2Remaining <= 3 || s.slot3Remaining <= 3);
 
     return (
-      `🪑 *Seats Availability — Live*\n` +
+      `🪑 *Seats — Slot-wise (Live)*\n` +
       `━━━━━━━━━━━━━━━━━━━━\n\n` +
-      lines +
+      sportLines +
       `\n\n` +
       (anyFull
-        ? `⚠️ कुछ sports *Full* हो चुके हैं! जल्दी करें।\n`
-        : allGood
-        ? `✅ अभी seats उपलब्ध हैं।\n`
-        : `⚡ Seats तेज़ी से भर रहे हैं!\n`) +
+        ? `⚠️ कुछ slots *भर चुके हैं!* जल्दी register करें।\n`
+        : critical
+        ? `⚡ कुछ slots में *बहुत कम seats* बची हैं!\n`
+        : `✅ अभी सभी slots में seats उपलब्ध हैं।\n`) +
       `\n👉 Register Now: https://campflow-rho.vercel.app\n\n` +
       `_मुख्य मेनू के लिए *menu* टाइप करें।_`
     );
