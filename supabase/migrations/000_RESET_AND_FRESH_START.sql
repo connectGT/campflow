@@ -205,21 +205,21 @@ FROM (
   -- Confirmed paid registrations (slot 1)
   SELECT slot_1_sport AS sport_id, 'slot_1' AS slot_id, 1 AS seats_taken
   FROM public.registrations
-  WHERE payment_status = 'paid' AND slot_1_sport IS NOT NULL
+  WHERE payment_status IN ('paid', 'pending_approval') AND slot_1_sport IS NOT NULL
 
   UNION ALL
 
   -- Confirmed paid registrations (slot 2)
   SELECT slot_2_sport AS sport_id, 'slot_2' AS slot_id, 1 AS seats_taken
   FROM public.registrations
-  WHERE payment_status = 'paid' AND slot_2_sport IS NOT NULL
+  WHERE payment_status IN ('paid', 'pending_approval') AND slot_2_sport IS NOT NULL
 
   UNION ALL
 
   -- Confirmed paid registrations (slot 3)
   SELECT slot_3_sport AS sport_id, 'slot_3' AS slot_id, 1 AS seats_taken
   FROM public.registrations
-  WHERE payment_status = 'paid' AND slot_3_sport IS NOT NULL
+  WHERE payment_status IN ('paid', 'pending_approval') AND slot_3_sport IS NOT NULL
 
   UNION ALL
 

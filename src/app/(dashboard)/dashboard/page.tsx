@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   const { data: registrations } = await supabase
     .from('registrations')
     .select(`
-      id, payment_status, utr_number, amount, created_at,
+      id, payment_status, utr_number, amount, created_at, rejection_reason,
       transport_pickup, slot_1_sport, slot_2_sport, slot_3_sport,
       child:children(name, age, grade)
     `)
@@ -132,7 +132,11 @@ export default async function DashboardPage() {
                   <div className="mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div>
                       <p className="text-red-400 font-bold text-sm">⚠️ Payment Rejected</p>
-                      <p className="text-xs text-text-muted mt-0.5">Your UTR ID could not be verified. Please re-register with the correct transaction ID.</p>
+                      <p className="text-xs text-text-muted mt-0.5">
+                        <span className="font-semibold text-red-300">Reason: </span>
+                        {reg.rejection_reason || "Your UTR ID could not be verified."}
+                      </p>
+                      <p className="text-xs text-text-muted mt-1">Please re-register with the correct payment details.</p>
                     </div>
                     <Link
                       href="/register"

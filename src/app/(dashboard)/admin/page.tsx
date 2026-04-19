@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ExportButton } from "@/components/admin/ExportButton";
 import { ApproveRejectButtons } from "@/components/admin/ApproveRejectButtons";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
+import { OfflineRegistrationForm } from "@/components/admin/OfflineRegistrationForm";
 import { createClient } from "@/lib/supabase/server";
 import { SPORTS, CAMP } from "@/data/camp";
 
@@ -132,6 +133,9 @@ export default async function AdminDashboardPage() {
         </div>
       </div>
 
+      {/* Offline Registration Form */}
+      <OfflineRegistrationForm />
+
       {/* Registration Table */}
       <div className="glass rounded-2xl overflow-hidden shadow-xl border border-glass-border">
         <div className="p-6 border-b border-glass-border">
@@ -203,10 +207,17 @@ export default async function AdminDashboardPage() {
                     <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded-full border ${
                       reg.payment_status === "paid" 
                         ? "bg-green-500/10 text-green-500 border-green-500/20" 
+                        : reg.payment_status === "rejected"
+                        ? "bg-red-500/10 text-red-400 border-red-500/20"
                         : "bg-amber-500/10 text-amber-500 border-amber-500/20"
                     }`}>
-                      {reg.payment_status === "paid" ? "Approved" : "Pending"}
+                      {reg.payment_status === "paid" ? "Approved" : reg.payment_status === "rejected" ? "Rejected" : "Pending"}
                     </span>
+                    {reg.rejection_reason && (
+                      <p className="text-[9px] text-red-400/70 mt-1 max-w-[120px] truncate" title={reg.rejection_reason}>
+                        {reg.rejection_reason}
+                      </p>
+                    )}
                   </td>
                   <td className="px-4 py-4 text-center">
                     {reg.payment_status === "pending_approval" ? (

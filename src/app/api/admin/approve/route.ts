@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient();
-    const { registrationId, action } = await request.json();
+    const { registrationId, action, rejectionReason } = await request.json();
 
     if (!registrationId || !["approve", "reject"].includes(action)) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
@@ -91,10 +91,13 @@ export async function POST(request: Request) {
 
     } else {
       // REJECT: mark as rejected (do NOT delete — user should see the rejection)
-      // Seats auto-free because realtime_sport_capacity only counts 'paid' registrations
+      // Seats auto-free because realtime_sport_capacity only counts 'paid' and 'pending_approval'
       const { error: rejectError } = await supabase
         .from("registrations")
-        .update({ payment_status: "rejected" })
+        .update({ 
+          payment_status: "rejected",
+          rejection_reason: rejectionReason || "Payment could not be verified.",
+        })
         .eq("id", registrationId);
 
       if (rejectError) {
