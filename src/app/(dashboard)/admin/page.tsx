@@ -117,13 +117,13 @@ export default async function AdminDashboardPage() {
         capacityContent={
           <div className="mb-10">
             <h2 className="text-xl font-bold mb-1">Live Seat Availability</h2>
-            <p className="text-xs text-text-muted mb-4">Per time slot — based on confirmed (paid) registrations</p>
+            <p className="text-xs text-text-muted mb-4">Remaining seats per time slot — based on confirmed (paid) registrations</p>
             <div className="glass rounded-2xl overflow-hidden border border-glass-border">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-surface/60 text-[11px] uppercase tracking-wider text-text-muted font-mono border-b border-glass-border">
                     <th className="px-4 py-3 text-left">Sport</th>
-                    <th className="px-4 py-3 text-center">Total / Slot</th>
+                    <th className="px-4 py-3 text-center">Total Remaining</th>
                     <th className="px-4 py-3 text-center">7–8 AM</th>
                     <th className="px-4 py-3 text-center">8–9 AM</th>
                     <th className="px-4 py-3 text-center">9–10 AM</th>
@@ -132,9 +132,15 @@ export default async function AdminDashboardPage() {
                 <tbody className="divide-y divide-glass-border">
                   {SPORTS.map(sport => {
                     const [t1, t2, t3] = slotMap[sport.id] || [0, 0, 0];
-                    const r1 = sport.seats_total - t1;
-                    const r2 = sport.seats_total - t2;
-                    const r3 = sport.seats_total - t3;
+                    const r1 = Math.max(0, sport.seats_total - t1);
+                    const r2 = Math.max(0, sport.seats_total - t2);
+                    const r3 = Math.max(0, sport.seats_total - t3);
+                    const totalRemaining = r1 + r2 + r3;
+                    const totalCapacity = sport.seats_total * 3;
+                    const fillPct = Math.round(((totalCapacity - totalRemaining) / totalCapacity) * 100);
+                    const totalColor = fillPct >= 90 ? "text-red-400" : fillPct >= 60 ? "text-yellow-400" : "text-green-400";
+                    const barColor = fillPct >= 90 ? "#ef4444" : fillPct >= 60 ? "#f59e0b" : sport.color;
+
                     const cell = (remaining: number) => {
                       const color = remaining <= 0 ? "text-red-400" : remaining <= 3 ? "text-yellow-400" : "text-green-400";
                       return (
@@ -151,18 +157,20 @@ export default async function AdminDashboardPage() {
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <span className="text-lg">{sport.emoji}</span>
-                            <div>
-                              <p className="font-semibold text-sm">{sport.name}</p>
-                              <div className="w-24 bg-surface rounded-full h-1 mt-1">
-                                <div className="h-1 rounded-full" style={{
-                                  width: `${Math.min(100, Math.round((Math.max(t1, t2, t3) / sport.seats_total) * 100))}%`,
-                                  backgroundColor: sport.color
-                                }} />
-                              </div>
-                            </div>
+                            <p className="font-semibold text-sm">{sport.name}</p>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-center text-text-muted font-mono text-sm">{sport.seats_total}</td>
+                        {/* Total Remaining column — dynamic */}
+                        <td className="px-4 py-3 text-center">
+                          <span className={`font-bold text-base ${totalColor}`}>{totalRemaining}</span>
+                          <span className="text-text-muted text-xs"> /{totalCapacity}</span>
+                          <div className="w-20 mx-auto bg-surface rounded-full h-1.5 mt-1.5">
+                            <div className="h-1.5 rounded-full transition-all" style={{
+                              width: `${fillPct}%`,
+                              backgroundColor: barColor
+                            }} />
+                          </div>
+                        </td>
                         {cell(r1)}
                         {cell(r2)}
                         {cell(r3)}
