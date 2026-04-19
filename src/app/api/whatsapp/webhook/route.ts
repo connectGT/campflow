@@ -238,7 +238,7 @@ export async function POST(request: Request) {
           await updateSession(from, "camp_dates");
           break;
 
-        case \"status\": {
+        case "status": {
           await sendMessage(from, MSG.STATUS_CHECKING, "status");
           const result = await lookupStatus(localPhone);
           if (result) {
@@ -249,6 +249,7 @@ export async function POST(request: Request) {
           await updateSession(from, "status");
           break;
         }
+
 
         case "seats": {
           await sendMessage(from, MSG.SEATS_CHECKING, "seats");
