@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/register";
   const supabase = createClient();
 
   const handleLogin = async () => {
