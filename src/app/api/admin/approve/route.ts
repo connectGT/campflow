@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { createHmac } from "crypto";
 
@@ -23,14 +23,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    const supabase = await createClient();
+    // Always use service role client to bypass RLS — admin has no Supabase session
+    const supabase = createAdminClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const { registrationId, action, rejectionReason } = await request.json();
 
     if (!registrationId || !["approve", "reject"].includes(action)) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
     }
 
-    // Fetch full registration details
+    // Fetch full registration details (service role bypasses RLS)
     const { data: reg, error: fetchError } = await supabase
       .from("registrations")
       .select(`
@@ -42,17 +47,26 @@ export async function POST(request: Request) {
       .single();
 
     if (fetchError || !reg) {
+      console.error("[Admin Approve] Fetch error:", fetchError);
       return NextResponse.json({ error: "Registration not found" }, { status: 404 });
     }
 
     if (action === "approve") {
       // Mark as paid
-      await supabase.from("registrations").update({ payment_status: "paid" }).eq("id", registrationId);
+      const { error: updateErr } = await supabase
+        .from("registrations")
+        .update({ payment_status: "paid" })
+        .eq("id", registrationId);
+
+      if (updateErr) {
+        console.error("[Admin Approve] Update error:", updateErr);
+        return NextResponse.json({ error: "Failed to approve" }, { status: 500 });
+      }
 
       // Sync to Google Sheets
       try {
         const { appendRegistrationToSheet } = await import("@/lib/google");
-        
+
         const sports: string[] = [];
         if (reg.slot_1_sport) sports.push(`7-8AM: ${reg.slot_1_sport}`);
         if (reg.slot_2_sport) sports.push(`8-9AM: ${reg.slot_2_sport}`);
@@ -64,7 +78,7 @@ export async function POST(request: Request) {
           childSchool: reg.child?.grade || "N/A",
           parentName: reg.parent?.full_name || "Unknown",
           parentEmail: reg.parent?.email || "",
-          parentPhone: reg.parent?.phone || reg.emergency_contact_phone || "",
+          parentPhone: reg.parent?.phone || "",
           emergencyName: reg.emergency_contact_name || "N/A",
           emergencyPhone: reg.emergency_contact_phone || "N/A",
           transportPoint: reg.transport_pickup || "Self Drop",
@@ -75,8 +89,11 @@ export async function POST(request: Request) {
           screenshotUrl: reg.proof_image_url || "N/A",
           status: "Approved",
         });
+
+        console.log("[Admin Approve] ✅ Google Sheets sync successful for:", reg.child?.name);
       } catch (sheetErr) {
-        console.error("[Admin Approve] Google Sheets sync failed:", sheetErr);
+        // Log but don't fail the approval — sheet sync is non-critical
+        console.error("[Admin Approve] ⚠️ Google Sheets sync failed:", sheetErr);
       }
 
       // WhatsApp notification
@@ -90,11 +107,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, status: "paid" });
 
     } else {
-      // REJECT: mark as rejected (do NOT delete — user should see the rejection)
-      // Seats auto-free because realtime_sport_capacity only counts 'paid' and 'pending_approval'
+      // REJECT: mark as rejected, save reason
       const { error: rejectError } = await supabase
         .from("registrations")
-        .update({ 
+        .update({
           payment_status: "rejected",
           rejection_reason: rejectionReason || "Payment could not be verified.",
         })
@@ -105,13 +121,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Failed to reject registration" }, { status: 500 });
       }
 
-      // Clean up any lingering cart seat reservations for this session
+      // Clean up cart seat reservations
       await supabase.from("seat_reservations").delete().eq("session_id", reg.id);
 
       return NextResponse.json({ success: true, status: "rejected" });
     }
+
   } catch (error: any) {
-    console.error("[Admin Approve] Error:", error);
+    console.error("[Admin Approve] Unexpected error:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });
   }
 }
