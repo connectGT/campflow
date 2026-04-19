@@ -45,7 +45,7 @@ export const MSG = {
     `✅ Step 5 — ₹12,000 UPI से payment करें\n` +
     `   📱 UPI ID: *9977855965@ybl*\n\n` +
     `✅ Step 6 — Screenshot upload करें और UTR डालें\n\n` +
-    `📞 Help के लिए: *7️⃣ Talk to Team*\n\n` +
+    `📞 Help के लिए: *8️⃣ Talk to Team*\n\n` +
     `_मुख्य मेनू के लिए *menu* टाइप करें।_`,
 
   // ─── 2: Sports & Timings ────────────────────────────────────────
@@ -160,7 +160,7 @@ export const MSG = {
       `📋 *Registration Status*\n\n` +
       `👦 Name: *${childName}*\n` +
       `Status: ${statusMap[status] || status}\n\n` +
-      `किसी help के लिए *7* टाइप करें।\n` +
+      `किसी help के लिए *8* टाइप करें।\n` +
       `_मुख्य मेनू के लिए *menu* टाइप करें।_`
     );
   },
@@ -171,9 +171,9 @@ export const MSG = {
     `• किसी और नंबर से register किया हो\n` +
     `• Registration अभी complete नहीं हुई हो\n\n` +
     `Register करने के लिए *1* टाइप करें।\n` +
-    `Team से बात करें — *7* टाइप करें।`,
+    `Team से बात करें — *8* टाइप करें।`,
 
-  // ─── 7: Talk to Team ────────────────────────────────────────────
+  // ─── 8: Talk to Team ────────────────────────────────────────────
   TALK_TO_TEAM:
     `👨‍💼 *Team से बात करें*\n\n` +
     `आपकी request note हो गई है।\n` +
@@ -193,7 +193,8 @@ export const MSG = {
     `4️⃣ Pickup Points\n` +
     `5️⃣ Camp Dates\n` +
     `6️⃣ My Status\n` +
-    `7️⃣ Talk to Team\n\n` +
+    `7️⃣  🪑 Seats Availability (Live)\n` +
+    `8️⃣ Talk to Team\n\n` +
     `या *menu* टाइप करें।`,
 };
 
