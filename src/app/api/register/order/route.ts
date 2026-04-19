@@ -23,6 +23,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid registration data. Please complete all slots." }, { status: 400 });
     }
 
+    // 0. Ensure parent profile exists (handles DB resets where profiles got wiped)
+    await supabase
+      .from("profiles")
+      .upsert(
+        {
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || user.user_metadata?.name || "",
+          phone: parentPhone,
+        },
+        { onConflict: "id" }
+      );
+
     // 1. Create or ensure child exists
     let dbChildId = null;
 
@@ -36,7 +49,6 @@ export async function POST(request: Request) {
 
     if (existingChild) {
       dbChildId = existingChild.id;
-      // Optionally update age/grade here if you want
       await supabase.from("children").update({ age: Number(childAge), grade: childSchool }).eq("id", dbChildId);
     } else {
       const { data: child, error: childError } = await supabase
@@ -45,7 +57,7 @@ export async function POST(request: Request) {
           parent_id: user.id, 
           name: childName, 
           age: Number(childAge),
-          grade: childSchool, // schema uses 'grade', not 'school'
+          grade: childSchool,
         })
         .select()
         .single();
@@ -57,8 +69,9 @@ export async function POST(request: Request) {
       dbChildId = child.id;
     }
 
-    // Update parent phone locally on profile
+    // Update parent phone on profile
     await supabase.from("profiles").update({ phone: parentPhone }).eq("id", user.id);
+
 
     const amount = 12000;
 
