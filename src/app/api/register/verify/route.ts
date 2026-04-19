@@ -71,7 +71,11 @@ export async function POST(request: Request) {
         verification_log: { ai_result: aiResult }
       })
       .eq("id", registrationId)
-      .select(`*, child:children(name), parent:profiles(phone)`)
+      .select(`
+        *,
+        child:children(name, age, school),
+        parent:profiles(full_name, email, phone)
+      `)
       .single();
 
     if (updateError || !reg) {
@@ -88,9 +92,13 @@ export async function POST(request: Request) {
         await appendRegistrationToSheet({
           childName: reg.child?.name || "Unknown",
           childAge: reg.child?.age || 0,
+          childSchool: reg.child?.school || "Unknown",
           parentName: reg.parent?.full_name || "Unknown",
           parentEmail: reg.parent?.email || "",
           parentPhone: reg.parent?.phone || "",
+          emergencyName: reg.emergency_contact_name || "N/A",
+          emergencyPhone: reg.emergency_contact_phone || "N/A",
+          transportPoint: reg.transport_pickup || "Self Drop",
           sports: reg.sports || [],
           amount: reg.amount || 12000,
           orderId: reg.id

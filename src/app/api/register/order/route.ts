@@ -19,7 +19,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { childName, childAge, selectedSports } = body;
+    const { 
+      childName, childAge, childSchool, 
+      parentPhone, emergencyName, emergencyPhone, transportPoint,
+      selectedSports, sessionId 
+    } = body;
 
     if (!childName || !childAge || !selectedSports || selectedSports.length !== 3) {
       return NextResponse.json({ error: "Invalid registration data" }, { status: 400 });
@@ -33,10 +37,9 @@ export async function POST(request: Request) {
           parent_id: user.id, 
           name: childName, 
           age: childAge,
-          // Since we don't have a child ID, we match by parent + name for now, 
-          // or just create a new one every time if we want to support multiple registrations.
+          school: childSchool,
         },
-        { onConflict: "" } // Let it create a new row if we don't have an ID
+        { onConflict: "" } 
       )
       .select()
       .single();
@@ -45,7 +48,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to save child details" }, { status: 500 });
     }
 
-    // 2. Skip Razorpay Order (Manual QR Flow)
+    // Update parent phone locally on profile
+    await supabase.from("profiles").update({ phone: parentPhone }).eq("id", user.id);
+
     const amount = 12000;
 
     // 3. Create Registration record (Pending)
@@ -54,12 +59,25 @@ export async function POST(request: Request) {
       .insert({
         parent_id: user.id,
         child_id: child.id,
-        sports: selectedSports,
+        sports: selectedSports, // Now text[] array!
         amount,
         payment_status: "pending",
+        transport_pickup: transportPoint,
+        emergency_contact_name: emergencyName,
+        emergency_contact_phone: emergencyPhone
       })
       .select()
       .single();
+
+    if (regError || !reg) {
+      console.error("Registration Save Error:", regError);
+      return NextResponse.json({ error: "Failed to create registration" }, { status: 500 });
+    }
+
+    // 4. Release local Cart Locks immediately as they are moving to verification
+    if (sessionId) {
+      await supabase.from("seat_reservations").delete().eq("session_id", sessionId);
+    }
 
     if (regError || !reg) {
       console.error("Registration Save Error:", regError);

@@ -7,9 +7,13 @@ import { google } from "googleapis";
 export async function appendRegistrationToSheet(data: {
   childName: string;
   childAge: number;
+  childSchool: string;
   parentName: string;
   parentEmail: string;
   parentPhone: string;
+  emergencyName: string;
+  emergencyPhone: string;
+  transportPoint: string;
   sports: string[];
   amount: number;
   orderId: string;
@@ -19,7 +23,7 @@ export async function appendRegistrationToSheet(data: {
     const base64Key = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_BASE64;
 
     if (!spreadsheetId || !base64Key) {
-      console.warn("[GoogleSheets] Missing credentials, skipping sync.");
+      console.warn("[GoogleSheets] WARN: Missing credentials, skipping real-time sync.");
       return;
     }
 
@@ -38,9 +42,12 @@ export async function appendRegistrationToSheet(data: {
         new Date().toISOString(),
         data.childName,
         data.childAge,
+        data.childSchool || "N/A",
         data.parentName,
         data.parentEmail,
-        data.parentPhone,
+        `+91 ${data.parentPhone}`,
+        `${data.emergencyName} (+91 ${data.emergencyPhone})`,
+        data.transportPoint || "Self Drop",
         data.sports.join(", "),
         data.amount,
         data.orderId,
@@ -50,7 +57,7 @@ export async function appendRegistrationToSheet(data: {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Sheet1!A:J",
+      range: "Sheet1!A:M", // Expanded range for M columns
       valueInputOption: "RAW",
       requestBody: {
         values,

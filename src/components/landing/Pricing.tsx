@@ -1,21 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
-import { Check, ArrowRight } from "lucide-react";
-import Link from "next/link";
-
-const included = [
-  "3 sports of your choice",
-  "Professional coaching",
-  "All equipment provided",
-  "Nutrition & hydration",
-  "Progress report & certificate",
-  "Insurance coverage",
-  "Small batch (max 15 kids)",
-  "Morning & evening slots",
-];
+import { INCLUSIONS_CORE, INCLUSIONS_FREE, INCLUSIONS_PARENTS, INCLUSIONS_SUMMARY, CAMP } from "@/data/camp";
 
 export function Pricing() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -23,108 +10,103 @@ export function Pricing() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        ".pricing-card",
-        { opacity: 0, y: 40 },
+        ".inclusion-card",
+        { opacity: 0, y: 30 },
         {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
+          opacity: 1, y: 0, duration: 0.5, stagger: 0.05, ease: "power2.out",
+          scrollTrigger: { trigger: containerRef.current, start: "top 80%", toggleActions: "play none none none" },
         }
       );
     }, containerRef);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={containerRef} className="py-24 px-8 bg-background relative overflow-hidden">
-      {/* Orbs */}
-      <div className="orb w-[450px] h-[450px] bg-[#ff5745] top-0 right-[-150px]" />
-      <div className="orb w-[300px] h-[300px] bg-[#aacae6] bottom-0 left-[-80px]" />
-
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
-        {/* Left — Heading */}
-        <div>
-          <div className="section-label mb-3">Simple, Transparent</div>
-          <div className="accent-divider" />
-          <h2 className="font-display font-extrabold uppercase text-4xl md:text-5xl text-text-primary tracking-tight mt-4 mb-6 leading-tight">
-            One Price.{" "}
-            <span className="gradient-text">Everything</span>{" "}
-            Included.
+    <section ref={containerRef} id="inclusions" className="py-24 bg-background relative overflow-hidden">
+      <div className="orb w-[500px] h-[500px] bg-[#aacae6] top-[20%] left-[-200px]" />
+      
+      <div className="max-w-7xl mx-auto px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="section-label mb-3 inline-block">The Investment</div>
+          <div className="accent-divider mx-auto" />
+          <h2 className="font-display font-extrabold uppercase text-4xl md:text-5xl text-text-primary tracking-tight mt-4 leading-tight">
+            What <span className="gradient-text">{CAMP.FEE_DISPLAY.split('—')[0]}</span> Covers
           </h2>
-          <p className="text-text-muted text-base leading-relaxed mb-8 font-medium">
-            No hidden fees. No upsells. One flat rate for a summer that will change your child forever.
+          <p className="text-text-muted mt-4 text-base font-medium">
+            {INCLUSIONS_SUMMARY}
           </p>
-          <ul className="space-y-3">
-            {included.map((item) => (
-              <li key={item} className="flex items-center gap-3">
-                <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                  style={{ background: "linear-gradient(135deg, #ffb4a9, #ff5745)" }}
-                >
-                  <Check className="w-3 h-3 text-[#111316]" strokeWidth={3} />
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-8">
+          
+          {/* Core Inclusions */}
+          <div className="glass-subtle rounded-2xl p-6 lg:col-span-2">
+            <h3 className="font-display font-bold text-xl text-text-primary mb-6 flex items-center gap-3">
+              <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary text-sm">₹</span>
+              11 Core Inclusions
+            </h3>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {INCLUSIONS_CORE.map((item) => (
+                <div key={item.title} className="inclusion-card p-4 rounded-xl hover:bg-white/[0.03] transition-colors border border-transparent hover:border-white/5">
+                  <div className="flex gap-4">
+                    <span className="text-2xl pt-1 shrink-0">{item.icon}</span>
+                    <div>
+                      <h4 className="font-display font-bold text-text-primary text-sm uppercase tracking-wider mb-1.5">{item.title}</h4>
+                      <p className="text-text-muted text-xs leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-text-primary text-sm font-medium">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Right — Price Card */}
-        <div className="pricing-card glass rounded-2xl p-10 relative overflow-hidden">
-          {/* Decorative gradient corner */}
-          <div
-            className="absolute top-0 right-0 w-48 h-48 opacity-10 rounded-full blur-3xl"
-            style={{ background: "linear-gradient(135deg, #ffb4a9, #ff5745)" }}
-          />
-
-          <p className="section-label mb-3">Transformation Package</p>
-          <div className="flex items-start gap-2 mb-2">
-            <span className="text-2xl text-text-muted font-bold mt-4">₹</span>
-            <span className="font-display font-extrabold text-8xl text-text-primary leading-none gradient-text">
-              12
-            </span>
-            <span className="font-display font-extrabold text-4xl text-text-muted self-end mb-4">,000</span>
-          </div>
-          <p className="text-text-muted text-sm mb-8 uppercase font-bold tracking-wider">
-            Per athlete · One-time fee
-          </p>
-
-          <div
-            className="border-t pt-8 space-y-3 mb-8"
-            style={{ borderColor: "rgba(255, 218, 213, 0.1)" }}
-          >
-            <div className="flex justify-between text-sm">
-              <span className="text-text-muted font-medium">Duration</span>
-              <span className="text-text-primary font-semibold">35 Days (06 May – 09 Jun)</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-text-muted font-medium">Sports Included</span>
-              <span className="text-text-primary font-semibold">Any 3 of 6</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-text-muted font-medium">Batch Size</span>
-              <span className="text-text-primary font-semibold">Max 15 children</span>
+              ))}
             </div>
           </div>
 
-          <Link href="/register" className="block">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="btn-primary w-full"
-            >
-              Apply Now
-              <ArrowRight className="w-4 h-4" />
-            </motion.div>
-          </Link>
+          {/* Value Additions & Parents */}
+          <div className="flex flex-col gap-8">
+            
+            <div className="glass-subtle rounded-2xl p-6" style={{ background: "linear-gradient(180deg, rgba(26,28,31,0.6) 0%, rgba(94,217,214,0.05) 100%)" }}>
+              <h3 className="font-display font-bold text-xl text-[#5ed9d6] mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-lg bg-[#5ed9d6]/20 flex items-center justify-center text-lg">✨</span>
+                Free Value Additions
+              </h3>
+              <div className="flex flex-col gap-4">
+                {INCLUSIONS_FREE.map((item) => (
+                  <div key={item.title} className="inclusion-card flex gap-4">
+                    <span className="text-2xl pt-1 shrink-0">{item.icon}</span>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h4 className="font-display font-bold text-text-primary text-sm uppercase tracking-wider">{item.title}</h4>
+                        <span className="text-[9px] font-black uppercase tracking-wider text-[#111316] bg-[#5ed9d6] px-1.5 py-0.5 rounded leading-none">{item.badge}</span>
+                      </div>
+                      <p className="text-text-muted text-xs leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-subtle rounded-2xl p-6" style={{ background: "linear-gradient(180deg, rgba(26,28,31,0.6) 0%, rgba(255,180,169,0.05) 100%)" }}>
+              <h3 className="font-display font-bold text-primary text-xl mb-6 flex items-center gap-3">
+                <span className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-lg">👩‍👦</span>
+                For Parents
+              </h3>
+              <div className="flex flex-col gap-4">
+                {INCLUSIONS_PARENTS.map((item) => (
+                  <div key={item.title} className="inclusion-card flex gap-4">
+                    <span className="text-2xl pt-1 shrink-0">{item.icon}</span>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h4 className="font-display font-bold text-text-primary text-sm uppercase tracking-wider">{item.title}</h4>
+                      </div>
+                      <p className="text-text-muted text-xs leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
         </div>
+        
       </div>
     </section>
   );

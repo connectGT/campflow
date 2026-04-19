@@ -7,7 +7,13 @@ import { useRouter } from "next/navigation";
 import QRCode from "react-qr-code";
 
 export function StepPayment() {
-  const { childName, childAge, selectedSports, parentPhone, prevStep, reset } = useCartStore();
+  const { 
+    childName, childAge, childSchool, transportPoint,
+    parentPhone, emergencyName, emergencyPhone,
+    selectedSports, cartSessionId, 
+    prevStep, reset 
+  } = useCartStore();
+  
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState("");
   const [screenshot, setScreenshot] = useState<File | null>(null);
@@ -18,7 +24,7 @@ export function StepPayment() {
   const router = useRouter();
 
   const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "campflow@okaxis"; // Default placeholder
-  const PAYEE_NAME = "CampFlow Summer Camp";
+  const PAYEE_NAME = "Dheera Sports Foundation";
   const AMOUNT = 12000;
   
   // UPI deep link
@@ -44,10 +50,15 @@ export function StepPayment() {
       const res = await fetch("/api/register/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ childName, childAge, selectedSports }),
+        body: JSON.stringify({ 
+          childName, childAge, childSchool, transportPoint,
+          parentPhone, emergencyName, emergencyPhone,
+          selectedSports, sessionId: cartSessionId 
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
+      
       setRegistrationId(data.registrationId);
       setStep("upload");
     } catch (err: any) {
