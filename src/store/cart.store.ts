@@ -12,10 +12,22 @@ interface CartState {
   // Child details
   childName: string;
   childAge: number | null;
+  childGender: string;
+  childDob: string;           // "YYYY-MM-DD"
+  fatherName: string;
+  motherName: string;
   childSchool: string;
-  parentPhone: string;
+
+  // Contact
+  parentPhone: string;        // Mobile number
+  whatsappNumber: string;     // WhatsApp (may differ from mobile)
+  fullAddress: string;
+
+  // Emergency
   emergencyName: string;
   emergencyPhone: string;
+
+  // Logistics
   transportPoint: string;
 
   // Sport selection explicitly mapped to time slots
@@ -31,15 +43,25 @@ interface CartState {
   // Actions — Child
   setChildName: (name: string) => void;
   setChildAge: (age: number) => void;
+  setChildGender: (gender: string) => void;
+  setChildDob: (dob: string) => void;
+  setFatherName: (name: string) => void;
+  setMotherName: (name: string) => void;
   setChildSchool: (school: string) => void;
+
+  // Actions — Contact
   setParentPhone: (phone: string) => void;
+  setWhatsappNumber: (phone: string) => void;
+  setFullAddress: (address: string) => void;
+
+  // Actions — Emergency & Logistics
   setEmergencyName: (name: string) => void;
   setEmergencyPhone: (phone: string) => void;
   setTransportPoint: (point: string) => void;
 
   // Actions — Sports (Async for locks)
   toggleSport: (sportId: string, slotId: "slot_1" | "slot_2" | "slot_3") => Promise<void>;
-  clearCartLock: () => void; // call when timer runs out
+  clearCartLock: () => void;
 
   // Actions — Navigation
   nextStep: () => void;
@@ -58,8 +80,16 @@ const initialState = {
 
   childName: "",
   childAge: null,
+  childGender: "",
+  childDob: "",
+  fatherName: "",
+  motherName: "",
   childSchool: "",
+
   parentPhone: "",
+  whatsappNumber: "",
+  fullAddress: "",
+
   emergencyName: "",
   emergencyPhone: "",
   transportPoint: "",
@@ -72,10 +102,21 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       ...initialState,
 
+      // Child setters
       setChildName: (name) => set({ childName: name }),
       setChildAge: (age) => set({ childAge: age }),
+      setChildGender: (gender) => set({ childGender: gender }),
+      setChildDob: (dob) => set({ childDob: dob }),
+      setFatherName: (name) => set({ fatherName: name }),
+      setMotherName: (name) => set({ motherName: name }),
       setChildSchool: (school) => set({ childSchool: school }),
+
+      // Contact setters
       setParentPhone: (phone) => set({ parentPhone: phone }),
+      setWhatsappNumber: (phone) => set({ whatsappNumber: phone }),
+      setFullAddress: (address) => set({ fullAddress: address }),
+
+      // Emergency / logistics
       setEmergencyName: (name) => set({ emergencyName: name }),
       setEmergencyPhone: (phone) => set({ emergencyPhone: phone }),
       setTransportPoint: (point) => set({ transportPoint: point }),
@@ -83,16 +124,11 @@ export const useCartStore = create<CartState>()(
       toggleSport: async (sportId, slotId) => {
         const state = get();
         
-        // Lazy init sessionId once they pick the first sport
         const sessionId = state.cartSessionId || crypto.randomUUID();
-        if (!state.cartSessionId) {
-          set({ cartSessionId: sessionId });
-        }
+        if (!state.cartSessionId) set({ cartSessionId: sessionId });
 
         const currentSlotSport = state.selectedSports[slotId];
         const isDeselecting = currentSlotSport === sportId;
-
-        // Validation: cannot pick the exact same sport in two different slots
         const isDuplicate = Object.values(state.selectedSports).some(id => id === sportId) && !isDeselecting;
 
         set({ isTogglingSport: true, cartError: null });
@@ -104,60 +140,47 @@ export const useCartStore = create<CartState>()(
           }
 
           if (isDeselecting) {
-            // Release from backend
             const res = await fetch("/api/cart/reserve", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ action: "release", sportId, slotId, sessionId })
             });
-            
             if (!res.ok) throw new Error("Could not release seat");
 
-            // UI update
             const newSelected = { ...state.selectedSports, [slotId]: null };
             const isEmpty = !newSelected.slot_1 && !newSelected.slot_2 && !newSelected.slot_3;
+            set({ selectedSports: newSelected, cartExpiresAt: isEmpty ? null : state.cartExpiresAt, isTogglingSport: false });
 
-            set({ 
-              selectedSports: newSelected,
-              cartExpiresAt: isEmpty ? null : state.cartExpiresAt, 
-              isTogglingSport: false 
-            });
           } else {
-            // If there's currently another sport in this slot, we must release it first theoretically!
             if (currentSlotSport) {
-               await fetch("/api/cart/reserve", {
-                 method: "POST",
-                 headers: { "Content-Type": "application/json" },
-                 body: JSON.stringify({ action: "release", sportId: currentSlotSport, slotId, sessionId })
-               });
+              await fetch("/api/cart/reserve", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "release", sportId: currentSlotSport, slotId, sessionId })
+              });
             }
 
-            // Reserve the new one
             const res = await fetch("/api/cart/reserve", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ action: "reserve", sportId, slotId, sessionId })
             });
-            
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || "Failed to reserve seat");
 
-            // Update successful
             set({ 
               selectedSports: { ...state.selectedSports, [slotId]: sportId },
-              cartExpiresAt: new Date(data.expiresAt).getTime(), // Keep synced
+              cartExpiresAt: new Date(data.expiresAt).getTime(),
               isTogglingSport: false 
             });
           }
         } catch (err: any) {
-           console.error("Cart action failed", err);
-           set({ cartError: err.message, isTogglingSport: false });
+          console.error("Cart action failed", err);
+          set({ cartError: err.message, isTogglingSport: false });
         }
       },
 
-      clearCartLock: () => {
-        set({ ...initialState });
-      },
+      clearCartLock: () => set({ ...initialState }),
 
       nextStep: () =>
         set((state) => ({
@@ -170,11 +193,8 @@ export const useCartStore = create<CartState>()(
         })),
 
       goToStep: (step) => set({ currentStep: step }),
-
       reset: () => set(initialState),
     }),
-    {
-      name: "dheera-cart-storage",
-    }
+    { name: "dheera-cart-storage" }
   )
 );

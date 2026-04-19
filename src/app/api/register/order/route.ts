@@ -13,13 +13,26 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { 
-      childName, childAge, childSchool, 
-      parentPhone, emergencyName, emergencyPhone, transportPoint,
-      selectedSports, sessionId 
+    const {
+      childName, childGender, childDob, childSchool,
+      fatherName, motherName,
+      parentPhone, whatsappNumber, fullAddress,
+      emergencyName, emergencyPhone, transportPoint,
+      selectedSports, sessionId,
     } = body;
 
-    if (!childName || !childAge || !selectedSports || !selectedSports.slot_1 || !selectedSports.slot_2 || !selectedSports.slot_3) {
+    // Derive age from DOB
+    const calcAge = (dob: string) => {
+      if (!dob) return null;
+      const today = new Date();
+      const birth = new Date(dob);
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+      return age;
+    };
+
+    if (!childName || !selectedSports?.slot_1 || !selectedSports?.slot_2 || !selectedSports?.slot_3) {
       return NextResponse.json({ error: "Invalid registration data. Please complete all slots." }, { status: 400 });
     }
 
@@ -36,10 +49,17 @@ export async function POST(request: Request) {
         { onConflict: "id" }
       );
 
-    // 1. Create or ensure child exists
-    let dbChildId = null;
+    // 1. Create or update child record
+    const childData = {
+      name: childName,
+      gender: childGender || null,
+      date_of_birth: childDob || null,
+      age: calcAge(childDob),
+      grade: childSchool || null,
+      father_name: fatherName || null,
+      mother_name: motherName || null,
+    };
 
-    // Check if child already exists by name for this parent
     const { data: existingChild } = await supabase
       .from("children")
       .select("id")
@@ -47,18 +67,15 @@ export async function POST(request: Request) {
       .eq("name", childName)
       .maybeSingle();
 
+    let dbChildId = null;
+
     if (existingChild) {
       dbChildId = existingChild.id;
-      await supabase.from("children").update({ age: Number(childAge), grade: childSchool }).eq("id", dbChildId);
+      await supabase.from("children").update(childData).eq("id", dbChildId);
     } else {
       const { data: child, error: childError } = await supabase
         .from("children")
-        .insert({ 
-          parent_id: user.id, 
-          name: childName, 
-          age: Number(childAge),
-          grade: childSchool,
-        })
+        .insert({ parent_id: user.id, ...childData })
         .select()
         .single();
 
@@ -69,13 +86,12 @@ export async function POST(request: Request) {
       dbChildId = child.id;
     }
 
-    // Update parent phone on profile
+    // 2. Update parent phone and WhatsApp on profile
     await supabase.from("profiles").update({ phone: parentPhone }).eq("id", user.id);
-
 
     const amount = 12000;
 
-    // 3. Create Registration record (Pending)
+    // 3. Create Registration record
     const { data: reg, error: regError } = await supabase
       .from("registrations")
       .insert({
@@ -88,18 +104,12 @@ export async function POST(request: Request) {
         payment_status: "pending",
         transport_pickup: transportPoint,
         emergency_contact_name: emergencyName,
-        emergency_contact_phone: emergencyPhone
+        emergency_contact_phone: emergencyPhone,
+        whatsapp_number: whatsappNumber || parentPhone,
+        full_address: fullAddress || null,
       })
       .select()
       .single();
-
-    if (regError || !reg) {
-      console.error("Registration Save Error:", regError);
-      return NextResponse.json({ error: "Failed to create registration" }, { status: 500 });
-    }
-
-    // 4. Removed local Cart Lock release so the seat stays protected
-    // while the user uploads their screenshot.
 
     if (regError || !reg) {
       console.error("Registration Save Error:", regError);
@@ -111,6 +121,7 @@ export async function POST(request: Request) {
       amount: reg.amount,
       currency: "INR",
     });
+
   } catch (error: any) {
     console.error("Order Creation Logic Error:", error);
     return NextResponse.json({ error: error.message || "Internal server error" }, { status: 500 });

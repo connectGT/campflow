@@ -7,10 +7,16 @@ import { google } from "googleapis";
 export async function appendRegistrationToSheet(data: {
   childName: string;
   childAge: number;
+  childGender?: string;
+  childDob?: string;
+  fatherName?: string;
+  motherName?: string;
   childSchool: string;
   parentName: string;
   parentEmail: string;
   parentPhone: string;
+  whatsappNumber?: string;
+  fullAddress?: string;
   emergencyName: string;
   emergencyPhone: string;
   transportPoint: string;
@@ -48,28 +54,34 @@ export async function appendRegistrationToSheet(data: {
     const values = [
       [
         new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),   // A: Date & Time (IST)
-        data.childName,                                                        // B: Child Name
-        data.childAge,                                                         // C: Age
-        data.childSchool || "N/A",                                            // D: School/Grade
-        data.parentName,                                                       // E: Parent Name
-        data.parentEmail,                                                      // F: Parent Email
-        data.parentPhone ? `'${data.parentPhone}` : "N/A",                   // G: Parent Phone (force text)
-        data.emergencyName || "N/A",                                          // H: Emergency Contact Name
-        data.emergencyPhone ? `'${data.emergencyPhone}` : "N/A",            // I: Emergency Phone (force text)
-        data.transportPoint || "Self Drop",                                   // J: Transport
-        data.sports.join(" | "),                                              // K: Sports (slot-wise)
-        `₹${(data.amount || 12000).toLocaleString("en-IN")}`,               // L: Amount
-        utrFormatted,                                                          // M: UTR (text forced)
-        data.screenshotUrl || "N/A",                                          // N: Screenshot URL
-        data.status || "Approved",                                            // O: Status
-        data.orderId,                                                          // P: Order ID
+        data.childName,                                                        // B: Swimmer Name
+        data.childGender?.toUpperCase() || "N/A",                            // C: Gender
+        data.childDob || "N/A",                                              // D: Date of Birth
+        data.childAge || "N/A",                                              // E: Age (calculated)
+        data.childSchool || "N/A",                                           // F: School
+        data.fatherName || "N/A",                                            // G: Father's Name
+        data.motherName || data.parentName || "N/A",                        // H: Mother's Name
+        data.parentName,                                                      // I: Parent/Guardian Name
+        data.parentEmail,                                                     // J: Email
+        data.parentPhone ? `'${data.parentPhone}` : "N/A",                  // K: Mobile (force text)
+        data.whatsappNumber ? `'${data.whatsappNumber}` : `'${data.parentPhone || "N/A"}`, // L: WhatsApp
+        data.fullAddress || "N/A",                                           // M: Address
+        data.emergencyName || "N/A",                                         // N: Emergency Contact
+        data.emergencyPhone ? `'${data.emergencyPhone}` : "N/A",           // O: Emergency Phone
+        data.transportPoint || "Self Drop",                                  // P: Transport
+        data.sports.join(" | "),                                             // Q: Sports (slot-wise)
+        `₹${(data.amount || 12000).toLocaleString("en-IN")}`,              // R: Amount
+        utrFormatted,                                                         // S: UTR (text forced)
+        data.screenshotUrl || "N/A",                                         // T: Screenshot URL
+        data.status || "Approved",                                           // U: Status
+        data.orderId,                                                         // V: Order ID
       ],
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Sheet1!A:P",
-      valueInputOption: "USER_ENTERED",  // USER_ENTERED respects the ' prefix for text forcing
+      range: "Sheet1!A:V",
+      valueInputOption: "USER_ENTERED",
       requestBody: { values },
     });
 
