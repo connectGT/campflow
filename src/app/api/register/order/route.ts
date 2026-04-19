@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       childName, childGender, childDob, childSchool,
-      fatherName, motherName,
+      fatherName, motherName, photoUrl,
       parentPhone, whatsappNumber, fullAddress,
       emergencyName, emergencyPhone, transportPoint,
       selectedSports, sessionId,
@@ -58,6 +58,7 @@ export async function POST(request: Request) {
       grade: childSchool || null,
       father_name: fatherName || null,
       mother_name: motherName || null,
+      photo_url: photoUrl || null,
     };
 
     const { data: existingChild } = await supabase

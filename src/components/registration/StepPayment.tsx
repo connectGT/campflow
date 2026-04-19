@@ -8,8 +8,10 @@ import QRCode from "react-qr-code";
 
 export function StepPayment() {
   const { 
-    childName, childAge, childSchool, transportPoint,
-    parentPhone, emergencyName, emergencyPhone,
+    childName, childGender, childDob, childSchool, transportPoint,
+    fatherName, motherName,
+    parentPhone, whatsappNumber, fullAddress,
+    emergencyName, emergencyPhone,
     selectedSports, cartSessionId, 
     prevStep, reset 
   } = useCartStore();
@@ -24,20 +26,16 @@ export function StepPayment() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "campflow@okaxis"; // Default placeholder
+  const UPI_ID = process.env.NEXT_PUBLIC_UPI_ID || "campflow@okaxis";
   const PAYEE_NAME = "Dheera Sports Foundation";
   const AMOUNT = 12000;
   
-  // UPI deep link
   const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${AMOUNT}&cu=INR&tn=Registration for ${childName}`;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError("File size should be less than 5MB");
-        return;
-      }
+      if (file.size > 5 * 1024 * 1024) { setError("File size should be less than 5MB"); return; }
       setScreenshot(file);
       setPreview(URL.createObjectURL(file));
       setError("");
@@ -48,12 +46,15 @@ export function StepPayment() {
     setIsProcessing(true);
     setError("");
     try {
+      const photoUrl = sessionStorage.getItem("student_photo_url") || null;
       const res = await fetch("/api/register/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          childName, childAge, childSchool, transportPoint,
-          parentPhone, emergencyName, emergencyPhone,
+          childName, childGender, childDob, childSchool, transportPoint,
+          fatherName, motherName, photoUrl,
+          parentPhone, whatsappNumber, fullAddress,
+          emergencyName, emergencyPhone,
           selectedSports, sessionId: cartSessionId 
         }),
       });
