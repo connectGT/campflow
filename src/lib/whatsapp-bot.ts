@@ -15,7 +15,8 @@ export const MSG = {
     `4️⃣  Pickup & Drop Points\n` +
     `5️⃣  Camp Dates & Details\n` +
     `6️⃣  My Registration Status\n` +
-    `7️⃣  Talk to our Team\n\n` +
+    `7️⃣  🪑 Seats Availability (Live)\n` +
+    `8️⃣  Talk to our Team\n\n` +
     `_किसी भी समय *menu* टाइप करें मुख्य मेनू के लिए।_`,
 
   MENU_PROMPT:
@@ -26,7 +27,8 @@ export const MSG = {
     `4️⃣  Pickup Points\n` +
     `5️⃣  Camp Dates\n` +
     `6️⃣  My Status\n` +
-    `7️⃣  Talk to Team\n\n` +
+    `7️⃣  🪑 Seats Availability (Live)\n` +
+    `8️⃣  Talk to Team\n\n` +
     `नंबर टाइप करें 👆`,
 
   // ─── 1: Registration ────────────────────────────────────────────
@@ -116,6 +118,37 @@ export const MSG = {
   // ─── 6: Status Check (dynamic) ──────────────────────────────────
   STATUS_CHECKING: "🔍 आपका registration status check हो रहा है...",
 
+  // ─── 7: Seats Availability (dynamic) ────────────────────────────
+  SEATS_CHECKING: "🪑 Seats availability check हो रही है...",
+
+  SEATS_AVAILABLE: (sports: { name: string; emoji: string; remaining: number; total: number }[]) => {
+    const lines = sports
+      .map(s => {
+        const pct = Math.round(((s.total - s.remaining) / s.total) * 100);
+        const bar = pct >= 90 ? "🔴" : pct >= 60 ? "🟡" : "🟢";
+        const label = s.remaining <= 0 ? "*FULL*" : `*${s.remaining}* seats left`;
+        return `${bar} ${s.emoji} ${s.name.padEnd(12)} — ${label}`;
+      })
+      .join("\n");
+
+    const anyFull = sports.some(s => s.remaining <= 0);
+    const allGood = sports.every(s => s.remaining > 10);
+
+    return (
+      `🪑 *Seats Availability — Live*\n` +
+      `━━━━━━━━━━━━━━━━━━━━\n\n` +
+      lines +
+      `\n\n` +
+      (anyFull
+        ? `⚠️ कुछ sports *Full* हो चुके हैं! जल्दी करें।\n`
+        : allGood
+        ? `✅ अभी seats उपलब्ध हैं।\n`
+        : `⚡ Seats तेज़ी से भर रहे हैं!\n`) +
+      `\n👉 Register Now: https://campflow-rho.vercel.app\n\n` +
+      `_मुख्य मेनू के लिए *menu* टाइप करें।_`
+    );
+  },
+
   STATUS_FOUND: (childName: string, status: string) => {
     const statusMap: Record<string, string> = {
       pending: "⏳ Payment pending — website पर screenshot upload करें",
@@ -180,7 +213,8 @@ export function parseIntent(text: string): string {
   if (t === "4") return "pickup";
   if (t === "5") return "camp_dates";
   if (t === "6") return "status";
-  if (t === "7") return "talk_to_team";
+  if (t === "7") return "seats";
+  if (t === "8") return "talk_to_team";
 
   // Keyword matching
   if (/regist|admission|join|enroll|signup|register|form/.test(t)) return "registration";
@@ -189,6 +223,7 @@ export function parseIntent(text: string): string {
   if (/pickup|drop|bus|transport|point|location|address|kahan|kha se/.test(t)) return "pickup";
   if (/date|dates|when|camp|start|duration|kab|kitne din/.test(t)) return "camp_dates";
   if (/status|check|confirm|verify|mera|my status/.test(t)) return "status";
+  if (/seat|seats|available|availab|kitni|space|capacity|bachi|remaining|left/.test(t)) return "seats";
   if (/talk|team|call|contact|help|human|person|agent|baat/.test(t)) return "talk_to_team";
 
   return "unknown";

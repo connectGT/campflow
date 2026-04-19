@@ -94,6 +94,35 @@ async function lookupStatus(phone: string) {
   return { childName: (reg.child as any)?.name || "your child", status: reg.payment_status };
 }
 
+// ─── Fetch live seat availability from DB ─────────────────────────
+async function lookupSeats() {
+  // Sport metadata (name, emoji, total seats)
+  const SPORT_META: Record<string, { name: string; emoji: string; total: number }> = {
+    swimming:   { name: "Swimming",    emoji: "🏊", total: 40 },
+    cricket:    { name: "Cricket",     emoji: "🏏", total: 40 },
+    football:   { name: "Football",    emoji: "⚽", total: 40 },
+    basketball: { name: "Basketball",  emoji: "🏀", total: 40 },
+    badminton:  { name: "Badminton",   emoji: "🏸", total: 40 },
+    self_defense: { name: "Self Defense", emoji: "🥋", total: 40 },
+  };
+
+  const { data: capacities } = await supabase
+    .from("realtime_sport_capacity")
+    .select("sport_id, total_seats_taken");
+
+  const takenMap: Record<string, number> = {};
+  (capacities || []).forEach((c: any) => {
+    takenMap[c.sport_id] = parseInt(c.total_seats_taken || "0");
+  });
+
+  return Object.entries(SPORT_META).map(([id, meta]) => ({
+    name: meta.name,
+    emoji: meta.emoji,
+    total: meta.total,
+    remaining: Math.max(0, meta.total - (takenMap[id] || 0)),
+  }));
+}
+
 // ─── Notify admin when customer wants to talk ──────────────────────
 async function notifyAdmin(customerPhone: string, message: string) {
   const adminMsg =
@@ -209,20 +238,28 @@ export async function POST(request: Request) {
           await updateSession(from, "camp_dates");
           break;
 
-        case "status": {
-          await sendMessage(from, MSG.STATUS_CHECKING);
+        case \"status\": {
+          await sendMessage(from, MSG.STATUS_CHECKING, "status");
           const result = await lookupStatus(localPhone);
           if (result) {
-            await sendMessage(from, MSG.STATUS_FOUND(result.childName, result.status));
+            await sendMessage(from, MSG.STATUS_FOUND(result.childName, result.status), "status");
           } else {
-            await sendMessage(from, MSG.STATUS_NOT_FOUND(localPhone));
+            await sendMessage(from, MSG.STATUS_NOT_FOUND(localPhone), "status");
           }
           await updateSession(from, "status");
           break;
         }
 
+        case "seats": {
+          await sendMessage(from, MSG.SEATS_CHECKING, "seats");
+          const sportsData = await lookupSeats();
+          await sendMessage(from, MSG.SEATS_AVAILABLE(sportsData), "seats");
+          await updateSession(from, "seats");
+          break;
+        }
+
         case "talk_to_team":
-          await sendMessage(from, MSG.TALK_TO_TEAM);
+          await sendMessage(from, MSG.TALK_TO_TEAM, "talk_to_team");
           await notifyAdmin(from, text);
           await updateSession(from, "talk_to_team");
           break;
