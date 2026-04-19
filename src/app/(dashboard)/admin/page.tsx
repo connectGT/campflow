@@ -34,7 +34,7 @@ export default async function AdminDashboardPage() {
     .from("registrations")
     .select(`
       *,
-      child:children(name, age, school),
+      child:children(name, age, grade),
       parent:profiles(full_name, email, phone)
     `)
     .in("payment_status", ["paid", "pending_approval"])
@@ -157,7 +157,7 @@ export default async function AdminDashboardPage() {
                   <td className="px-4 py-4">
                     <p className="font-bold">{reg.child?.name}</p>
                     <p className="text-xs text-text-muted">{reg.child?.age} yrs</p>
-                    <p className="text-xs text-text-muted">{reg.child?.school || "—"}</p>
+                    <p className="text-xs text-text-muted">{reg.child?.grade || "—"}</p>
                     <p className="text-[10px] text-text-muted mt-1">{format(new Date(reg.created_at), "MMM d, HH:mm")}</p>
                   </td>
                   <td className="px-4 py-4 text-xs">

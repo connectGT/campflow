@@ -43,9 +43,9 @@ export default async function DashboardPage() {
     .select(`
       id, payment_status, utr_number, amount, created_at,
       transport_pickup, slot_1_sport, slot_2_sport, slot_3_sport,
-      child:children(name, age, school)
+      child:children(name, age, grade)
     `)
-    .eq('user_id', user?.id)
+    .eq('parent_id', user?.id)
     .order('created_at', { ascending: false })
 
   return (
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
                     </div>
                     <div>
                       <p className="font-bold text-lg">{reg.child?.name}</p>
-                      <p className="text-sm text-text-muted">{reg.child?.age} yrs &bull; {reg.child?.school}</p>
+                      <p className="text-sm text-text-muted">{reg.child?.age} yrs &bull; {reg.child?.grade}</p>
                     </div>
                   </div>
                   <StatusBadge status={reg.payment_status} />
