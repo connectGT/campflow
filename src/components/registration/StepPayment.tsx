@@ -148,13 +148,22 @@ export function StepPayment() {
             </div>
           )}
 
-          <button
-            onClick={startRegistration}
-            disabled={isProcessing}
-            className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
-          >
-            {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : "I've Paid, Continue ➔"}
-          </button>
+          <div className="flex flex-col sm:flex-row gap-3 mt-2">
+            <button
+              onClick={prevStep}
+              disabled={isProcessing}
+              className="flex items-center justify-center gap-2 border border-glass-border hover:bg-surface text-text-muted px-6 py-4 rounded-xl font-semibold transition-colors disabled:opacity-40"
+            >
+              <ChevronLeft className="w-5 h-5" /> Back to Review
+            </button>
+            <button
+              onClick={startRegistration}
+              disabled={isProcessing}
+              className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold text-lg transition-all shadow-lg active:scale-[0.98] disabled:opacity-50"
+            >
+              {isProcessing ? <Loader2 className="w-6 h-6 animate-spin" /> : "I've Paid, Continue ➔"}
+            </button>
+          </div>
         </>
       ) : (
         <>
