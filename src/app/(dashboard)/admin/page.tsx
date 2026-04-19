@@ -155,7 +155,7 @@ export default async function AdminDashboardPage() {
                               <p className="font-semibold text-sm">{sport.name}</p>
                               <div className="w-24 bg-surface rounded-full h-1 mt-1">
                                 <div className="h-1 rounded-full" style={{
-                                  width: `${Math.min(100, Math.round(((t1+t2+t3) / (sport.seats_total * 3)) * 100))}%`,
+                                  width: `${Math.min(100, Math.round((Math.max(t1, t2, t3) / sport.seats_total) * 100))}%`,
                                   backgroundColor: sport.color
                                 }} />
                               </div>
