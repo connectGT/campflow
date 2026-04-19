@@ -32,9 +32,8 @@ function LoginForm() {
         className="glass-strong rounded-2xl p-10 w-full max-w-md text-center relative z-10"
       >
         <div className="mb-8">
-          <h1 className="font-display text-3xl font-bold mb-2">
-            Welcome to{" "}
-            <span className="gradient-text">CampFlow</span>
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-3">
+            Welcome to <span className="gradient-text">Dheera Sports</span>
           </h1>
           <p className="text-text-muted">
             Sign in to register your child for summer camp
