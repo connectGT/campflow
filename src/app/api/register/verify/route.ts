@@ -103,6 +103,11 @@ export async function POST(request: Request) {
           amount: reg.amount || 12000,
           orderId: reg.id
         });
+
+        const sessionId = formData.get("session_id") as string;
+        if (sessionId) {
+          await supabase.from("seat_reservations").delete().eq("session_id", sessionId);
+        }
       } catch (automationError) {
         console.error("Post-verification automation failed:", automationError);
       }

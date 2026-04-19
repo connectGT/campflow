@@ -70,12 +70,17 @@ export function StepReview() {
           </div>
           <div className="flex-1">
             <p className="text-xs text-text-muted uppercase tracking-wider font-semibold">Selected Disciplines</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {selectedSports.map((id) => (
-                <span key={id} className="px-3 py-1 rounded-full bg-background border border-glass-border text-xs font-semibold capitalize tracking-wide">
-                  {id.replace('_', '-')}
-                </span>
-              ))}
+            <div className="mt-3 flex flex-col gap-2">
+               {[
+                 { slot: "7:00 AM - 8:00 AM", id: selectedSports.slot_1 },
+                 { slot: "8:00 AM - 9:00 AM", id: selectedSports.slot_2 },
+                 { slot: "9:00 AM - 10:00 AM", id: selectedSports.slot_3 }
+               ].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-background border border-glass-border px-3 py-2 rounded-lg">
+                     <span className="text-xs font-semibold text-text-muted">{item.slot}</span>
+                     <span className="text-sm font-bold text-white capitalize">{item.id?.replace('_', ' ') || 'None'}</span>
+                  </div>
+               ))}
             </div>
           </div>
         </div>

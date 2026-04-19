@@ -4,9 +4,9 @@ import { SPORTS } from "@/data/camp";
 
 export async function POST(request: Request) {
   try {
-    const { action, sportId, sessionId } = await request.json();
+    const { action, sportId, slotId, sessionId } = await request.json();
 
-    if (!sportId || !sessionId) {
+    if (!sportId || !sessionId || !slotId) {
       return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
@@ -18,20 +18,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Invalid sport selection" }, { status: 400 });
     }
 
+    const slotCap = Math.floor(sportConfig.seats_total / 3);
+
     if (action === "reserve") {
-      // 1. Check current capacity
+      // 1. Check current capacity for THIS SPECIFIC SLOT
       const { data: capacityData, error: capacityError } = await supabase
         .from("realtime_sport_capacity")
         .select("total_seats_taken")
         .eq("sport_id", sportId)
-        .single();
+        .eq("slot_id", slotId)
+        .maybeSingle();
 
       // If it doesn't exist, it means 0 are taken.
       const taken = capacityData?.total_seats_taken || 0;
 
-      // 2. Validate availability
-      if (taken >= sportConfig.seats_total) {
-        return NextResponse.json({ error: "No seats available in " + sportConfig.name }, { status: 409 });
+      // 2. Validate availability against the slot cap (not total cap)
+      if (taken >= slotCap) {
+        return NextResponse.json({ error: `No seats available in ${sportConfig.name} at this time slot` }, { status: 409 });
       }
 
       // 3. Insert reservation lock (10 minutes)
@@ -40,6 +43,7 @@ export async function POST(request: Request) {
         .from("seat_reservations")
         .insert({
           sport_id: sportId,
+          slot_id: slotId,
           session_id: sessionId,
           expires_at: expiresAt,
         });
@@ -50,12 +54,12 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true, expiresAt });
     } else if (action === "release") {
-      // Release logic: delete 1 reservation for this session/sport
-      // We limit to 1 using ctid or just deleting relying on constraints, but standard delete by session + sport works
+      // Release logic: delete 1 reservation for this session/sport/slot
       const { error: deleteError } = await supabase
         .from("seat_reservations")
         .delete()
         .eq("sport_id", sportId)
+        .eq("slot_id", slotId)
         .eq("session_id", sessionId);
 
       if (deleteError) {

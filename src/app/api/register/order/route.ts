@@ -19,8 +19,8 @@ export async function POST(request: Request) {
       selectedSports, sessionId 
     } = body;
 
-    if (!childName || !childAge || !selectedSports || selectedSports.length !== 3) {
-      return NextResponse.json({ error: "Invalid registration data" }, { status: 400 });
+    if (!childName || !childAge || !selectedSports || !selectedSports.slot_1 || !selectedSports.slot_2 || !selectedSports.slot_3) {
+      return NextResponse.json({ error: "Invalid registration data. Please complete all slots." }, { status: 400 });
     }
 
     // 1. Create or ensure child exists
@@ -68,7 +68,9 @@ export async function POST(request: Request) {
       .insert({
         parent_id: user.id,
         child_id: dbChildId,
-        sports: selectedSports, // Now text[] array!
+        slot_1_sport: selectedSports.slot_1,
+        slot_2_sport: selectedSports.slot_2,
+        slot_3_sport: selectedSports.slot_3,
         amount,
         payment_status: "pending",
         transport_pickup: transportPoint,
@@ -83,10 +85,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Failed to create registration" }, { status: 500 });
     }
 
-    // 4. Release local Cart Locks immediately as they are moving to verification
-    if (sessionId) {
-      await supabase.from("seat_reservations").delete().eq("session_id", sessionId);
-    }
+    // 4. Removed local Cart Lock release so the seat stays protected
+    // while the user uploads their screenshot.
 
     if (regError || !reg) {
       console.error("Registration Save Error:", regError);

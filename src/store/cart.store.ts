@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { RegistrationStep } from "@/types";
 
 interface CartState {
@@ -17,8 +18,12 @@ interface CartState {
   emergencyPhone: string;
   transportPoint: string;
 
-  // Sport selection (exactly 3 required)
-  selectedSports: string[];
+  // Sport selection explicitly mapped to time slots
+  selectedSports: {
+    slot_1: string | null;
+    slot_2: string | null;
+    slot_3: string | null;
+  };
 
   // Flow control
   currentStep: RegistrationStep;
@@ -33,7 +38,7 @@ interface CartState {
   setTransportPoint: (point: string) => void;
 
   // Actions — Sports (Async for locks)
-  toggleSport: (sportId: string) => Promise<void>;
+  toggleSport: (sportId: string, slotId: "slot_1" | "slot_2" | "slot_3") => Promise<void>;
   clearCartLock: () => void; // call when timer runs out
 
   // Actions — Navigation
@@ -58,99 +63,118 @@ const initialState = {
   emergencyName: "",
   emergencyPhone: "",
   transportPoint: "",
-  selectedSports: [],
+  selectedSports: { slot_1: null, slot_2: null, slot_3: null },
   currentStep: 1 as RegistrationStep,
 };
 
-export const useCartStore = create<CartState>((set, get) => ({
-  ...initialState,
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      ...initialState,
 
-  setChildName: (name) => set({ childName: name }),
-  setChildAge: (age) => set({ childAge: age }),
-  setChildSchool: (school) => set({ childSchool: school }),
-  setParentPhone: (phone) => set({ parentPhone: phone }),
-  setEmergencyName: (name) => set({ emergencyName: name }),
-  setEmergencyPhone: (phone) => set({ emergencyPhone: phone }),
-  setTransportPoint: (point) => set({ transportPoint: point }),
+      setChildName: (name) => set({ childName: name }),
+      setChildAge: (age) => set({ childAge: age }),
+      setChildSchool: (school) => set({ childSchool: school }),
+      setParentPhone: (phone) => set({ parentPhone: phone }),
+      setEmergencyName: (name) => set({ emergencyName: name }),
+      setEmergencyPhone: (phone) => set({ emergencyPhone: phone }),
+      setTransportPoint: (point) => set({ transportPoint: point }),
 
-  toggleSport: async (sportId) => {
-    const state = get();
-    
-    // Lazy init sessionId once they pick the first sport
-    const sessionId = state.cartSessionId || crypto.randomUUID();
-    if (!state.cartSessionId) {
-      set({ cartSessionId: sessionId });
-    }
-
-    const isSelected = state.selectedSports.includes(sportId);
-
-    set({ isTogglingSport: true, cartError: null });
-
-    try {
-      if (isSelected) {
-        // Release from backend
-        const res = await fetch("/api/cart/reserve", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "release", sportId, sessionId })
-        });
+      toggleSport: async (sportId, slotId) => {
+        const state = get();
         
-        if (!res.ok) throw new Error("Could not release seat");
-
-        // UI update
-        const newSelected = state.selectedSports.filter((id) => id !== sportId);
-        set({ 
-          selectedSports: newSelected,
-          cartExpiresAt: newSelected.length === 0 ? null : state.cartExpiresAt, // Reset timer if cart is empty
-          isTogglingSport: false 
-        });
-      } else {
-        // Enforce max 3 locally to avoid unneeded API calls
-        if (state.selectedSports.length >= 3) {
-          set({ isTogglingSport: false, cartError: "You can only select up to 3 sports." });
-          return;
+        // Lazy init sessionId once they pick the first sport
+        const sessionId = state.cartSessionId || crypto.randomUUID();
+        if (!state.cartSessionId) {
+          set({ cartSessionId: sessionId });
         }
 
-        // Add (Reserve) via backend
-        const res = await fetch("/api/cart/reserve", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "reserve", sportId, sessionId })
-        });
-        
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to reserve seat");
+        const currentSlotSport = state.selectedSports[slotId];
+        const isDeselecting = currentSlotSport === sportId;
 
-        // Update successful
-        set({ 
-          selectedSports: [...state.selectedSports, sportId],
-          cartExpiresAt: new Date(data.expiresAt).getTime(), // Keep synced with fresh API expiry
-          isTogglingSport: false 
-        });
-      }
-    } catch (err: any) {
-       console.error("Cart action failed", err);
-       set({ cartError: err.message, isTogglingSport: false });
+        // Validation: cannot pick the exact same sport in two different slots
+        const isDuplicate = Object.values(state.selectedSports).some(id => id === sportId) && !isDeselecting;
+
+        set({ isTogglingSport: true, cartError: null });
+
+        try {
+          if (isDuplicate) {
+            set({ isTogglingSport: false, cartError: "You cannot select the same sport for multiple time-slots." });
+            return;
+          }
+
+          if (isDeselecting) {
+            // Release from backend
+            const res = await fetch("/api/cart/reserve", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "release", sportId, slotId, sessionId })
+            });
+            
+            if (!res.ok) throw new Error("Could not release seat");
+
+            // UI update
+            const newSelected = { ...state.selectedSports, [slotId]: null };
+            const isEmpty = !newSelected.slot_1 && !newSelected.slot_2 && !newSelected.slot_3;
+
+            set({ 
+              selectedSports: newSelected,
+              cartExpiresAt: isEmpty ? null : state.cartExpiresAt, 
+              isTogglingSport: false 
+            });
+          } else {
+            // If there's currently another sport in this slot, we must release it first theoretically!
+            if (currentSlotSport) {
+               await fetch("/api/cart/reserve", {
+                 method: "POST",
+                 headers: { "Content-Type": "application/json" },
+                 body: JSON.stringify({ action: "release", sportId: currentSlotSport, slotId, sessionId })
+               });
+            }
+
+            // Reserve the new one
+            const res = await fetch("/api/cart/reserve", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "reserve", sportId, slotId, sessionId })
+            });
+            
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to reserve seat");
+
+            // Update successful
+            set({ 
+              selectedSports: { ...state.selectedSports, [slotId]: sportId },
+              cartExpiresAt: new Date(data.expiresAt).getTime(), // Keep synced
+              isTogglingSport: false 
+            });
+          }
+        } catch (err: any) {
+           console.error("Cart action failed", err);
+           set({ cartError: err.message, isTogglingSport: false });
+        }
+      },
+
+      clearCartLock: () => {
+        set({ ...initialState });
+      },
+
+      nextStep: () =>
+        set((state) => ({
+          currentStep: Math.min(state.currentStep + 1, 4) as RegistrationStep,
+        })),
+
+      prevStep: () =>
+        set((state) => ({
+          currentStep: Math.max(state.currentStep - 1, 1) as RegistrationStep,
+        })),
+
+      goToStep: (step) => set({ currentStep: step }),
+
+      reset: () => set(initialState),
+    }),
+    {
+      name: "dheera-cart-storage",
     }
-  },
-
-  clearCartLock: () => {
-    // We don't necessarily call release API for all because DB will auto-expire them eventually, 
-    // but just flush local state if time is up. 
-    set({ selectedSports: [], cartExpiresAt: null, cartError: "Cart timer expired. Seats released." });
-  },
-
-  nextStep: () =>
-    set((state) => ({
-      currentStep: Math.min(state.currentStep + 1, 4) as RegistrationStep,
-    })),
-
-  prevStep: () =>
-    set((state) => ({
-      currentStep: Math.max(state.currentStep - 1, 1) as RegistrationStep,
-    })),
-
-  goToStep: (step) => set({ currentStep: step }),
-
-  reset: () => set(initialState),
-}));
+  )
+);

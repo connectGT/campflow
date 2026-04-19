@@ -19,7 +19,10 @@ export async function appendRegistrationToSheet(data: {
   orderId: string;
 }) {
   try {
-    const spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    let spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
+    if (spreadsheetId && spreadsheetId.includes("/d/")) {
+      spreadsheetId = spreadsheetId.split("/d/")[1].split("/")[0];
+    }
     const base64Key = process.env.GOOGLE_SERVICE_ACCOUNT_KEY_BASE64;
 
     if (!spreadsheetId || !base64Key) {

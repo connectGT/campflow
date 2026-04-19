@@ -53,6 +53,6 @@ export async function parsePaymentScreenshot(imageBuffer: Buffer, mimeType: stri
     };
   } catch (error) {
     console.error("[Gemini AI] Error parsing screenshot:", error);
-    throw new Error("AI failed to read the screenshot. Please try again or enter UTR manually.");
+    throw new Error("AI failed to read the screenshot clearly. Please ensure the full receipt is visible, not edited, and not cropped. If the issue persists, please enter the UTR manually.");
   }
 }

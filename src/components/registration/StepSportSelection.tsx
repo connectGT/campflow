@@ -7,15 +7,40 @@ import { useEffect, useState } from "react";
 
 import { SPORTS as sports } from "@/data/camp";
 
+const SLOTS = [
+  { id: "slot_1" as const, label: "7:00 AM - 8:00 AM" },
+  { id: "slot_2" as const, label: "8:00 AM - 9:00 AM" },
+  { id: "slot_3" as const, label: "9:00 AM - 10:00 AM" }
+];
+
 export function StepSportSelection() {
   const { 
     selectedSports, toggleSport, nextStep, prevStep, 
     isTogglingSport, cartExpiresAt, cartError, clearCartLock 
   } = useCartStore();
 
-  const isComplete = selectedSports.length === 3;
+  const isComplete = !!selectedSports.slot_1 && !!selectedSports.slot_2 && !!selectedSports.slot_3;
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<"slot_1" | "slot_2" | "slot_3">("slot_1");
+  const [availability, setAvailability] = useState<Record<string, any>>({});
 
+  // Real-time Availability Polling
+  useEffect(() => {
+    const fetchAvailability = async () => {
+      try {
+        const res = await fetch("/api/sports/availability");
+        const data = await res.json();
+        if (data.availability) setAvailability(data.availability);
+      } catch (e) {
+        console.error("Failed to fetch availability", e);
+      }
+    };
+    fetchAvailability(); // initial
+    const poller = setInterval(fetchAvailability, 3000);
+    return () => clearInterval(poller);
+  }, []);
+
+  // Timer logic
   useEffect(() => {
     if (!cartExpiresAt) {
       setTimeLeft(null);
@@ -41,9 +66,10 @@ export function StepSportSelection() {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
+  const selectedCount = Object.values(selectedSports).filter(Boolean).length;
+
   return (
     <div className="glass rounded-2xl p-6 md:p-10 shadow-lg relative overflow-hidden">
-      
       {/* Timer Overlay Banner */}
       <AnimatePresence>
         {cartExpiresAt && timeLeft !== null && timeLeft > 0 && (
@@ -51,7 +77,7 @@ export function StepSportSelection() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className={`absolute top-0 left-0 right-0 py-2 px-4 flex items-center justify-center gap-2 font-bold text-sm tracking-widest ${timeLeft < 60000 ? 'bg-red-500 text-white' : 'bg-primary/20 text-primary border-b border-primary/30'}`}
+            className={`absolute top-0 left-0 right-0 py-2 px-4 flex items-center justify-center gap-2 font-bold text-sm tracking-widest z-10 ${timeLeft < 60000 ? 'bg-red-500 text-white' : 'bg-primary/20 text-primary border-b border-primary/30'}`}
           >
             <Clock className="w-4 h-4" />
             CART RESERVATION EXPIRES IN {formatTime(timeLeft)}
@@ -59,22 +85,12 @@ export function StepSportSelection() {
         )}
       </AnimatePresence>
 
-      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 ${cartExpiresAt ? 'mt-8' : ''}`}>
+      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 ${cartExpiresAt ? 'mt-8' : ''}`}>
         <div>
-          <h2 className="font-display text-2xl font-bold">Pick 3 Sports</h2>
+          <h2 className="font-display text-2xl font-bold">Build Routine</h2>
           <p className="text-text-muted text-sm mt-1">
-            Selected: <span className="text-primary font-bold">{selectedSports.length}/3</span>
+            Pick 1 sport per time slot. <span className="text-primary font-bold">{selectedCount}/3</span>
           </p>
-        </div>
-        <div className="flex gap-2">
-          {selectedSports.map((id) => {
-            const sport = sports.find((s) => s.id === id);
-            return (
-              <div key={id} className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-sm shadow-[0_0_10px_rgba(255,87,69,0.3)]">
-                {sport?.emoji}
-              </div>
-            );
-          })}
         </div>
       </div>
 
@@ -84,7 +100,7 @@ export function StepSportSelection() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mb-6 p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3"
+            className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 flex items-start gap-3"
           >
             <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
             <p className="text-red-400 text-sm font-medium">{cartError}</p>
@@ -92,39 +108,85 @@ export function StepSportSelection() {
         )}
       </AnimatePresence>
 
+      {/* Tabs */}
+      <div className="flex bg-surface border border-glass-border rounded-xl p-1 mb-6">
+        {SLOTS.map((slot) => {
+          const isActive = activeTab === slot.id;
+          const assignedSportId = selectedSports[slot.id];
+          const sportObj = assignedSportId ? sports.find((s) => s.id === assignedSportId) : null;
+
+          return (
+            <button
+              key={slot.id}
+              onClick={() => setActiveTab(slot.id)}
+              className={`flex-1 relative py-3 text-sm font-semibold rounded-lg transition-all flex flex-col items-center justify-center gap-1 ${
+                isActive ? "text-white" : "text-text-muted hover:text-text-primary"
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 bg-primary/80 border-t border-white/20 rounded-lg shadow-lg"
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              )}
+              <span className="relative z-10">{slot.label}</span>
+              <span className="relative z-10 text-[10px] uppercase tracking-wider opacity-80">
+                {sportObj ? <span className="flex items-center gap-1">{sportObj.emoji} {sportObj.name}</span> : "Unassigned"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Grid for Active Tab */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
         {sports.map((sport) => {
-          const isSelected = selectedSports.includes(sport.id);
-          const isDisabled = (!isSelected && isComplete) || isTogglingSport;
+          const isSelectedInThisSlot = selectedSports[activeTab] === sport.id;
+          
+          // Check if this explicit sport is selected in ANOTHER slot
+          const isSelectedInOtherSlot = Object.entries(selectedSports).some(
+            ([slotId, sId]) => sId === sport.id && slotId !== activeTab
+          );
+
+          // Availability Data
+          const availData = availability[sport.id]?.[activeTab];
+          const remaining = availData ? availData.remaining : Math.floor(sport.seats_total / 3);
+          const isFull = remaining <= 0;
+
+          const isDisabled = isTogglingSport || isSelectedInOtherSlot || (!isSelectedInThisSlot && isFull);
 
           return (
             <motion.div
               key={sport.id}
               whileHover={!isDisabled ? { scale: 1.02, y: -2 } : {}}
               whileTap={!isDisabled ? { scale: 0.98 } : {}}
-              onClick={() => !isDisabled && toggleSport(sport.id)}
+              onClick={() => !isDisabled && toggleSport(sport.id, activeTab)}
               className={`relative p-6 rounded-2xl border-2 transition-all ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} ${
-                isSelected
+                isSelectedInThisSlot
                   ? "border-primary bg-primary/10 shadow-lg shadow-primary/10"
                   : isDisabled
                   ? "border-glass-border opacity-50 grayscale"
                   : "border-glass-border bg-surface hover:border-primary/50"
               }`}
             >
-              {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+              {isSelectedInThisSlot && (
+                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-[0_0_10px_rgba(255,87,69,0.5)]">
                   <Check className="w-4 h-4 text-white" />
                 </div>
               )}
-              {isTogglingSport && isDisabled && !isSelected && !isComplete && (
+              {isTogglingSport && !isSelectedInThisSlot && !isDisabled && (
                  <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-surface border border-glass-border flex items-center justify-center">
                     <Loader2 className="w-3 h-3 text-text-muted animate-spin" />
                  </div>
               )}
               <span className="text-4xl mb-4 block">{sport.emoji}</span>
               <h3 className="font-bold text-lg leading-tight mb-1">{sport.name}</h3>
-              <p className="text-text-muted text-xs font-semibold">
-                {isSelected ? "Locked" : isComplete ? "Limit Reached" : isTogglingSport ? "Wait..." : sport.seats_total + " Total Seats"}
+              <p className={`text-xs font-semibold ${isSelectedInOtherSlot ? 'text-orange-400' : isFull ? 'text-red-400' : 'text-primary/80'}`}>
+                {isSelectedInThisSlot ? "Locked" 
+                 : isSelectedInOtherSlot ? "In Other Slot" 
+                 : isFull ? "Slot Full" 
+                 : `${remaining} Seats Left`}
               </p>
             </motion.div>
           );
@@ -150,11 +212,11 @@ export function StepSportSelection() {
         >
           {isTogglingSport ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" /> Reserving...
+              <Loader2 className="w-5 h-5 animate-spin" /> Updating...
             </>
           ) : (
             <>
-              Review Selection <ChevronRight className="w-5 h-5" />
+              Review Routine <ChevronRight className="w-5 h-5" />
             </>
           )}
         </button>

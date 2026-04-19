@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { LogOut } from 'lucide-react'
+import { GlobalTimer } from '@/components/registration/GlobalTimer'
 
 export default async function DashboardLayout({
   children,
@@ -53,6 +54,7 @@ export default async function DashboardLayout({
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-6xl mx-auto p-6 relative">
+        <GlobalTimer />
         {/* Background orbs */}
         <div className="orb w-[500px] h-[500px] bg-primary/20 -top-40 -left-60 pointer-events-none" />
         <div className="orb w-[400px] h-[400px] bg-secondary/10 top-40 -right-40 pointer-events-none" />

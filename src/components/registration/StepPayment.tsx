@@ -82,6 +82,7 @@ export function StepPayment() {
       const formData = new FormData();
       formData.append("registration_id", registrationId);
       formData.append("screenshot", screenshot);
+      if (cartSessionId) formData.append("session_id", cartSessionId);
 
       const res = await fetch("/api/register/verify", {
         method: "POST",
