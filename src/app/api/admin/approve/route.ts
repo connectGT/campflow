@@ -1,19 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { createHmac } from "crypto";
 
 export const dynamic = "force-dynamic";
 
+function isValidAdminToken(token: string | undefined): boolean {
+  if (!token) return false;
+  const user = process.env.ADMIN_USERNAME || "";
+  const pass = process.env.ADMIN_PASSWORD || "";
+  const secret = process.env.ADMIN_JWT_SECRET || "change-this-in-production";
+  const expected = createHmac("sha256", secret).update(user + ":" + pass).digest("hex");
+  return token === expected;
+}
+
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    // Admin gate
-    const isAdmin = user?.email === "gurutray@gmail.com" || user?.email?.endsWith("@campflow.in") || user?.email === "muktabhinav@gmail.com";
-    if (!isAdmin) {
+    // Cookie-based admin auth (matches /dheera-control login)
+    const cookieStore = await cookies();
+    const adminToken = cookieStore.get("admin_token")?.value;
+    if (!isValidAdminToken(adminToken)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
+    const supabase = await createClient();
     const { registrationId, action } = await request.json();
 
     if (!registrationId || !["approve", "reject"].includes(action)) {
@@ -25,7 +35,7 @@ export async function POST(request: Request) {
       .from("registrations")
       .select(`
         *, 
-        child:children(name, age, school),
+        child:children(name, age, grade),
         parent:profiles(full_name, email, phone)
       `)
       .eq("id", registrationId)
@@ -51,7 +61,7 @@ export async function POST(request: Request) {
         await appendRegistrationToSheet({
           childName: reg.child?.name || "Unknown",
           childAge: reg.child?.age || 0,
-          childSchool: reg.child?.school || "Unknown",
+          childSchool: reg.child?.grade || "N/A",
           parentName: reg.parent?.full_name || "Unknown",
           parentEmail: reg.parent?.email || "",
           parentPhone: reg.parent?.phone || reg.emergency_contact_phone || "",
