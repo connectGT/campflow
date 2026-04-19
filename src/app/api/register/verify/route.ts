@@ -47,8 +47,8 @@ export async function POST(request: Request) {
       }, { status: 409 });
     }
 
-    // 3. Update Registration Status (Directly Paid on blind trust + image existing)
-    const finalStatus = "paid";
+    // 3. Save UTR + screenshot, mark as pending admin approval
+    const finalStatus = "pending_approval";
 
     const { data: reg, error: updateError } = await supabase
       .from("registrations")
@@ -69,44 +69,6 @@ export async function POST(request: Request) {
 
     if (updateError || !reg) {
       return NextResponse.json({ error: "Failed to update record" }, { status: 500 });
-    }
-
-    // 4. Trigger Automation if status is paid
-    if (finalStatus === "paid") {
-      try {
-        const { sendRegistrationWhatsApp } = await import("@/lib/whatsapp");
-        await sendRegistrationWhatsApp(reg.parent?.phone || "", reg.child?.name || "your child");
-        
-        const { appendRegistrationToSheet } = await import("@/lib/google");
-        
-        // Convert explicitly mapped slots to array for sheet stringification
-        const sports = [];
-        if (reg.slot_1_sport) sports.push(`7-8AM: ${reg.slot_1_sport}`);
-        if (reg.slot_2_sport) sports.push(`8-9AM: ${reg.slot_2_sport}`);
-        if (reg.slot_3_sport) sports.push(`9-10AM: ${reg.slot_3_sport}`);
-
-        await appendRegistrationToSheet({
-          childName: reg.child?.name || "Unknown",
-          childAge: reg.child?.age || 0,
-          childSchool: reg.child?.school || "Unknown",
-          parentName: reg.parent?.full_name || "Unknown",
-          parentEmail: reg.parent?.email || "",
-          parentPhone: reg.parent?.phone || "",
-          emergencyName: reg.emergency_contact_name || "N/A",
-          emergencyPhone: reg.emergency_contact_phone || "N/A",
-          transportPoint: reg.transport_pickup || "Self Drop",
-          sports: sports,
-          amount: reg.amount || 12000,
-          orderId: reg.id
-        });
-
-        const sessionId = formData.get("session_id") as string;
-        if (sessionId) {
-          await supabase.from("seat_reservations").delete().eq("session_id", sessionId);
-        }
-      } catch (automationError) {
-        console.error("Post-verification automation failed:", automationError);
-      }
     }
 
     return NextResponse.json({ 

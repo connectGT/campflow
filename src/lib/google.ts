@@ -17,6 +17,9 @@ export async function appendRegistrationToSheet(data: {
   sports: string[];
   amount: number;
   orderId: string;
+  utrNumber?: string;
+  screenshotUrl?: string;
+  status?: string;
 }) {
   try {
     let spreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
@@ -54,13 +57,15 @@ export async function appendRegistrationToSheet(data: {
         data.sports.join(", "),
         data.amount,
         data.orderId,
-        "Paid",
+        data.utrNumber || "N/A",
+        data.screenshotUrl || "N/A",
+        data.status || "Approved",
       ],
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
-      range: "Sheet1!A:M", // Expanded range for M columns
+      range: "Sheet1!A:O", // Expanded range for O columns
       valueInputOption: "RAW",
       requestBody: {
         values,
