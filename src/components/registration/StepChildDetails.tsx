@@ -125,8 +125,6 @@ export function StepChildDetails() {
     nextStep();
   };
 
-  };
-
   return (
     <div className="glass rounded-2xl p-6 md:p-10 shadow-lg">
       <h2 className="font-display text-2xl font-bold mb-1">Participant Details</h2>
