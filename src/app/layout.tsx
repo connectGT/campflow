@@ -19,8 +19,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "CampFlow — Modern Summer Camp Registration",
-    template: "%s | CampFlow",
+    default: "Dheera Sports — Modern Summer Camp Registration",
+    template: "%s | Dheera Sports",
   },
   description:
     "Register your child for pro-level summer sports camps across India. Cricket, swimming, football, basketball, tennis, and badminton — all-inclusive package at ₹12,000.",
@@ -31,12 +31,12 @@ export const metadata: Metadata = {
     "swimming lessons",
     "campflow registration",
   ],
-  authors: [{ name: "CampFlow" }],
+  authors: [{ name: "Dheera Sports" }],
   openGraph: {
-    title: "CampFlow — Summer Camp Registration",
+    title: "Dheera Sports — Summer Camp Registration",
     description: "Multi-sport training, NSNIS coaches, and all-inclusive packages.",
-    url: "https://campflow.me",
-    siteName: "CampFlow",
+    url: "https://dheerasports.in",
+    siteName: "Dheera Sports",
     images: [
       {
         url: "/og-image.png",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CampFlow — Summer Camp Simplified",
+    title: "Dheera Sports — Summer Camp Simplified",
     description: "Register for top-tier sports camps in minutes.",
     images: ["/og-image.png"],
   },

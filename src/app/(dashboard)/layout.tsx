@@ -36,7 +36,7 @@ export default async function DashboardLayout({
       <nav className="fixed top-0 inset-x-0 h-16 glass z-50 border-b border-glass-border">
         <div className="max-w-6xl mx-auto h-full px-6 flex items-center justify-between">
           <Link href="/dashboard" className="font-display font-bold text-xl tracking-tight">
-            Camp<span className="text-primary">Flow</span>
+            Dheera <span className="text-primary">Sports</span>
           </Link>
 
           <form action="/api/auth/signout" method="POST">

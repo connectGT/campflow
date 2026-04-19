@@ -21,7 +21,7 @@ export default function RegisterSuccessPage() {
           Registration <span className="gradient-text">Confirmed!</span>
         </h1>
         <p className="text-text-muted text-lg mb-12">
-          Welcome to the CampFlow family. We've received your payment and secured your child's spot.
+          Welcome to the Dheera Sports family. We've received your payment and secured your child's spot.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
