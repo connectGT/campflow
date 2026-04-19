@@ -1,7 +1,62 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { MessageCircle, Phone, RefreshCw, ArrowLeft, Search, Clock, Bot, User } from "lucide-react";
+import { MessageCircle, Phone, RefreshCw, ArrowLeft, Search, Clock, Bot, User, Send, Loader2 } from "lucide-react";
+
+// ─── Admin Reply Box ──────────────────────────────────────────────────────────
+function AdminReplyBox({ phone, onSent }: { phone: string; onSent: () => void }) {
+  const [text, setText] = useState("");
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSend = async () => {
+    if (!text.trim()) return;
+    setSending(true);
+    setError("");
+    try {
+      const res = await fetch("/api/admin/whatsapp-reply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, message: text.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send");
+      setText("");
+      onSent(); // refresh thread
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="border-t border-glass-border p-3 bg-surface/30">
+      {error && <p className="text-xs text-red-400 mb-2">⚠️ {error}</p>}
+      <div className="flex gap-2 items-end">
+        <div className="flex-1">
+          <textarea
+            rows={2}
+            className="w-full bg-background border border-glass-border rounded-xl px-3 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-green-500/30 transition-shadow placeholder:text-text-muted/60 resize-none"
+            placeholder="Type a reply from the Dheera Sports WhatsApp number..."
+            value={text}
+            onChange={e => setText(e.target.value)}
+            onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+          />
+        </div>
+        <button
+          onClick={handleSend}
+          disabled={sending || !text.trim()}
+          className="flex items-center gap-1.5 px-4 py-2.5 bg-green-500/20 text-green-400 border border-green-500/30 rounded-xl hover:bg-green-500/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold text-sm"
+        >
+          {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+          Send
+        </button>
+      </div>
+      <p className="text-[10px] text-text-muted mt-1.5">Sends from the *Dheera Sports* business WhatsApp. Press Enter to send, Shift+Enter for new line.</p>
+    </div>
+  );
+}
 
 interface Conversation {
   phone: string;
@@ -247,15 +302,8 @@ export function WhatsAppConversations() {
                 )}
               </div>
 
-              {/* Footer note */}
-              <div className="px-4 py-2 border-t border-glass-border bg-surface/20 text-center">
-                <p className="text-[10px] text-text-muted">
-                  🤖 Bot auto-replies to customers. To reply manually →{" "}
-                  <a href={`https://wa.me/91${selected.localPhone}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                    Open WhatsApp
-                  </a>
-                </p>
-              </div>
+              {/* Admin Reply Box */}
+              <AdminReplyBox phone={selected.localPhone} onSent={() => fetchThread(selected.phone)} />
             </>
           )}
         </div>
