@@ -90,11 +90,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, status: "paid" });
 
     } else {
-      // REJECT: delete registration so the slot is freed
-      await supabase.from("registrations").delete().eq("id", registrationId);
+      // REJECT: mark as rejected (do NOT delete — user should see the rejection)
+      // Seats auto-free because realtime_sport_capacity only counts 'paid' registrations
+      const { error: rejectError } = await supabase
+        .from("registrations")
+        .update({ payment_status: "rejected" })
+        .eq("id", registrationId);
 
-      // Also clean up any lingering cart reservations for this child
-      await supabase.from("seat_reservations").delete().eq("child_id", reg.child_id);
+      if (rejectError) {
+        console.error("[Admin Approve] Reject error:", rejectError);
+        return NextResponse.json({ error: "Failed to reject registration" }, { status: 500 });
+      }
+
+      // Clean up any lingering cart seat reservations for this session
+      await supabase.from("seat_reservations").delete().eq("session_id", reg.id);
 
       return NextResponse.json({ success: true, status: "rejected" });
     }

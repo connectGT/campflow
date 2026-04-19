@@ -29,7 +29,7 @@ export default async function AdminDashboardPage() {
 
   const supabase = await createClient();
 
-  // Fetch All Non-Rejected Registrations
+  // Fetch All Registrations (all statuses so admin can see full history)
   const { data: registrations, error } = await supabase
     .from("registrations")
     .select(`
@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
       child:children(name, age, grade),
       parent:profiles(full_name, email, phone)
     `)
-    .in("payment_status", ["paid", "pending_approval"])
+    .in("payment_status", ["paid", "pending_approval", "rejected"])
     .order("created_at", { ascending: false });
 
   // Fetch Real-time capacities
