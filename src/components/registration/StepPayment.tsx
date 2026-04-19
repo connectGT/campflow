@@ -175,7 +175,7 @@ export function StepPayment() {
           )}
 
           <div className="mb-6 text-left">
-            <label className="block text-sm font-semibold mb-2 text-text-muted">Transaction ID (UTR Number)</label>
+            <label className="block text-sm font-semibold mb-2 text-text-muted">UTR ID</label>
             <input 
               type="text" 
               value={utr}
