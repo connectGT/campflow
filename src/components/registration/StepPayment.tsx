@@ -157,6 +157,13 @@ export function StepPayment() {
             </div>
           </div>
 
+          {error && (
+            <div className="bg-destructive/10 text-destructive border border-destructive/20 rounded-xl p-4 mb-6 text-sm flex items-center gap-3 text-left">
+              <AlertTriangle className="w-5 h-5 shrink-0" />
+              <p>{error}</p>
+            </div>
+          )}
+
           <button
             onClick={startRegistration}
             disabled={isProcessing}
