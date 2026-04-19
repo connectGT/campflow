@@ -1,22 +1,33 @@
-import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { createHmac } from "crypto";
 import { format } from "date-fns";
-import { Users, CreditCard, Calendar, ArrowLeft, Activity, ImageIcon } from "lucide-react";
+import { Users, CreditCard, Calendar, ArrowLeft, Activity, ImageIcon, LogOut } from "lucide-react";
 import Link from "next/link";
 import { ExportButton } from "@/components/admin/ExportButton";
 import { ApproveRejectButtons } from "@/components/admin/ApproveRejectButtons";
+import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
+import { createClient } from "@/lib/supabase/server";
 import { SPORTS, CAMP } from "@/data/camp";
 
+function getExpectedToken() {
+  const user = process.env.ADMIN_USERNAME || "";
+  const pass = process.env.ADMIN_PASSWORD || "";
+  const secret = process.env.ADMIN_JWT_SECRET || "change-this-in-production";
+  return createHmac("sha256", secret).update(user + ":" + pass).digest("hex");
+}
+
 export default async function AdminDashboardPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  // Cookie-based auth — must have valid admin_token cookie from /dheera-control login
+  const cookieStore = await cookies();
+  const adminToken = cookieStore.get("admin_token")?.value;
+  const expectedToken = getExpectedToken();
 
-  // Basic Admin Protection
-  const isAdmin = user?.email === "gurutray@gmail.com" || user?.email?.endsWith("@campflow.in") || user?.email === "muktabhinav@gmail.com";
-
-  if (!isAdmin) {
-    redirect("/dashboard");
+  if (!adminToken || adminToken !== expectedToken) {
+    redirect("/dheera-control");
   }
+
+  const supabase = await createClient();
 
   // Fetch All Non-Rejected Registrations
   const { data: registrations, error } = await supabase
@@ -53,9 +64,7 @@ export default async function AdminDashboardPage() {
         </div>
         <div className="flex items-center gap-4">
           <ExportButton data={registrations || []} filename="campflow_registrations" />
-          <Link href="/dashboard" className="flex items-center gap-2 text-text-muted hover:text-text-primary transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Back
-          </Link>
+          <AdminLogoutButton />
         </div>
       </div>
 
