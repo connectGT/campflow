@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { createHmac } from "crypto";
+import { appendRegistrationToSheet } from "@/lib/google";
 
 export const dynamic = "force-dynamic";
 
@@ -65,8 +66,6 @@ export async function POST(request: Request) {
 
       // Sync to Google Sheets
       try {
-        const { appendRegistrationToSheet } = await import("@/lib/google");
-
         const sports: string[] = [];
         if (reg.slot_1_sport) sports.push(`7-8AM: ${reg.slot_1_sport}`);
         if (reg.slot_2_sport) sports.push(`8-9AM: ${reg.slot_2_sport}`);

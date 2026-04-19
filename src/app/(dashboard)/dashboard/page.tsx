@@ -139,7 +139,7 @@ export default async function DashboardPage() {
                       <p className="text-xs text-text-muted mt-1">Please re-register with the correct payment details.</p>
                     </div>
                     <Link
-                      href="/register"
+                      href={`/register?resume_rejection=${reg.id}`}
                       className="shrink-0 px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary-hover transition-colors"
                     >
                       Re-register →

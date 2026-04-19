@@ -13,6 +13,24 @@ const selectClass = "w-full bg-background border border-glass-border rounded-xl 
 const labelClass = "block text-sm font-semibold text-text-muted mb-2";
 const sectionTitle = "text-[11px] font-bold uppercase tracking-widest text-primary mb-4 mt-1 pb-2 border-b border-glass-border";
 
+const PhoneInput = ({ label, value, onChange, disabled }: {label:string, value:string, onChange:(v:string)=>void, disabled?:boolean}) => (
+  <div>
+    <label className={labelClass}>{label} <span className="text-red-400">*</span></label>
+    <div className="flex">
+      <span className="inline-flex items-center px-4 bg-surface border border-r-0 border-glass-border rounded-l-xl text-text-muted text-sm font-semibold">+91</span>
+      <input
+        type="tel"
+        maxLength={10}
+        disabled={disabled}
+        className={`w-full bg-background border border-glass-border rounded-r-xl px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow placeholder:text-text-muted/60 ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+        placeholder="9876543210"
+        value={value}
+        onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, 10))}
+      />
+    </div>
+  </div>
+);
+
 export function StepChildDetails() {
   const {
     childName, childGender, childDob, childSchool,
@@ -107,23 +125,7 @@ export function StepChildDetails() {
     nextStep();
   };
 
-  const PhoneInput = ({ label, value, onChange, disabled }: {label:string, value:string, onChange:(v:string)=>void, disabled?:boolean}) => (
-    <div>
-      <label className={labelClass}>{label} <span className="text-red-400">*</span></label>
-      <div className="flex">
-        <span className="inline-flex items-center px-4 bg-surface border border-r-0 border-glass-border rounded-l-xl text-text-muted text-sm font-semibold">+91</span>
-        <input
-          type="tel"
-          maxLength={10}
-          disabled={disabled}
-          className={`w-full bg-background border border-glass-border rounded-r-xl px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow placeholder:text-text-muted/60 ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
-          placeholder="9876543210"
-          value={value}
-          onChange={(e) => onChange(e.target.value.replace(/\D/g, "").slice(0, 10))}
-        />
-      </div>
-    </div>
-  );
+  };
 
   return (
     <div className="glass rounded-2xl p-6 md:p-10 shadow-lg">
