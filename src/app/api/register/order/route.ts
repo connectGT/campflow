@@ -24,22 +24,37 @@ export async function POST(request: Request) {
     }
 
     // 1. Create or ensure child exists
-    const { data: child, error: childError } = await supabase
+    let dbChildId = null;
+
+    // Check if child already exists by name for this parent
+    const { data: existingChild } = await supabase
       .from("children")
-      .upsert(
-        { 
+      .select("id")
+      .eq("parent_id", user.id)
+      .eq("name", childName)
+      .maybeSingle();
+
+    if (existingChild) {
+      dbChildId = existingChild.id;
+      // Optionally update age/grade here if you want
+      await supabase.from("children").update({ age: Number(childAge), grade: childSchool }).eq("id", dbChildId);
+    } else {
+      const { data: child, error: childError } = await supabase
+        .from("children")
+        .insert({ 
           parent_id: user.id, 
           name: childName, 
-          age: childAge,
-          school: childSchool,
-        },
-        { onConflict: "" } 
-      )
-      .select()
-      .single();
+          age: Number(childAge),
+          grade: childSchool, // schema uses 'grade', not 'school'
+        })
+        .select()
+        .single();
 
-    if (childError || !child) {
-      return NextResponse.json({ error: "Failed to save child details" }, { status: 500 });
+      if (childError || !child) {
+        console.error("Child Insert Error:", childError);
+        return NextResponse.json({ error: `Failed to save child: ${childError?.message || "Unknown error"}` }, { status: 500 });
+      }
+      dbChildId = child.id;
     }
 
     // Update parent phone locally on profile
@@ -52,7 +67,7 @@ export async function POST(request: Request) {
       .from("registrations")
       .insert({
         parent_id: user.id,
-        child_id: child.id,
+        child_id: dbChildId,
         sports: selectedSports, // Now text[] array!
         amount,
         payment_status: "pending",
