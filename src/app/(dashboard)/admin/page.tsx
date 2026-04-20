@@ -76,7 +76,7 @@ export default async function AdminDashboardPage() {
           <p className="text-text-muted">Approve pending payments and manage camp logistics.</p>
         </div>
         <div className="flex items-center gap-4">
-          <ExportButton data={registrations || []} filename="campflow_registrations" />
+          <ExportButton />
           <AdminLogoutButton />
         </div>
       </div>
