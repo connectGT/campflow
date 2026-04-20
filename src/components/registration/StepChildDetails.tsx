@@ -52,6 +52,13 @@ export function StepChildDetails() {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Aadhar upload state
+  const [aadharFile, setAadharFile] = useState<File | null>(null);
+  const [aadharPreview, setAadharPreview] = useState<string | null>(null);
+  const [aadharUrl, setAadharUrl] = useState<string | null>(null);
+  const [uploadingAadhar, setUploadingAadhar] = useState(false);
+  const aadharRef = useRef<HTMLInputElement>(null);
+
   const handleSameAsPhone = (checked: boolean) => {
     setSameAsPhone(checked);
     if (checked) setWhatsappNumber(parentPhone);
@@ -97,6 +104,31 @@ export function StepChildDetails() {
     }
   };
 
+  const handleAadharSelect = async (file: File) => {
+    if (file.size > 5 * 1024 * 1024) { setError("Aadhar photo must be less than 5 MB."); return; }
+    setAadharFile(file);
+    setAadharPreview(URL.createObjectURL(file));
+    setError("");
+    setUploadingAadhar(true);
+    try {
+      const supabase = createClient();
+      const ext = file.name.split(".").pop();
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadErr } = await supabase.storage
+        .from("aadhar-photos")
+        .upload(path, file, { cacheControl: "3600", upsert: false });
+      if (uploadErr) throw uploadErr;
+      const { data: { publicUrl } } = supabase.storage.from("aadhar-photos").getPublicUrl(path);
+      setAadharUrl(publicUrl);
+    } catch (e: any) {
+      setError("Aadhar upload failed: " + e.message);
+      setAadharPreview(null);
+      setAadharFile(null);
+    } finally {
+      setUploadingAadhar(false);
+    }
+  };
+
   const handleNext = () => {
     const required = (val: string | null | undefined, label: string) => {
       if (!val || val.trim().length < 1) { setError(`${label} is required.`); return false; }
@@ -112,6 +144,7 @@ export function StepChildDetails() {
     if (!motherName || motherName.trim().length < 2) { setError("Mother's Name is required."); return; }
     if (!childSchool || childSchool.trim().length < 2) { setError("School Name is required."); return; }
     if (!photoUrl) { setError("Student photo is required. Please upload a photo."); return; }
+    if (!aadharUrl) { setError("Aadhar card photo is required. Please upload the child's Aadhar card."); return; }
     if (!parentPhone || !/^[6-9]\d{9}$/.test(parentPhone)) { setError("Valid 10-digit Mobile Number is required."); return; }
     if (!whatsappNumber || !/^[6-9]\d{9}$/.test(whatsappNumber)) { setError("Valid 10-digit WhatsApp Number is required."); return; }
     if (!fullAddress || fullAddress.trim().length < 10) { setError("Full Address is required (minimum 10 characters)."); return; }
@@ -119,8 +152,9 @@ export function StepChildDetails() {
     if (!emergencyPhone || !/^[6-9]\d{9}$/.test(emergencyPhone)) { setError("Valid Emergency Contact Number is required."); return; }
     if (!transportPoint) { setError("Pick-Up & Drop Point is required."); return; }
 
-    // Store photo URL in sessionStorage for the order API to pick up
+    // Store photo URLs in sessionStorage for the order API to pick up
     sessionStorage.setItem("student_photo_url", photoUrl);
+    sessionStorage.setItem("aadhar_photo_url", aadharUrl!);
     setError("");
     nextStep();
   };
@@ -239,6 +273,56 @@ export function StepChildDetails() {
               <label className={labelClass}>School Name <span className="text-red-400">*</span></label>
               <input type="text" className={inputClass} placeholder="e.g. Scindia School, Gwalior" value={childSchool} onChange={(e) => setChildSchool(e.target.value)} />
             </div>
+
+            {/* Aadhar Card Upload */}
+            <div className="md:col-span-2">
+              <label className={labelClass}>Aadhar Card of Child <span className="text-red-400">*</span></label>
+              <div className="flex items-center gap-5">
+                <div
+                  onClick={() => aadharRef.current?.click()}
+                  className={`relative w-40 h-24 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden
+                    ${aadharPreview ? "border-primary" : "border-glass-border hover:border-primary/60"}`}
+                >
+                  {aadharPreview ? (
+                    <>
+                      <img src={aadharPreview} alt="Aadhar" className="w-full h-full object-cover" />
+                      {uploadingAadhar && (
+                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-6 h-6 text-text-muted mb-1" />
+                      <span className="text-[9px] text-text-muted text-center px-1">Tap to upload</span>
+                    </>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <button
+                    type="button"
+                    onClick={() => aadharRef.current?.click()}
+                    className="flex items-center gap-2 px-4 py-2 bg-surface border border-glass-border hover:border-primary text-sm font-semibold rounded-xl transition-colors"
+                  >
+                    <Upload className="w-4 h-4" />
+                    {aadharFile ? "Change Aadhar" : "Upload Aadhar"}
+                  </button>
+                  <p className="text-xs text-text-muted mt-2">JPG or PNG, max 5 MB. Front side of Aadhar card.</p>
+                  {aadharUrl && !uploadingAadhar && (
+                    <p className="text-xs text-green-400 mt-1 font-semibold">✓ Aadhar uploaded</p>
+                  )}
+                </div>
+                <input
+                  ref={aadharRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={e => { const f = e.target.files?.[0]; if (f) handleAadharSelect(f); e.target.value = ""; }}
+                />
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -298,7 +382,7 @@ export function StepChildDetails() {
       </div>
 
       <div className="mt-8 flex justify-end">
-        <button onClick={handleNext} disabled={uploadingPhoto}
+        <button onClick={handleNext} disabled={uploadingPhoto || uploadingAadhar}
           className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-xl font-semibold transition-colors disabled:opacity-50">
           Next Step <ChevronRight className="w-5 h-5" />
         </button>

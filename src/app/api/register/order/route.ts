@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const {
       childName, childGender, childDob, childSchool,
-      fatherName, motherName, photoUrl,
+      fatherName, motherName, photoUrl, aadharPhotoUrl,
       parentPhone, whatsappNumber, fullAddress,
       emergencyName, emergencyPhone, transportPoint,
       selectedSports, sessionId,
@@ -108,6 +108,7 @@ export async function POST(request: Request) {
         emergency_contact_phone: emergencyPhone,
         whatsapp_number: whatsappNumber || parentPhone,
         full_address: fullAddress || null,
+        aadhar_photo_url: aadharPhotoUrl || null,
       })
       .select()
       .single();

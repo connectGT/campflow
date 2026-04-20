@@ -161,6 +161,9 @@ CREATE TABLE public.registrations (
   emergency_contact_name text,
   emergency_contact_phone text,
 
+  -- Documents
+  aadhar_photo_url text,
+
   created_at timestamptz DEFAULT now()
 );
 
