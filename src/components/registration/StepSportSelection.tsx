@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import { SPORTS as sports } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 const SLOTS = [
   { id: "slot_1" as const, label: "7:00 AM - 8:00 AM" },
@@ -132,7 +133,7 @@ export function StepSportSelection() {
               )}
               <span className="relative z-10">{slot.label}</span>
               <span className="relative z-10 text-[10px] uppercase tracking-wider opacity-80">
-                {sportObj ? <span className="flex items-center gap-1">{sportObj.emoji} {sportObj.name}</span> : "Unassigned"}
+                {sportObj ? <span className="flex items-center gap-1"><Icon name={sportObj.emoji} className="w-3 h-3" /> {sportObj.name}</span> : "Unassigned"}
               </span>
             </button>
           );
@@ -180,7 +181,9 @@ export function StepSportSelection() {
                     <Loader2 className="w-3 h-3 text-text-muted animate-spin" />
                  </div>
               )}
-              <span className="text-4xl mb-4 block">{sport.emoji}</span>
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-primary" style={{ background: `${sport.color}22`, border: `1px solid ${sport.color}44` }}>
+                <Icon name={sport.emoji} className="w-6 h-6" />
+              </div>
               <h3 className="font-bold text-lg leading-tight mb-1">{sport.name}</h3>
               <p className={`text-xs font-semibold ${isSelectedInOtherSlot ? 'text-orange-400' : isFull ? 'text-red-400' : 'text-primary/80'}`}>
                 {isSelectedInThisSlot ? "Locked" 
