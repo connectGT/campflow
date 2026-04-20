@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     default: "Dheera Sports — Modern Summer Camp Registration",
     template: "%s | Dheera Sports",
   },
+  icons: {
+    icon: [
+      { url: '/icon.png' },
+      { url: '/icon.jpg' }
+    ],
+    apple: '/icon.png',
+  },
   description:
     "Register your child for pro-level summer sports camps across India. Cricket, swimming, football, basketball, tennis, and badminton — all-inclusive package at ₹12,000.",
   keywords: [
