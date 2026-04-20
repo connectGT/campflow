@@ -103,8 +103,8 @@ export const INCLUSIONS_CORE = [
 ];
 
 export const INCLUSIONS_FREE = [
-  { icon: "🧘♀️", title: "Yoga Sessions",               badge: "FREE", desc: "Structured yoga as athletic science. Strength, balance, and breath control built into the daily programme." },
-  { icon: "🧘♂️", title: "Meditation Sessions",         badge: "FREE", desc: "The stillest athletes are often the fiercest competitors. Daily moments of silence teach children how to find calm under pressure." },
+  { icon: "🧘", title: "Yoga Sessions",               badge: "FREE", desc: "Structured yoga as athletic science. Strength, balance, and breath control built into the daily programme." },
+  { icon: "🧘", title: "Meditation Sessions",         badge: "FREE", desc: "The stillest athletes are often the fiercest competitors. Daily moments of silence teach children how to find calm under pressure." },
   { icon: "🔔", title: "Sound Healing Sessions",     badge: "FREE", desc: "One of the most powerful tools for stress release and emotional reset. Children experience ancient healing science — many for the first time." },
   { icon: "💃", title: "Dance Sessions",             badge: "FREE", desc: "Expression, rhythm, coordination, joy. A child who can move freely is a child who is free. Movement as celebration." },
   { icon: "🏅", title: "Surprise Olympics Sport Session", badge: "FREE", desc: "One session — kept secret until the day — where children experience a real Olympic sport they may never have tried. Wonder and aspiration in one afternoon." },
