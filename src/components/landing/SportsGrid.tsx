@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
 import Image from "next/image";
@@ -9,7 +9,6 @@ import { Icon } from "@/components/ui/IconMapping";
 
 export function SportsGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [availability, setAvailability] = useState<Record<string, any>>({});
 
   useEffect(() => {
     // GSAP Animation
@@ -23,25 +22,8 @@ export function SportsGrid() {
         }
       );
     }, containerRef);
-    }, containerRef);
     
-    // Fetch live availability
-    const fetchAvailability = async () => {
-      try {
-        const res = await fetch("/api/sports/availability");
-        const data = await res.json();
-        if (data.availability) setAvailability(data.availability);
-      } catch (e) {
-        console.error("Failed to fetch availability for grid", e);
-      }
-    };
-    fetchAvailability();
-    const poller = setInterval(fetchAvailability, 30000); // refresh every 30s
-    
-    return () => {
-      ctx.revert();
-      clearInterval(poller);
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -108,16 +90,7 @@ export function SportsGrid() {
                   />
                   <div className="flex justify-between items-center text-sm mt-auto border-t border-white/5 pt-3">
                     <p className="text-text-muted font-medium">{sport.coaches} Coaches</p>
-                    {(() => {
-                      const avail = availability[sport.id];
-                      let displaySeats = sport.seats_total;
-                      if (avail) {
-                        displaySeats = Object.values(avail).reduce((sum: number, slotObj: any) => sum + slotObj.remaining, 0) as number;
-                      }
-                      return (
-                        <p className="text-text-primary font-bold">{displaySeats} Seats Left</p>
-                      );
-                    })()}
+                    <p className="text-text-primary font-bold">{sport.seats_total} Seats</p>
                   </div>
                   {sport.urgent_note && (
                     <p className="text-primary text-xs font-medium mt-2">{sport.urgent_note}</p>
