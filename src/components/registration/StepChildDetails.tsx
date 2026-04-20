@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { ChevronRight, ChevronDown, Camera, Upload, X, FileText } from "lucide-react";
 import { TRANSPORT } from "@/data/camp";
 import { createClient } from "@/lib/supabase/client";
+import imageCompression from "browser-image-compression";
 
 const TRANSPORT_POINTS = [...TRANSPORT.POINTS, "Self-Arrangement"];
 
@@ -74,17 +75,32 @@ export function StepChildDetails() {
     return age;
   };
 
-  const handlePhotoSelect = async (file: File) => {
-    if (file.size > 5 * 1024 * 1024) {
+  const compressFile = async (file: File) => {
+    if (file.type === "application/pdf") return file;
+    try {
+      const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
+      const compressedBlob = await imageCompression(file, options);
+      return new File([compressedBlob], file.name, { type: file.type });
+    } catch (error) {
+      console.warn("Compression failed, using original file", error);
+      return file;
+    }
+  };
+
+  const handlePhotoSelect = async (originalFile: File) => {
+    if (originalFile.size > 5 * 1024 * 1024) {
       setError("Photo must be less than 5 MB.");
       return;
     }
+    
+    setUploadingPhoto(true);
+    const file = await compressFile(originalFile);
+    
     setPhotoFile(file);
     setPhotoPreview(URL.createObjectURL(file));
     setError("");
 
     // Upload immediately to storage
-    setUploadingPhoto(true);
     try {
       const supabase = createClient();
       const ext = file.name.split(".").pop();
@@ -104,12 +120,16 @@ export function StepChildDetails() {
     }
   };
 
-  const handleAadharSelect = async (file: File) => {
-    if (file.size > 5 * 1024 * 1024) { setError("Aadhar photo must be less than 5 MB."); return; }
+  const handleAadharSelect = async (originalFile: File) => {
+    if (originalFile.size > 5 * 1024 * 1024) { setError("Aadhar photo must be less than 5 MB."); return; }
+    
+    setUploadingAadhar(true);
+    const file = await compressFile(originalFile);
+    
     setAadharFile(file);
     setAadharPreview(URL.createObjectURL(file));
     setError("");
-    setUploadingAadhar(true);
+    
     try {
       const supabase = createClient();
       const ext = file.name.split(".").pop();

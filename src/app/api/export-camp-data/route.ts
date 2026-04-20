@@ -184,10 +184,10 @@ export async function GET() {
     zip.file("00_Master_Database.csv", csvContent);
 
     // 6. Generate ZIP safely for Vercel/Node
-    const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
+    const zipBuffer = await zip.generateAsync({ type: "uint8array" });
 
     // 7. Return ZIP response
-    return new NextResponse(zipBuffer, {
+    return new NextResponse(zipBuffer as any, {
       status: 200,
       headers: {
         "Content-Type": "application/zip",

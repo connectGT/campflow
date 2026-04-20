@@ -4,6 +4,7 @@ import { useCartStore } from "@/store/cart.store";
 import { useState, useRef } from "react";
 import { ChevronLeft, QrCode, Upload, ShieldCheck, Loader2, RefreshCcw, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import imageCompression from "browser-image-compression";
 
 export function StepPayment() {
   const { 
@@ -31,10 +32,23 @@ export function StepPayment() {
   
   const upiLink = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(PAYEE_NAME)}&am=${AMOUNT}&cu=INR&tn=Registration for ${childName}`;
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 5 * 1024 * 1024) { setError("File size should be less than 5MB"); return; }
+  const compressFile = async (file: File) => {
+    if (file.type === "application/pdf") return file;
+    try {
+      const options = { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true };
+      const compressedBlob = await imageCompression(file, options);
+      return new File([compressedBlob], file.name, { type: file.type });
+    } catch (error) {
+      console.warn("Compression failed, using original file", error);
+      return file;
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const originalFile = e.target.files?.[0];
+    if (originalFile) {
+      if (originalFile.size > 5 * 1024 * 1024) { setError("File size should be less than 5MB"); return; }
+      const file = await compressFile(originalFile);
       setScreenshot(file);
       setPreview(URL.createObjectURL(file));
       setError("");
