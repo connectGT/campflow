@@ -1,3 +1,4 @@
+import { Navbar } from "@/components/layout/Navbar";
 import { Hero } from "@/components/landing/Hero";
 import { Features } from "@/components/landing/Features";
 import { SportsGrid } from "@/components/landing/SportsGrid";
@@ -13,19 +14,21 @@ import { Footer } from "@/components/landing/Footer";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen">
-      <Hero />
+    <main className="min-h-screen relative">
+      <Navbar />
+      <div id="hero"><Hero /></div>
       <Features />
       <SportsGrid />
       <SanghaSection />
       <WhyJoinSection />
-      <ScheduleTimeline />
-      <TrainerProfiles />
+      <div id="schedule"><ScheduleTimeline /></div>
+      <div id="coaches"><TrainerProfiles /></div>
       <Pricing />
       <Testimonials />
-      <FAQ />
+      <div id="faq"><FAQ /></div>
       <CTASection />
       <Footer />
     </main>
   );
 }
+

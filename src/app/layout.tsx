@@ -56,6 +56,7 @@ export const metadata: Metadata = {
 };
 
 import { ChatwootWidget } from "@/components/chatwoot/ChatwootWidget";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -65,12 +66,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jakarta.variable} ${manrope.variable} dark`}
+      className={`${jakarta.variable} ${manrope.variable}`}
+      suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-text-primary font-sans antialiased">
-        <QueryProvider>{children}</QueryProvider>
-        <ChatwootWidget />
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+          <QueryProvider>{children}</QueryProvider>
+          <ChatwootWidget />
+        </ThemeProvider>
       </body>
     </html>
   );
 }
+

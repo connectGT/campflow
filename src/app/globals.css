@@ -1,36 +1,39 @@
 @import "tailwindcss";
 
-/* ─── Design Tokens: Aqua Pro Inspired ─── */
+/* ─── Design Tokens: Dynamic Themes ─── */
 @theme inline {
   /* Backgrounds */
-  --color-background:      #111316;
-  --color-surface:         #1a1c1f;
-  --color-surface-high:    #1e2023;
-  --color-surface-highest: #282a2d;
-  --color-surface-variant: #333538;
+  --color-background:      var(--bg);
+  --color-surface:         var(--surf);
+  --color-surface-high:    var(--surf-high);
+  --color-surface-highest: var(--surf-highest);
+  --color-surface-variant: var(--surf-var);
 
   /* Primary — warm coral/orange */
-  --color-primary:           #ffb4a9;
-  --color-primary-dim:       #ffb4a9;
-  --color-primary-container: #ff5745;
-  --color-primary-hover:     #ff8a7d;
+  --color-primary:           var(--primary);
+  --color-primary-dim:       var(--primary-dim);
+  --color-primary-container: var(--primary-cont);
+  --color-primary-hover:     var(--primary-hov);
 
   /* Secondary — oceanic blue */
-  --color-secondary:           #aacae6;
-  --color-secondary-container: #2a4a61;
+  --color-secondary:           var(--sec);
+  --color-secondary-container: var(--sec-cont);
 
   /* Tertiary — teal accent */
   --color-tertiary: #5ed9d6;
 
   /* Text */
-  --color-text-primary: #e2e2e6;
-  --color-text-muted:   #aacae6;
-  --color-text-subtle:  #7a9bb5;
+  --color-text-primary: var(--txt-primary);
+  --color-text-muted:   var(--txt-muted);
+  --color-text-subtle:  var(--txt-subtle);
 
   /* Borders */
-  --color-outline:         rgba(91, 64, 60, 0.4);
-  --color-outline-variant: rgba(91, 64, 60, 0.2);
-  --color-glass-border:    rgba(255, 218, 213, 0.08);
+  --color-outline:         var(--outline);
+  --color-outline-variant: var(--outline-var);
+  --color-glass-border:    var(--glass-brdr);
+  
+  --color-glass-bg:        var(--glass-bg);
+  --color-glass-bg-subtle: var(--glass-bg-subtle);
 
   /* Error */
   --color-destructive: #ffb4ab;
@@ -43,9 +46,65 @@
 
 /* ─── Base Styles ─── */
 @layer base {
+  :root {
+    /* LIGHT MODE */
+    --bg: #fbfbfc;
+    --surf: #ffffff;
+    --surf-high: #f4f5f7;
+    --surf-highest: #eef0f3;
+    --surf-var: #e2e4e9;
+
+    --primary: #ff5745;
+    --primary-dim: #ff8a7d;
+    --primary-cont: #ffe7e4;
+    --primary-hov: #e64a39;
+
+    --sec: #2a4a61;
+    --sec-cont: #e6f0f9;
+
+    --txt-primary: #1a1c1f;
+    --txt-muted: #4b5563;
+    --txt-subtle: #6b7280;
+
+    --outline: rgba(0,0,0,0.1);
+    --outline-var: rgba(0,0,0,0.05);
+    --glass-brdr: rgba(255,255,255,0.4);
+    
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg-subtle: rgba(255, 255, 255, 0.4);
+  }
+
+  .dark {
+    /* DARK MODE (Aqua Pro Inspired) */
+    --bg: #111316;
+    --surf: #1a1c1f;
+    --surf-high: #1e2023;
+    --surf-highest: #282a2d;
+    --surf-var: #333538;
+
+    --primary: #ffb4a9;
+    --primary-dim: #ffb4a9;
+    --primary-cont: #ff5745;
+    --primary-hov: #ff8a7d;
+
+    --sec: #aacae6;
+    --sec-cont: #2a4a61;
+
+    --txt-primary: #e2e2e6;
+    --txt-muted: #aacae6;
+    --txt-subtle: #7a9bb5;
+
+    --outline: rgba(91, 64, 60, 0.4);
+    --outline-var: rgba(91, 64, 60, 0.2);
+    --glass-brdr: rgba(255, 218, 213, 0.08);
+
+    --glass-bg: rgba(51, 53, 56, 0.55);
+    --glass-bg-subtle: rgba(30, 32, 35, 0.7);
+  }
+
   html {
     scroll-behavior: smooth;
-    color-scheme: dark;
+    color-scheme: light dark;
   }
 
   body {
@@ -54,6 +113,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -62,16 +122,16 @@
 
   ::selection {
     background-color: rgba(255, 87, 69, 0.35);
-    color: #ffffff;
+    color: var(--color-text-primary);
   }
 
   ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #111316; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb {
-    background: #5b403c;
+    background: var(--surf-highest);
     border-radius: 3px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: #ffb4a9; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 }
 
 /* ─── Custom Utilities (Tailwind v4 @utility) ─── */
@@ -81,33 +141,27 @@
 }
 
 @utility glass {
-  background: rgba(51, 53, 56, 0.55);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 218, 213, 0.1);
-  border-left: 1px solid rgba(255, 218, 213, 0.1);
-  border-right: 1px solid rgba(255, 218, 213, 0.05);
-  border-bottom: 1px solid rgba(255, 218, 213, 0.05);
-  box-shadow: 0 40px 60px rgba(12, 14, 17, 0.35);
+  border: 1px solid var(--glass-brdr);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 @utility glass-subtle {
-  background: rgba(30, 32, 35, 0.7);
+  background: var(--glass-bg-subtle);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 218, 213, 0.07);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--outline-var);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 @utility glass-strong {
-  background: rgba(51, 53, 56, 0.55);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 218, 213, 0.1);
-  border-left: 1px solid rgba(255, 218, 213, 0.1);
-  border-right: 1px solid rgba(255, 218, 213, 0.05);
-  border-bottom: 1px solid rgba(255, 218, 213, 0.05);
-  box-shadow: 0 40px 60px rgba(12, 14, 17, 0.35);
+  border: 1px solid var(--glass-brdr);
+  box-shadow: 0 40px 60px rgba(0, 0, 0, 0.15);
 }
 
 @utility gradient-text {
