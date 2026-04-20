@@ -11,7 +11,7 @@ const faqs = [
   },
   {
     q: "How long does the camp run?",
-    a: "Each summer camp session runs for 35 days (06 May to 09 June, Monday to Saturday). Sundays are weekly rest days. Sessions run from 7 AM to 10 AM daily.",
+    a: "Each summer camp session runs for 35 days (06 May to 09 June), with one weekly rest day. Sessions run from 7 AM to 10 AM daily.",
   },
   {
     q: "Can my child switch sports mid-camp?",

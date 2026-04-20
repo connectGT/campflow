@@ -46,7 +46,7 @@ export function ScheduleTimeline() {
             </h2>
           </div>
           <p className="text-text-muted text-base leading-relaxed lg:text-right font-medium">
-            {CAMP.DAILY_TIMING}. {CAMP.DAILY_HOURS} daily, Monday through Saturday.
+            {CAMP.DAILY_TIMING}. {CAMP.DAILY_HOURS}, with one weekly rest day.
           </p>
         </div>
 
