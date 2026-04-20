@@ -56,7 +56,7 @@ export function TrainerProfiles() {
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div className="glass-subtle rounded-xl p-5 text-center border-l-2 border-[#ff5745]">
-                <p className="font-display font-bold text-lg text-text-primary mb-1">Founding Directors</p>
+                <p className="font-display font-bold text-lg text-text-primary mb-1">Founders</p>
                 <p className="text-text-subtle text-xs font-medium">{FOUNDING_DIRECTORS.length} Visionaries</p>
               </div>
               <div className="glass-subtle rounded-xl p-5 text-center border-l-2 border-[#aacae6]">
@@ -67,10 +67,10 @@ export function TrainerProfiles() {
           </div>
         </div>
 
-        {/* Founding Directors */}
+        {/* Founders */}
         <div className="mb-16">
           <h3 className="font-display font-extrabold text-2xl mb-8 flex items-center gap-4">
-            Founding Directors
+            Founders
             <div className="h-px flex-1 bg-white/5" />
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
