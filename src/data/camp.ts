@@ -62,7 +62,7 @@ export const SPORTS = [
   { id: "cricket",     name: "Cricket",     emoji: "🏏", seats_total: 25, coaches: 2, urgent: false, image: "/sport-cricket.jpg", color: "#ff5745" },
   { id: "basketball",  name: "Basketball",  emoji: "🏀", seats_total: 15, coaches: 2, urgent: false, image: "/sport-basketball.jpg", color: "#ffb4a9" },
   { id: "badminton",   name: "Badminton",   emoji: "🏸", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-badminton.jpg", color: "#5ed9d6" },
-  { id: "self_defence",name: "Self-Defence",emoji: "🥋", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-tennis.jpg", color: "#ff8a7d" },
+  { id: "self_defence",name: "Self-Defence",emoji: "🥋", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-self-defence.png", color: "#ff8a7d" },
 ];
 
 export const SPORTS_URGENT_BANNER = "⚠️ Badminton and Self-Defence have only 10 seats per time slot — register early.";
