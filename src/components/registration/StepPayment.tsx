@@ -4,7 +4,6 @@ import { useCartStore } from "@/store/cart.store";
 import { useState, useRef } from "react";
 import { ChevronLeft, QrCode, Upload, ShieldCheck, Loader2, RefreshCcw, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import QRCode from "react-qr-code";
 
 export function StepPayment() {
   const { 
@@ -124,21 +123,21 @@ export function StepPayment() {
           </p>
 
           <div className="bg-white p-4 rounded-3xl w-fit mx-auto shadow-2xl mb-8 border-4 border-primary/20">
-            <QRCode value={upiLink} size={200} />
+            <img src="/QR.jpeg" alt="Scan to pay" className="w-[200px] h-[200px] object-cover rounded-xl" />
           </div>
 
           <div className="bg-surface/50 border border-glass-border rounded-2xl p-6 mb-10">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-text-muted text-sm">Payable to:</span>
-              <span className="font-bold text-sm">{PAYEE_NAME}</span>
+              <span className="text-text-muted text-sm">Beneficiary Name:</span>
+              <span className="font-bold text-sm text-right">DHEERA SPORTS FOUNDATION</span>
             </div>
             <div className="flex justify-between items-center mb-4">
-              <span className="text-text-muted text-sm">VPA:</span>
-              <span className="font-mono text-xs">{UPI_ID}</span>
+              <span className="text-text-muted text-sm">UPI ID:</span>
+              <span className="font-mono text-xs text-right">vyapar.173204492006@hdfcbank</span>
             </div>
             <div className="border-t border-glass-border pt-4 flex justify-between items-center font-bold text-lg">
-               <span>Amount</span>
-               <span className="text-primary">₹{AMOUNT.toLocaleString()}</span>
+               <span>Amounts</span>
+               <span className="text-primary">₹12,000</span>
             </div>
           </div>
 
