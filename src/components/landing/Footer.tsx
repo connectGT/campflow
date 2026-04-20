@@ -66,12 +66,7 @@ export function Footer() {
                   Secure Registration
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="text-text-subtle hover:text-white transition-colors text-sm flex items-center gap-2">
-                  <ExternalLink className="w-3 h-3 text-white/50" />
-                  Staff Portal
-                </Link>
-              </li>
+
             </ul>
           </div>
 

@@ -78,7 +78,7 @@ export function Features() {
               <div className="absolute bottom-5 left-5 right-5">
                 <div className="glass rounded-xl p-4">
                   <p className="font-display font-medium text-text-primary text-xs leading-relaxed">
-                    &ldquo;{TRANSFORMATION_PROOF_LINE.split('.').slice(0,2).join('.')}. <span className="gradient-text font-bold block mt-2">{TRANSFORMATION_PROOF_LINE.split('.').slice(2).join('.').trim()}</span>&rdquo;
+                    &ldquo;{TRANSFORMATION_PROOF_LINE.split('.').slice(0,2).join('.')}. <span className="gradient-text font-bold block mt-2">{TRANSFORMATION_PROOF_LINE.split('.').slice(2).join('.').trim()}&rdquo;</span>
                   </p>
                 </div>
               </div>

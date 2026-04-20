@@ -48,9 +48,9 @@ export const SECONDARY_STATS = [
 ];
 
 export const IMPORTANT_DATES = [
-  { date: "18 April 2026", event: "Registration Opens — Online & WhatsApp", icon: "🚀" },
-  { date: "03 May 2026",   event: "Last Date to Register",                  icon: "⚠️" },
-  { date: "05 May 2026",   event: "Personal Timetables Sent to All Parents",icon: "📋" },
+  { date: "19 April 2026", event: "Registration Opens — Online & WhatsApp", icon: "🚀" },
+  { date: "28 April 2026", event: "Last Date to Register",                  icon: "⚠️" },
+  { date: "05 May 2026",   event: "Personal timetables sent to all confirmed parents", icon: "📋" },
   { date: "06 May 2026",   event: "DAY 1 — Camp Begins!",                   icon: "🏊" },
   { date: "07–09 Jun 2026",event: "Closing Ceremony — Days 33, 34 & 35 (Parents Invited)", icon: "🏆" },
   { date: "09 June 2026",  event: "Last Day — Medal Ceremony, Performance Reports, Celebration", icon: "🎗️" },
@@ -90,9 +90,9 @@ export const TRANSFORMATION_PROOF_LINE = "On Day 1, we measure every child's per
 
 export const INCLUSIONS_CORE = [
   { icon: "🏊", title: "35 Days of Professional Coaching",     desc: "Not a playground. A performance programme under qualified coaches across 6 Olympic-pathway sports." },
-  { icon: "🍳", title: "Daily Breakfast — Every Morning",      desc: "They eat like athletes. Nutritious, real food from Day 1. No junk. No shortcuts." },
+  { icon: "🍳", title: "Daily Breakfast",      desc: "They eat like athletes. Nutritious, real food from Day 1. No junk. No shortcuts." },
   { icon: "🥗", title: "Nutritional Counselling",              desc: "They learn to fuel their body, not just fill it. A personalised nutrition guidance note goes home." },
-  { icon: "🧠", title: "Sports Psychology — Every Saturday",   desc: "Pressure handling. Resilience. Focus. Goal-setting. Skills that transfer directly to the classroom — and to life." },
+  { icon: "🧠", title: "Sports Psychology",   desc: "Pressure handling. Resilience. Focus. Goal-setting. Skills that transfer directly to the classroom — and to life." },
   { icon: "🧘", title: "Daily Yoga Cool-Down",                 desc: "Flexibility, breathing, body awareness — ancient science applied to modern athletic performance. Habits that stay for life." },
   { icon: "📊", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Laps swum, distance run, coordination score. Measurable transformation." },
   { icon: "📋", title: "Personal Performance Report",          desc: "Personality & performance evaluation tracked by our expert coaches across all 35 days." },
@@ -117,7 +117,7 @@ export const INCLUSIONS_PARENTS = [
   { icon: "👶",  title: "Online Child Growth & Development",     badge: "FOR PARENTS", desc: "Understanding your child's physical and emotional development through sport. How Dheera works with every age from 7 to 20." },
 ];
 
-export const INCLUSIONS_SUMMARY = "11 Core Inclusions + 5 Free Value Additions + 4 Parent Programmes = 20 Touchpoints of Transformation";
+export const INCLUSIONS_SUMMARY = "11 Core Inclusions + 5 Free Value Addition for Kids + 4 Parent Programmes = 20 Touchpoints of Transformation";
 
 export const REGISTRATION_STEPS = [
   { step: 1, title: "Call or WhatsApp Us",       detail: "+91-8269799319 │ Get Registration Form Link" },
@@ -135,7 +135,6 @@ export const FOUNDING_DIRECTORS = [
 ];
 
 export const EXPERT_TEAM = [
-  { name: "Mr. Rajendra Upadhyay", role: "Swimming Programme Lead", credentials: "Joint Secretary — MP Swimming Association │ Secretary — District Swimming Association, Gwalior", color: "#aacae6" },
   { name: "Shubham Upadhyay", role: "Head Coach — Swimming", credentials: "Eklavya Awardee │ International Swimmer │ National Medalist │ National Record Holder", color: "#aacae6" },
   { name: "Dr. Sadhna Upadhyay", role: "Athlete Wellness & Health", credentials: "Homeopathic Doctor — Natural recovery, athlete health management", color: "#5ed9d6" },
   { name: "Deeksha Upadhyay", role: "Sports Psychology", credentials: "Sports Psychologist — Mental performance, pre-competition focus, athlete wellbeing", color: "#ffb4a9" },
@@ -407,7 +406,7 @@ export const DHEERA_ECOSYSTEM = [
 export const ECOSYSTEM_NOTE = "Each part of this ecosystem feeds the next. No one carries the weight alone.";
 
 export const WHY_JOIN = [
-  { icon: "🏊", come_for: "Swimming",   leave_with: "An athlete — technically precise, physically strong, mentally unbreakable." },
+  { icon: "🏊", come_for: "Growth",   leave_with: "An athlete — technically precise, physically strong, mentally unbreakable." },
   { icon: "💪", come_for: "Fitness",    leave_with: "A transformed body — not just lighter or faster, but fundamentally healthier in cardiovascular, muscular, and respiratory systems." },
   { icon: "🧠", come_for: "Focus",      leave_with: "A mind that handles pressure, sets goals, and bounces back from failure — skills that will serve your child in every exam, interview, and relationship for the rest of their life." },
   { icon: "🤝", come_for: "Community",  leave_with: "A family — the Dheera Collective — that will stand with you, celebrate your child, and ensure their dream is never limited by your resources." },

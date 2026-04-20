@@ -7,7 +7,6 @@ import { WhyJoinSection } from "@/components/landing/WhyJoinSection";
 import { ScheduleTimeline } from "@/components/landing/ScheduleTimeline";
 import { TrainerProfiles } from "@/components/landing/TrainerProfiles";
 import { Pricing } from "@/components/landing/Pricing";
-import { Testimonials } from "@/components/landing/Testimonials";
 import { FAQ } from "@/components/landing/FAQ";
 import { CTASection } from "@/components/landing/CTASection";
 import { Footer } from "@/components/landing/Footer";
@@ -24,7 +23,7 @@ export default function HomePage() {
       <div id="schedule"><ScheduleTimeline /></div>
       <div id="coaches"><TrainerProfiles /></div>
       <Pricing />
-      <Testimonials />
+
       <div id="faq"><FAQ /></div>
       <CTASection />
       <Footer />
