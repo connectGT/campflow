@@ -23,12 +23,12 @@ export const metadata: Metadata = {
     template: "%s | Dheera Sports",
   },
   description:
-    "Register your child for pro-level summer sports camps across India. Cricket, swimming, football, basketball, tennis, and badminton — all-inclusive package at ₹12,000.",
+    "Register your child for pro-level summer sports camps across India. Cricket, growth, football, basketball, tennis, and badminton — all-inclusive package at ₹12,000.",
   keywords: [
     "summer camp india",
     "sports training for kids",
     "cricket coaching",
-    "swimming lessons",
+    "growth lessons",
     "campflow registration",
   ],
   authors: [{ name: "Dheera Sports" }],

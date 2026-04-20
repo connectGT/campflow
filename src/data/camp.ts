@@ -48,21 +48,21 @@ export const SECONDARY_STATS = [
 ];
 
 export const IMPORTANT_DATES = [
-  { date: "19 April 2026", event: "Registration Opens — Online & WhatsApp", icon: "🚀" },
-  { date: "28 April 2026", event: "Last Date to Register",                  icon: "⚠️" },
-  { date: "05 May 2026",   event: "Personal timetables sent to all confirmed parents", icon: "📋" },
-  { date: "06 May 2026",   event: "DAY 1 — Camp Begins!",                   icon: "🏊" },
-  { date: "07–09 Jun 2026",event: "Closing Ceremony — Days 33, 34 & 35 (Parents Invited)", icon: "🏆" },
-  { date: "09 June 2026",  event: "Last Day — Medal Ceremony, Performance Reports, Celebration", icon: "🎗️" },
+  { date: "19 April 2026", event: "Registration Opens — Online & WhatsApp", icon: "rocket" },
+  { date: "28 April 2026", event: "Last Date to Register",                  icon: "alert" },
+  { date: "05 May 2026",   event: "Personal timetables sent to all confirmed parents", icon: "calendar" },
+  { date: "06 May 2026",   event: "DAY 1 — Camp Begins!",                   icon: "waves" },
+  { date: "07–09 Jun 2026",event: "Closing Ceremony — Days 33, 34 & 35 (Parents Invited)", icon: "party" },
+  { date: "09 June 2026",  event: "Last Day — Medal Ceremony, Performance Reports, Celebration", icon: "medal" },
 ];
 
 export const SPORTS = [
-  { id: "swimming",    name: "Swimming",    emoji: "🏊", seats_total: 40, coaches: 4, urgent: false, image: "/sport-swimming.jpg", color: "#aacae6" },
-  { id: "football",    name: "Football",    emoji: "⚽", seats_total: 25, coaches: 2, urgent: false, image: "/sport-football.jpg", color: "#ff5745" },
-  { id: "cricket",     name: "Cricket",     emoji: "🏏", seats_total: 25, coaches: 2, urgent: false, image: "/sport-cricket.jpg", color: "#ff5745" },
-  { id: "basketball",  name: "Basketball",  emoji: "🏀", seats_total: 15, coaches: 2, urgent: false, image: "/sport-basketball.jpg", color: "#ffb4a9" },
-  { id: "badminton",   name: "Badminton",   emoji: "🏸", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-badminton.jpg", color: "#5ed9d6" },
-  { id: "self_defence",name: "Self-Defence",emoji: "🥋", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-self-defence.png", color: "#ff8a7d" },
+  { id: "swimming",    name: "Growth",    emoji: "waves", seats_total: 40, coaches: 4, urgent: false, image: "/sport-growth.jpg", color: "#aacae6" },
+  { id: "football",    name: "Football",    emoji: "activity", seats_total: 25, coaches: 2, urgent: false, image: "/sport-football.jpg", color: "#ff5745" },
+  { id: "cricket",     name: "Cricket",     emoji: "trophy", seats_total: 25, coaches: 2, urgent: false, image: "/sport-cricket.jpg", color: "#ff5745" },
+  { id: "basketball",  name: "Basketball",  emoji: "target", seats_total: 15, coaches: 2, urgent: false, image: "/sport-basketball.jpg", color: "#ffb4a9" },
+  { id: "badminton",   name: "Badminton",   emoji: "zap", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-badminton.jpg", color: "#5ed9d6" },
+  { id: "self_defence",name: "Self-Defence",emoji: "shield", seats_total: 10, coaches: 1, urgent: true, urgent_note: "Only 10 seats per slot — fills first", image: "/sport-self-defence.png", color: "#ff8a7d" },
 ];
 
 export const SPORTS_URGENT_BANNER = "⚠️ Badminton and Self-Defence have only 10 seats per time slot — register early.";
@@ -79,42 +79,42 @@ export const TRANSPORT = {
 };
 
 export const TRANSFORMATION_PILLARS = [
-  { icon: "💪", title: "PHYSICAL", body: "3 hours of coached sport burns 400–700 calories daily. Weight management. Cardiovascular endurance. Strength. Coordination. Motor skills. The body your child always had the potential for — finally unlocked." },
-  { icon: "🥗", title: "NUTRITIONAL", body: "Daily high-protein breakfast. Weekly food awareness sessions. A nutritional guidance note goes home. By Day 35, your child will not just be fitter — they will understand why what they eat matters." },
-  { icon: "🧠", title: "MENTAL", body: "Sports psychology every Saturday. Pressure handling. Resilience after failure. Focus under stress. Goal-setting discipline. These are not sports skills — they are life skills. They show up in the classroom, in the boardroom, and in every moment that matters." },
-  { icon: "❤️", title: "EMOTIONAL", body: "Winning without arrogance. Losing without collapse. Friendships across school boundaries. Confidence that stays long after the camp ends. Sport is the world's greatest emotional education." },
-  { icon: "🌅", title: "DISCIPLINE", body: "35 mornings of showing up. By Day 35, that is no longer a habit — it is a character. The child who could not wake at 6:00 AM will do so naturally. The child who quit easily will know what it means to finish." },
+  { icon: "activity", title: "PHYSICAL", body: "3 hours of coached sport burns 400–700 calories daily. Weight management. Cardiovascular endurance. Strength. Coordination. Motor skills. The body your child always had the potential for — finally unlocked." },
+  { icon: "leaf", title: "NUTRITIONAL", body: "Daily high-protein breakfast. Weekly food awareness sessions. A nutritional guidance note goes home. By Day 35, your child will not just be fitter — they will understand why what they eat matters." },
+  { icon: "brain", title: "MENTAL", body: "Sports psychology every Saturday. Pressure handling. Resilience after failure. Focus under stress. Goal-setting discipline. These are not sports skills — they are life skills. They show up in the classroom, in the boardroom, and in every moment that matters." },
+  { icon: "heart", title: "EMOTIONAL", body: "Winning without arrogance. Losing without collapse. Friendships across school boundaries. Confidence that stays long after the camp ends. Sport is the world's greatest emotional education." },
+  { icon: "clock", title: "DISCIPLINE", body: "35 mornings of showing up. By Day 35, that is no longer a habit — it is a character. The child who could not wake at 6:00 AM will do so naturally. The child who quit easily will know what it means to finish." },
 ];
 
 export const TRANSFORMATION_PROOF_LINE = "On Day 1, we measure every child's performance and body measurements. On Day 35, we measure again. Every child receives their personal Before & After Athletic Report. The numbers will speak for themselves.";
 
 export const INCLUSIONS_CORE = [
-  { icon: "🏊", title: "35 Days of Professional Coaching",     desc: "Not a playground. A performance programme under qualified coaches across 6 Olympic-pathway sports." },
-  { icon: "🍳", title: "Daily Breakfast",      desc: "They eat like athletes. Nutritious, real food from Day 1. No junk. No shortcuts." },
-  { icon: "🥗", title: "Nutritional Counselling",              desc: "They learn to fuel their body, not just fill it. A personalised nutrition guidance note goes home." },
-  { icon: "🧠", title: "Sports Psychology",   desc: "Pressure handling. Resilience. Focus. Goal-setting. Skills that transfer directly to the classroom — and to life." },
-  { icon: "🧘", title: "Daily Yoga Cool-Down",                 desc: "Flexibility, breathing, body awareness — ancient science applied to modern athletic performance. Habits that stay for life." },
-  { icon: "📊", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Laps swum, distance run, coordination score. Measurable transformation." },
-  { icon: "📋", title: "Personal Performance Report",          desc: "Personality & performance evaluation tracked by our expert coaches across all 35 days." },
-  { icon: "👕", title: "Dheera T-Shirt",                      desc: "They wear the identity. They become part of something bigger than a summer holiday." },
-  { icon: "🏅", title: "Competitions, Medals & Certificates", desc: "Public acknowledgement of 35 days of commitment. A moment they will remember for years." },
-  { icon: "🚌", title: "Transport (4 City Pick-Up Points)",    desc: "Maharaj Bada │ Chetakpuri │ Padav │ Collectorate. Door-to-campus-to-door." },
-  { icon: "🎗️", title: "Closing Ceremony",                    desc: "Finals, time trials, medals, Before & After reports, and a celebration that will make Gwalior sit up." },
+  { icon: "users", title: "35 Days of Professional Coaching",     desc: "Not a playground. A performance programme under qualified coaches across 6 Olympic-pathway sports." },
+  { icon: "utensils", title: "Daily Breakfast",      desc: "They eat like athletes. Nutritious, real food from Day 1. No junk. No shortcuts." },
+  { icon: "apple", title: "Nutritional Counselling",              desc: "They learn to fuel their body, not just fill it. A personalised nutrition guidance note goes home." },
+  { icon: "brain", title: "Sports Psychology",   desc: "Pressure handling. Resilience. Focus. Goal-setting. Skills that transfer directly to the classroom — and to life." },
+  { icon: "flower", title: "Daily Yoga Cool-Down",                 desc: "Flexibility, breathing, body awareness — ancient science applied to modern athletic performance. Habits that stay for life." },
+  { icon: "chart", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Growth progress, distance run, coordination score. Measurable transformation." },
+  { icon: "report", title: "Personal Performance Report",          desc: "Personality & performance evaluation tracked by our expert coaches across all 35 days." },
+  { icon: "shirt", title: "Dheera T-Shirt",                      desc: "They wear the identity. They become part of something bigger than a summer holiday." },
+  { icon: "trophy", title: "Competitions, Medals & Certificates", desc: "Public acknowledgement of 35 days of commitment. A moment they will remember for years." },
+  { icon: "bus", title: "Transport (4 City Pick-Up Points)",    desc: "Maharaj Bada │ Chetakpuri │ Padav │ Collectorate. Door-to-campus-to-door." },
+  { icon: "party", title: "Closing Ceremony",                    desc: "Finals, time trials, medals, Before & After reports, and a celebration that will make Gwalior sit up." },
 ];
 
 export const INCLUSIONS_FREE = [
-  { icon: "🧘", title: "Yoga Sessions",               badge: "FREE", desc: "Structured yoga as athletic science. Strength, balance, and breath control built into the daily programme." },
-  { icon: "🧘", title: "Meditation Sessions",         badge: "FREE", desc: "The stillest athletes are often the fiercest competitors. Daily moments of silence teach children how to find calm under pressure." },
-  { icon: "🔔", title: "Sound Healing Sessions",     badge: "FREE", desc: "One of the most powerful tools for stress release and emotional reset. Children experience ancient healing science — many for the first time." },
-  { icon: "💃", title: "Dance Sessions",             badge: "FREE", desc: "Expression, rhythm, coordination, joy. A child who can move freely is a child who is free. Movement as celebration." },
-  { icon: "🏅", title: "Surprise Olympics Sport Session", badge: "FREE", desc: "One session — kept secret until the day — where children experience a real Olympic sport they may never have tried. Wonder and aspiration in one afternoon." },
+  { icon: "flower", title: "Yoga Sessions",               badge: "FREE", desc: "Structured yoga as athletic science. Strength, balance, and breath control built into the daily programme." },
+  { icon: "wind", title: "Meditation Sessions",         badge: "FREE", desc: "The stillest athletes are often the fiercest competitors. Daily moments of silence teach children how to find calm under pressure." },
+  { icon: "sparkles", title: "Sound Healing Sessions",     badge: "FREE", desc: "One of the most powerful tools for stress release and emotional reset. Children experience ancient healing science — many for the first time." },
+  { icon: "party", title: "Dance Sessions",             badge: "FREE", desc: "Expression, rhythm, coordination, joy. A child who can move freely is a child who is free. Movement as celebration." },
+  { icon: "trophy", title: "Surprise Olympics Sport Session", badge: "FREE", desc: "One session — kept secret until the day — where children experience a real Olympic sport they may never have tried. Wonder and aspiration in one afternoon." },
 ];
 
 export const INCLUSIONS_PARENTS = [
-  { icon: "🧘",  title: "Yoga for Parents",                      badge: "FOR PARENTS", desc: "While their children train, parents are invited to join dedicated yoga sessions. Dheera transforms the whole family." },
-  { icon: "📱",  title: "Online Nutrition Session",              badge: "FOR PARENTS", desc: "A live expert session on how to feed a young athlete. What to cook. What to avoid. How to support performance at home." },
-  { icon: "🧠",  title: "Online Sports Psychology Session",      badge: "FOR PARENTS", desc: "How to be the parent an athlete needs — not the parent an athlete fears. A session that will change how you watch your child compete." },
-  { icon: "👶",  title: "Online Child Growth & Development",     badge: "FOR PARENTS", desc: "Understanding your child's physical and emotional development through sport. How Dheera works with every age from 7 to 20." },
+  { icon: "flower",  title: "Yoga for Parents",                      badge: "FOR PARENTS", desc: "While their children train, parents are invited to join dedicated yoga sessions. Dheera transforms the whole family." },
+  { icon: "apple",  title: "Online Nutrition Session",              badge: "FOR PARENTS", desc: "A live expert session on how to feed a young athlete. What to cook. What to avoid. How to support performance at home." },
+  { icon: "brain",  title: "Online Sports Psychology Session",      badge: "FOR PARENTS", desc: "How to be the parent an athlete needs — not the parent an athlete fears. A session that will change how you watch your child compete." },
+  { icon: "users",  title: "Online Child Growth & Development",     badge: "FOR PARENTS", desc: "Understanding your child's physical and emotional development through sport. How Dheera works with every age from 7 to 20." },
 ];
 
 export const INCLUSIONS_SUMMARY = "11 Core Inclusions + 5 Free Value Addition for Kids + 4 Parent Programmes = 20 Touchpoints of Transformation";
@@ -131,11 +131,11 @@ export const REGISTRATION_STEPS = [
 export const FOUNDING_DIRECTORS = [
   { name: "Abhinav Upadhyay", role: "Director", credentials: "National Swimmer, India", bio: "Secretary, Para Sports Association of Madhya Pradesh (State Body of Paralympic Committee of India). Founder-Director, Dheera Sports Foundation.", color: "#ff5745" },
   { name: "Abhisar Verma",    role: "Director", credentials: "International Swimmer, India", bio: "MBA in Sports Management — Real Madrid Graduate School, Spain. Founder-Director, Dheera Sports Foundation.", color: "#aacae6" },
-  { name: "Ashish Agarwal",   role: "Director", credentials: "Chartered Accountant (CA)", bio: "Joint Secretary — District Swimming Association, Gwalior. Founder-Director, Dheera Sports Foundation.", color: "#ffb4a9" },
+  { name: "Ashish Agarwal",   role: "Director", credentials: "Chartered Accountant (CA)", bio: "Joint Secretary — District Growth Association, Gwalior. Founder-Director, Dheera Sports Foundation.", color: "#ffb4a9" },
 ];
 
 export const EXPERT_TEAM = [
-  { name: "Shubham Upadhyay", role: "Head Coach — Swimming", credentials: "Eklavya Awardee │ International Swimmer │ National Medalist │ National Record Holder", color: "#aacae6" },
+  { name: "Shubham Upadhyay", role: "Head Coach — Growth", credentials: "Eklavya Awardee │ International Swimmer │ National Medalist │ National Record Holder", color: "#aacae6" },
   { name: "Dr. Sadhna Upadhyay", role: "Athlete Wellness & Health", credentials: "Homeopathic Doctor — Natural recovery, athlete health management", color: "#5ed9d6" },
   { name: "Deeksha Upadhyay", role: "Sports Psychology", credentials: "Sports Psychologist — Mental performance, pre-competition focus, athlete wellbeing", color: "#ffb4a9" },
   { name: "Rahul Khare", role: "Shooting Programme Lead", credentials: "National Medalist — Shooting", color: "#ff8a7d" },
@@ -182,7 +182,7 @@ export const FOOTER = {
 export const WHATSAPP = {
   WELCOME: "👋 Welcome to Dheera Sports Camp 2026! How can we help?",
   MENU_BUTTONS: ["🏊 View Sports & Seats", "📋 Register My Child", "📅 Camp Dates & Details"],
-  PAYMENT_CONFIRM: "✅ Registration confirmed! Your child's personal timetable will be sent by 5 May 2026. See you on 6 May! 🏆",
+  PAYMENT_CONFIRM: "Seat Locked! 🛡️ We've received your registration. Our team is verifying the details and will reach out to you via WhatsApp with the payment link and next steps within 24 hours. Stay connected!",
 };
 
 // ============================================================
@@ -192,7 +192,7 @@ export const WHATSAPP = {
 export const SANSKRIT_SHLOKA = "शरीरमाद्यं खलु धर्मसाधनम्";
 export const SANSKRIT_TRANSLATION = "The body is indeed the primary instrument of dharma.";
 export const BRAND_SECONDARY_TAGLINE = "Swim. Evolve. Conquer.";
-export const BRAND_IDENTITY_LINE = "We don't just train swimmers. We mold the Dheeras.";
+export const BRAND_IDENTITY_LINE = "We don't just train athletes. We mold the Dheeras.";
 export const BRAND_ONE_LINER = "Dheera Sports Foundation is not a sports academy. It is a movement.";
 
 export const DHEERA_WORD_MEANING = {
@@ -211,7 +211,7 @@ export const VISION_STATEMENT = "To create a generation of World-Class Athletes 
 export const VISION_DIMENSIONS = [
   {
     number: "01",
-    title: "World-Class Athletes — Not Just Good Swimmers",
+    title: "World-Class Athletes — Built for Growth",
     body: "We are building a pipeline. From a child who sees water for the first time in Gwalior — to a swimmer standing on the podium at the Asian Games, the World Championships, the Olympics. Every child who trains at Dheera is in that pipeline."
   },
   {
@@ -269,7 +269,7 @@ export const CORE_PILLARS = [
     icon: "🏊",
     title: "Aquatics — The Path to Gold",
     intro: "Water is where champions are forged. The pool is not a recreational facility at Dheera — it is a crucible. Every length swum is data. Every breath is measured. Every stroke is refined.",
-    infrastructure_note: "We are building the region's first Stainless Steel Swimming Infrastructure — a 25m × 25m all-weather indoor pool. Stainless steel is the international standard for competition pools. It is hygienic, durable, and precise.",
+    infrastructure_note: "We are building the region's first Stainless Steel Growth Infrastructure — a 25m × 25m all-weather indoor pool. Stainless steel is the international standard for competition pools. It is hygienic, durable, and precise.",
     sub_pillars: [
       {
         icon: "📊",
@@ -295,9 +295,9 @@ export const CORE_PILLARS = [
         icon: "🌍",
         title: "International Connectivity",
         points: [
-          "Regular webinars with global swimming science experts",
+          "Regular webinars with global growth science experts",
           "Exposure to international competition formats",
-          "Knowledge sharing with national swimming federations",
+          "Knowledge sharing with national growth federations",
           "Bridge between Gwalior's talent and the world's standards"
         ]
       }
@@ -360,12 +360,12 @@ export const CORE_PILLARS = [
       },
       {
         icon: "🏊",
-        title: "Swimming as Public Health",
+        title: "Growth as Public Health",
         points: [
-          "Community drives promoting swimming as a life-saving skill — drowning prevention",
+          "Community drives promoting growth as a life-saving skill — drowning prevention",
           "Free water safety camps twice yearly — open to all Gwalior residents",
           "'Every Child Swims' — partnership with government schools for structured access",
-          "Swimming as preventive healthcare — cardiovascular, respiratory, mental wellness"
+          "Growth as preventive healthcare — cardiovascular, respiratory, mental wellness"
         ]
       }
     ]
@@ -373,45 +373,45 @@ export const CORE_PILLARS = [
 ];
 
 export const SANGHA_HEADLINE = "It takes a village to raise a Champion.";
-export const SANGHA_SUBLINE = "The Dheera Collective — Parents · Adult Swimmers · Mentors · Coaches — united by one shared purpose.";
+export const SANGHA_SUBLINE = "The Dheera Collective — Parents · Adult Athletes · Mentors · Coaches — united by one shared purpose.";
 export const SANGHA_INTRO = "The most important thing we have built at Dheera is not the pool. It is not the coaching methodology. It is the Sangha.";
 export const SANGHA_DEFINITION = "Sangha — the ancient concept of community — is one of the three jewels of Indian philosophy, alongside Dharma (purpose) and Dhyana (awareness). In Sanskrit, Sangha means a community bound by shared values, mutual support, and collective aspiration.";
 
 export const SANGHA_PILLARS = [
   {
-    icon: "🔬",
+    icon: "microscope",
     title: "Science of Existence",
-    body: "We move beyond basic fitness to educate our community on Body Science, Mind Science, and Energy Science. Through exclusive webinars with international swimming science experts, we decode the physiology of excellence — and make it accessible to every family."
+    body: "We move beyond basic fitness to educate our community on Body Science, Mind Science, and Energy Science. Through exclusive webinars with international growth science experts, we decode the physiology of excellence — and make it accessible to every family."
   },
   {
-    icon: "💪",
+    icon: "handshake",
     title: "The Power of Sangha",
     body: "This is a platform for mutual empowerment. We encourage community members to share their Skills, Resources, and Social Capital. Whether financial support, professional expertise, or networking — the Dheera Family stands together to uplift every child."
   },
   {
-    icon: "🧑👧",
+    icon: "heart",
     title: "Conscious Parenting",
     body: "We train parents to be the emotional backbone of their athlete children. A parent who screams from the sideline creates anxiety. A parent who understands the science creates champions. Dheera trains both the swimmer and the family."
   }
 ];
 
 export const DHEERA_ECOSYSTEM = [
-  { icon: "🏊", label: "Athletes",  desc: "Train. Compete. Grow." },
-  { icon: "👩👧", label: "Families",  desc: "Support. Learn. Grow." },
-  { icon: "🧑🏫", label: "Coaches",   desc: "Guide. Science. Results." },
-  { icon: "💼",  label: "Mentors",   desc: "Fund. Advise. Open Doors." },
-  { icon: "🏅",  label: "India",     desc: "On the Podium." }
+  { icon: "waves", label: "Athletes",  desc: "Train. Compete. Grow." },
+  { icon: "users", label: "Families",  desc: "Support. Learn. Grow." },
+  { icon: "education", label: "Coaches",   desc: "Guide. Science. Results." },
+  { icon: "briefcase",  label: "Mentors",   desc: "Fund. Advise. Open Doors." },
+  { icon: "globe",  label: "India",     desc: "On the Podium." }
 ];
 
 export const ECOSYSTEM_NOTE = "Each part of this ecosystem feeds the next. No one carries the weight alone.";
 
 export const WHY_JOIN = [
-  { icon: "🏊", come_for: "Growth",   leave_with: "An athlete — technically precise, physically strong, mentally unbreakable." },
-  { icon: "💪", come_for: "Fitness",    leave_with: "A transformed body — not just lighter or faster, but fundamentally healthier in cardiovascular, muscular, and respiratory systems." },
-  { icon: "🧠", come_for: "Focus",      leave_with: "A mind that handles pressure, sets goals, and bounces back from failure — skills that will serve your child in every exam, interview, and relationship for the rest of their life." },
-  { icon: "🤝", come_for: "Community",  leave_with: "A family — the Dheera Collective — that will stand with you, celebrate your child, and ensure their dream is never limited by your resources." },
-  { icon: "🌬️", come_for: "Sports",     leave_with: "A philosophy — the understanding that the body is sacred, effort is worship, and greatness is not given but earned through disciplined daily action." },
-  { icon: "🏅", come_for: "A Medal",    leave_with: "A legacy — the knowledge that your child is part of the movement that will one day put India on the Olympic swimming podium." }
+  { icon: "waves", come_for: "Growth",   leave_with: "An athlete — technically precise, physically strong, mentally unbreakable." },
+  { icon: "activity", come_for: "Fitness",    leave_with: "A transformed body — not just lighter or faster, but fundamentally healthier in cardiovascular, muscular, and respiratory systems." },
+  { icon: "brain", come_for: "Focus",      leave_with: "A mind that handles pressure, sets goals, and bounces back from failure — skills that will serve your child in every exam, interview, and relationship for the rest of their life." },
+  { icon: "users", come_for: "Community",  leave_with: "A family — the Dheera Collective — that will stand with you, celebrate your child, and ensure their dream is never limited by your resources." },
+  { icon: "sparkles", come_for: "Sports",     leave_with: "A philosophy — the understanding that the body is sacred, effort is worship, and greatness is not given but earned through disciplined daily action." },
+  { icon: "medal", come_for: "A Medal",    leave_with: "A legacy — the knowledge that your child is part of the movement that will one day put India on the Olympic growth podium." }
 ];
 
 export const GWALIOR_PROMISE_OPENER = "There is a child in Gwalior today — perhaps in Lashkar, perhaps in Morar, perhaps near the Fort — who wakes up every morning with a dream that is too big for the world they were born into.";

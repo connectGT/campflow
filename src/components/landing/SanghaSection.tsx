@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { SANGHA_HEADLINE, SANGHA_SUBLINE, SANGHA_INTRO, SANGHA_PILLARS, DHEERA_ECOSYSTEM, ECOSYSTEM_NOTE } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 export function SanghaSection() {
   return (
@@ -61,7 +62,9 @@ export function SanghaSection() {
               transition={{ delay: idx * 0.1 }}
               className="bg-zinc-900/40 border border-zinc-800/60 p-8 rounded-2xl hover:bg-zinc-900 transition-colors"
             >
-              <div className="text-4xl mb-6">{pillar.icon}</div>
+              <div className="mb-6 text-cyan-400">
+                <Icon name={pillar.icon} className="w-10 h-10" />
+              </div>
               <h3 className="text-xl font-bold text-white mb-4">{pillar.title}</h3>
               <p className="text-zinc-400 leading-relaxed">{pillar.body}</p>
             </motion.div>
@@ -96,8 +99,8 @@ export function SanghaSection() {
                 transition={{ delay: 0.5 + (idx * 0.2) }}
                 className="flex flex-col items-center flex-1 w-full md:w-auto"
               >
-                <div className="w-20 h-20 rounded-full bg-zinc-950 border-2 border-zinc-700 flex items-center justify-center text-3xl mb-4 relative z-10 hover:border-cyan-500 transition-colors shadow-[0_0_15px_rgba(0,0,0,0.5)]">
-                  {item.icon}
+                <div className="w-20 h-20 rounded-full bg-zinc-950 border-2 border-zinc-700 flex items-center justify-center mb-4 relative z-10 hover:border-cyan-500 transition-colors shadow-[0_0_15px_rgba(0,0,0,0.5)] text-cyan-400">
+                  <Icon name={item.icon} className="w-10 h-10" />
                 </div>
                 <h4 className="text-white font-bold text-lg mb-1">{item.label}</h4>
                 <p className="text-cyan-400 text-xs font-medium uppercase tracking-wider text-center">{item.desc}</p>

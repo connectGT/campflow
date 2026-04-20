@@ -54,7 +54,8 @@ Return this exact JSON structure:
 }
 
 Rules:
-- Sport fields must be exactly one of the valid options (lowercase with underscore). Map "self defence" → "self_defence", "Badminton" → "badminton", etc.
+- Sport fields must be exactly one of the valid options (lowercase with underscore). 
+- IMPORTANT: Map "Growth" or "Swimming" → "swimming", "Self Defence" → "self_defence", "Badminton" → "badminton", etc.
 - Transport must be exactly one of the given options. If unclear, use "Self Drop".
 - Phone numbers: digits only, no spaces, no +91 prefix.
 - If a field is unclear or missing, use empty string "" or 0 for age.

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { WHY_JOIN } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 export function WhyJoinSection() {
   return (
@@ -49,8 +50,8 @@ export function WhyJoinSection() {
               transition={{ delay: idx * 0.1 }}
               className="group relative bg-white border border-zinc-200 rounded-3xl p-8 hover:shadow-xl transition-all duration-300"
             >
-              <div className="text-4xl mb-6 bg-zinc-50 w-16 h-16 rounded-full flex items-center justify-center border border-zinc-100 group-hover:scale-110 transition-transform">
-                {item.icon}
+              <div className="mb-6 bg-zinc-50 w-16 h-16 rounded-full flex items-center justify-center border border-zinc-100 group-hover:scale-110 transition-transform text-cyan-600">
+                <Icon name={item.icon} className="w-8 h-8" />
               </div>
               
               <div className="mb-6">

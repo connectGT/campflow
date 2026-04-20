@@ -37,14 +37,10 @@ export const MSG = {
     `✅ Step 1 — हमारी website पर जाएं:\n` +
     `👉 https://campflow-rho.vercel.app\n\n` +
     `✅ Step 2 — "Register Now" पर click करें\n\n` +
-    `✅ Step 3 — बच्चे की details भरें:\n` +
-    `   • नाम, जन्मतिथि, Gender\n` +
-    `   • माता-पिता का नाम, School\n` +
-    `   • Photo, Address\n\n` +
-    `✅ Step 4 — 3 Sports चुनें (अलग-अलग slots में)\n\n` +
-    `✅ Step 5 — ₹12,000 UPI से payment करें\n` +
-    `   📱 UPI ID: *9977855965@ybl*\n\n` +
-    `✅ Step 6 — Screenshot upload करें और UTR डालें\n\n` +
+    `✅ Step 3 — बच्चे की details भरें (नाम, Gender, Contact)\n\n` +
+    `✅ Step 4 — 3 Sports चुनें (Slot-wise)\n\n` +
+    `✅ Step 5 — Registration Submit करें\n\n` +
+    `✅ Step 6 — Seat Locked! 🛡️ हमारी टीम आपसे WhatsApp पर संपर्क करेगी Payment Link और next steps के लिए।\n\n` +
     `📞 Help के लिए: *8️⃣ Talk to Team*\n\n` +
     `_मुख्य मेनू के लिए *menu* टाइप करें।_`,
 
@@ -56,13 +52,13 @@ export const MSG = {
     `⏰ Slot 2 — 8:00 AM – 9:00 AM\n` +
     `⏰ Slot 3 — 9:00 AM – 10:00 AM\n\n` +
     `*Available Sports:*\n` +
-    `🏊 Swimming\n` +
+    `🏊 Growth\n` +
     `🏏 Cricket\n` +
     `⚽ Football\n` +
     `🏀 Basketball\n` +
     `🏸 Badminton\n` +
     `🥋 Self Defense\n\n` +
-    `📌 हर बच्चा *3 अलग sports* choose कर सकता है — एक-एक हर slot में।\n` +
+    `📌 हर बच्चा *3 अलग sports* choose कर सकता है — एक-एक हर slot में.\n` +
     `📌 एक ही sport दो slots में नहीं चुन सकते।\n\n` +
     `_मुख्य मेनू के लिए *menu* टाइप करें।_`,
 
@@ -76,11 +72,7 @@ export const MSG = {
     `   • UPI ID: *9977855965@ybl*\n` +
     `   • Name: Dheera Sports Foundation\n\n` +
     `*Process:*\n` +
-    `1. UPI से ₹12,000 transfer करें\n` +
-    `2. Screenshot save करें\n` +
-    `3. Website पर UTR number और screenshot upload करें\n` +
-    `4. 24 घंटे में admin verify करेंगे\n` +
-    `5. Confirmation WhatsApp पर मिलेगा ✅\n\n` +
+    `1. Website पर Registration Form भरें\n2. Submit करने पर आपकी Seat Lock हो जाएगी\n3. 24 घंटे के अंदर हमारी टीम आपसे WhatsApp पर संपर्क करेगी\n4. Verification के बाद आपको Official Payment Link भेजा जाएगा\n5. Payment होते ही आपका Timetable generate हो जाएगा ✅\n\n` +
     `⚠️ *Cash payment भी accepted है* — किसी team member से मिलें\n\n` +
     `_मुख्य मेनू के लिए *menu* टाइप करें।_`,
 
@@ -144,8 +136,8 @@ export const MSG = {
 
   STATUS_FOUND: (childName: string, status: string) => {
     const statusMap: Record<string, string> = {
-      pending: "⏳ Payment pending — website पर screenshot upload करें",
-      pending_approval: "⏳ Payment verification में है — 24 घंटे में confirm होगा",
+      pending: "⏳ Seat Locked! — हमारी टीम आपसे संपर्क करने वाली है",
+      pending_approval: "⏳ Details verified — Payment link जल्द ही भेजा जा रहा है",
       paid: "✅ Registration confirmed! Camp में आपका स्वागत है 🏅",
       rejected: "❌ Payment verify नहीं हो सका — team से संपर्क करें",
     };
@@ -212,7 +204,7 @@ export function parseIntent(text: string): string {
 
   // Keyword matching
   if (/regist|admission|join|enroll|signup|register|form/.test(t)) return "registration";
-  if (/sport|swim|cricket|football|basket|badmin|defense|time|slot|schedule|timing/.test(t)) return "sports";
+  if (/sport|growth|swim|cricket|football|basket|badmin|defense|time|slot|schedule|timing/.test(t)) return "sports";
   if (/fee|fees|pay|cost|price|payment|amount|rupee|upi|money|kitna/.test(t)) return "fees";
   if (/pickup|drop|bus|transport|point|location|address|kahan|kha se/.test(t)) return "pickup";
   if (/date|dates|when|camp|start|duration|kab|kitne din/.test(t)) return "camp_dates";

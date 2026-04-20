@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap/config";
 import { IMPORTANT_DATES, CAMP } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 export function ScheduleTimeline() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -70,7 +71,7 @@ export function ScheduleTimeline() {
                 </span>
               </div>
               <div className="px-6 py-5 flex items-center gap-4 md:col-span-9">
-                <span className="text-2xl shrink-0">{item.icon}</span>
+                <Icon name={item.icon} className="w-5 h-5 text-primary shrink-0" />
                 <span className="font-display font-semibold text-text-primary text-base tracking-wide">
                   {item.event}
                 </span>

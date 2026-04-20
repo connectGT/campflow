@@ -27,7 +27,7 @@ export async function GET() {
       availability[sport.id] = {};
       
       // seats_total in camp.ts = direct per-slot capacity
-      // e.g. Swimming=40, Football=25, Cricket=25, Basketball=15, Badminton=10, Self-Defence=10
+      // e.g. Growth=40, Football=25, Cricket=25, Basketball=15, Badminton=10, Self-Defence=10
       const slotCap = sport.seats_total;
 
       slots.forEach((slot) => {

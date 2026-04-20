@@ -6,7 +6,7 @@ import { UserPlus, Loader2, ChevronDown, Sparkles, Upload, FileText, X, CheckCir
 
 const SPORTS = ["swimming", "football", "cricket", "basketball", "badminton", "self_defence"];
 const SPORT_LABELS: Record<string, string> = {
-  swimming: "🏊 Swimming", football: "⚽ Football", cricket: "🏏 Cricket",
+  swimming: "🏊 Growth", football: "⚽ Football", cricket: "🏏 Cricket",
   basketball: "🏀 Basketball", badminton: "🏸 Badminton", self_defence: "🥋 Self Defence"
 };
 const TRANSPORT_POINTS = ["Self Drop", "Maharaj Bada", "Chetakpuri", "Padav", "Collectorate"];
@@ -163,7 +163,7 @@ export function OfflineRegistrationForm() {
                 <textarea
                   value={pasteText}
                   onChange={e => setPasteText(e.target.value)}
-                  placeholder="Paste registration form details here... e.g. Child: Arjun, Age: 12, Class 7, Sports: Swimming, Football, Cricket, Parent: Suresh, Phone: 9876543210..."
+                  placeholder="Paste registration form details here... e.g. Child: Arjun, Age: 12, Class 7, Sports: Growth, Football, Cricket, Parent: Suresh, Phone: 9876543210..."
                   rows={4}
                   className="flex-1 bg-background border border-violet-500/40 rounded-xl px-3 py-2 text-sm text-white placeholder:text-text-muted focus:outline-none focus:border-violet-400 resize-none"
                 />

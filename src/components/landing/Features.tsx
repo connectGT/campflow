@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "@/lib/gsap/config";
 import Image from "next/image";
+import { Icon } from "@/components/ui/IconMapping";
 import { TRANSFORMATION_PILLARS, TRANSFORMATION_PROOF_LINE } from "@/data/camp";
 
 export function Features() {
@@ -49,10 +50,10 @@ export function Features() {
                 className="feature-card glass-subtle rounded-xl p-6 card-lift group hover:border-primary/20 transition-all duration-300"
               >
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 text-2xl"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 text-primary"
                   style={{ background: "rgba(255, 87, 69, 0.12)", border: "1px solid rgba(255, 180, 169, 0.2)" }}
                 >
-                  {feature.icon}
+                  <Icon name={feature.icon} className="w-5 h-5" />
                 </div>
                 <h3 className="font-display font-bold text-text-primary text-sm tracking-wide mb-1.5 uppercase tracking-[0.1em]">
                   {feature.title}

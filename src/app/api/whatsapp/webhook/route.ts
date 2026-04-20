@@ -97,7 +97,7 @@ async function lookupStatus(phone: string) {
 // ─── Fetch live SLOT-WISE seat availability ────────────────────────
 async function lookupSeats() {
   const SPORT_META: Record<string, { name: string; emoji: string; total: number }> = {
-    swimming:     { name: "Swimming",    emoji: "🏊", total: 40 },
+    swimming:     { name: "Growth",      emoji: "🏊", total: 40 },
     football:     { name: "Football",    emoji: "⚽", total: 25 },
     cricket:      { name: "Cricket",     emoji: "🏏", total: 25 },
     basketball:   { name: "Basketball",  emoji: "🏀", total: 15 },

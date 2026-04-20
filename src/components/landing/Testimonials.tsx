@@ -12,7 +12,7 @@ const testimonials = [
   {
     name: "Amit Deshmukh",
     city: "Pune",
-    text: "The best decision we made this summer. Both our daughters picked swimming and basketball. The facilities were top-notch and the batch sizes kept things personal.",
+    text: "The best decision we made this summer. Both our daughters picked growth and basketball. The facilities were top-notch and the batch sizes kept things personal.",
   },
   {
     name: "Kavitha Nair",

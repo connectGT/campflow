@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { gsap } from "@/lib/gsap/config";
 import Image from "next/image";
 import { SPORTS, SPORTS_URGENT_BANNER } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 export function SportsGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,8 +40,8 @@ export function SportsGrid() {
             Pick any 3 from our roster of {SPORTS.length}. All coaching, equipment, and nutrition included in the flat ₹12,000 fee.
           </p>
           
-          <div className="mt-6 flex items-center gap-2 p-3 rounded-lg border border-red-500/20 bg-red-500/5 max-w-xl">
-            <span className="text-xl">⚠️</span>
+          <div className="mt-6 flex items-center gap-3 p-3 rounded-lg border border-red-500/20 bg-red-500/5 max-w-xl">
+            <Icon name="alert" className="w-5 h-5 text-primary" />
             <p className="text-primary text-sm font-semibold">{SPORTS_URGENT_BANNER.replace('⚠️ ', '')}</p>
           </div>
         </div>
@@ -65,8 +66,8 @@ export function SportsGrid() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#1a1c1f] via-[#1a1c1f]/30 to-transparent" />
                   {/* Emoji badge */}
-                  <div className="absolute top-3 left-3 w-10 h-10 rounded-full flex items-center justify-center text-xl glass">
-                    {sport.emoji}
+                  <div className="absolute top-3 left-3 w-10 h-10 rounded-full flex items-center justify-center text-primary glass">
+                    <Icon name={sport.emoji} className="w-5 h-5" />
                   </div>
                   {/* Urgent badge */}
                   {sport.urgent && (
