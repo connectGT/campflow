@@ -157,12 +157,26 @@ export function StepSportSelection() {
 
           const isDisabled = isTogglingSport || isSelectedInOtherSlot || (!isSelectedInThisSlot && isFull);
 
+          const handleSportClick = () => {
+            if (isDisabled) return;
+            const isSelecting = !isSelectedInThisSlot;
+            toggleSport(sport.id, activeTab);
+            
+            // Auto-advance to next sequential logical tab if selecting (not deselecting)
+            if (isSelecting) {
+              setTimeout(() => {
+                if (activeTab === "slot_1") setActiveTab("slot_2");
+                else if (activeTab === "slot_2") setActiveTab("slot_3");
+              }, 400); // 400ms gives time to see the checkmark animation before sliding
+            }
+          };
+
           return (
             <motion.div
               key={sport.id}
               whileHover={!isDisabled ? { scale: 1.02, y: -2 } : {}}
               whileTap={!isDisabled ? { scale: 0.98 } : {}}
-              onClick={() => !isDisabled && toggleSport(sport.id, activeTab)}
+              onClick={handleSportClick}
               className={`relative p-6 rounded-2xl border-2 transition-all ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} ${
                 isSelectedInThisSlot
                   ? "border-primary bg-primary/10 shadow-lg shadow-primary/10"
