@@ -35,7 +35,7 @@ export function CTASection() {
           "{GWALIOR_PROMISE_OPENER}"
         </motion.h2>
 
-        <div className="max-w-3xl mx-auto space-y-6 text-zinc-300 text-lg md:text-xl font-light leading-relaxed mb-16">
+        <div className="max-w-4xl mx-auto space-y-6 text-zinc-300 text-lg md:text-xl font-light leading-relaxed mb-16">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

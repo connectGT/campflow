@@ -416,7 +416,7 @@ export const WHY_JOIN = [
 ];
 
 export const GWALIOR_PROMISE_OPENER = "There is a child in Gwalior today — perhaps in Lashkar, perhaps in Morar, perhaps near the Fort — who wakes up every morning with a dream that is too big for the world they were born into.";
-export const GWALIOR_PROMISE_MIDDLE = "That child has the talent. They may not have the pool. The coach. The support. The belief.";
+export const GWALIOR_PROMISE_MIDDLE = "That child has the talent. They may not have the pool. The coach. The support. The\u00A0belief.";
 export const GWALIOR_PROMISE_COMMITMENT = "Dheera Sports Foundation makes one promise: we will find that child. We will build the infrastructure they need. We will fund the journey they deserve. And we will stand behind them — as coaches, as mentors, as a community — until the day they stand on the podium.";
 export const GWALIOR_HERITAGE_LINE = "Gwalior gave India Tansen. It gave India Rani Lakshmibai. It is the home of LNIPE — India's only sports university. All it needs now is a pool — and the people who believe in what can grow from it.";
 
