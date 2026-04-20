@@ -97,9 +97,9 @@ export const INCLUSIONS_CORE = [
   { icon: "📊", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Laps swum, distance run, coordination score. Measurable transformation." },
   { icon: "📋", title: "Personal Performance Report",          desc: "Personality & performance evaluation tracked by our expert coaches across all 35 days." },
   { icon: "👕", title: "Dheera T-Shirt",                      desc: "They wear the identity. They become part of something bigger than a summer holiday." },
-  { icon: "🏅", title: "Medals & Certificates",               desc: "Public acknowledgement of 35 days of commitment. A moment they will remember for years." },
+  { icon: "🏅", title: "Competitions, Medals & Certificates", desc: "Public acknowledgement of 35 days of commitment. A moment they will remember for years." },
   { icon: "🚌", title: "Transport (4 City Pick-Up Points)",    desc: "Maharaj Bada │ Chetakpuri │ Padav │ Collectorate. Door-to-campus-to-door." },
-  { icon: "🎗️", title: "Closing Ceremony (3 Days)",           desc: "Finals, time trials, medals, Before & After reports, and a celebration that will make Gwalior sit up." },
+  { icon: "🎗️", title: "Closing Ceremony",                    desc: "Finals, time trials, medals, Before & After reports, and a celebration that will make Gwalior sit up." },
 ];
 
 export const INCLUSIONS_FREE = [
