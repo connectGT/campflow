@@ -46,12 +46,13 @@ export function StepPayment() {
     setError("");
     try {
       const photoUrl = sessionStorage.getItem("student_photo_url") || null;
+      const aadharPhotoUrl = sessionStorage.getItem("aadhar_photo_url") || null;
       const res = await fetch("/api/register/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           childName, childGender, childDob, childSchool, transportPoint,
-          fatherName, motherName, photoUrl,
+          fatherName, motherName, photoUrl, aadharPhotoUrl,
           parentPhone, whatsappNumber, fullAddress,
           emergencyName, emergencyPhone,
           selectedSports, sessionId: cartSessionId 

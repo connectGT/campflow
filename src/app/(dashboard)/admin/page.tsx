@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
     .from("registrations")
     .select(`
       *,
-      child:children(name, age, grade),
+      child:children(name, age, grade, photo_url),
       parent:profiles(full_name, email, phone)
     `)
     .in("payment_status", ["paid", "pending_approval", "rejected"])
@@ -202,7 +202,7 @@ export default async function AdminDashboardPage() {
                     <th className="px-4 py-3 whitespace-nowrap">Sport Slots</th>
                     <th className="px-4 py-3 whitespace-nowrap">Transport</th>
                     <th className="px-4 py-3 whitespace-nowrap">Amount</th>
-                    <th className="px-4 py-3 whitespace-nowrap">UTR & Proof</th>
+                    <th className="px-4 py-3 whitespace-nowrap">Documents & UTR</th>
                     <th className="px-4 py-3 text-center whitespace-nowrap">Status</th>
                     <th className="px-4 py-3 text-center whitespace-nowrap">Action</th>
                   </tr>
@@ -245,22 +245,59 @@ export default async function AdminDashboardPage() {
                       </td>
                       <td className="px-4 py-4 text-xs text-text-muted whitespace-nowrap">{reg.transport_pickup || "Self Drop"}</td>
                       <td className="px-4 py-4 text-xs font-bold text-white whitespace-nowrap">₹{(reg.amount || 12000).toLocaleString("en-IN")}</td>
-                      <td className="px-4 py-4 min-w-[140px]">
-                        <p className="text-xs font-mono font-bold text-white break-all mb-2">{reg.utr_number || "NO UTR"}</p>
-                        {reg.proof_image_url && !reg.utr_number?.startsWith("OFFLINE") ? (
-                          <a href={reg.proof_image_url} target="_blank" rel="noreferrer">
-                            <div className="w-14 h-14 rounded-lg overflow-hidden border border-glass-border hover:border-primary transition-colors relative group">
-                              <img src={reg.proof_image_url} alt="Payment proof" className="w-full h-full object-cover" />
-                              <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                                <ImageIcon className="w-3 h-3 text-white" />
+                      <td className="px-4 py-4 min-w-[180px]">
+                        <p className="text-xs font-mono font-bold text-white break-all mb-2 pb-1 border-b border-glass-border/40 inline-block">{reg.utr_number || "NO UTR"}</p>
+                        <div className="flex gap-2 mt-1">
+                          {/* Student Photo */}
+                          {reg.child?.photo_url ? (
+                            <a href={reg.child.photo_url} target="_blank" rel="noreferrer" title="Passphoto">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden border border-glass-border hover:border-primary transition-colors relative group">
+                                <img src={reg.child.photo_url} alt="Photo" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                                  <ImageIcon className="w-3 h-3 text-white" />
+                                </div>
                               </div>
+                            </a>
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg border border-glass-border flex flex-col items-center justify-center bg-surface/50" title="No Photo">
+                              <span className="text-[8px] text-text-muted uppercase">N/A</span>
                             </div>
-                          </a>
-                        ) : reg.utr_number?.startsWith("OFFLINE") ? (
-                          <span className="text-[10px] text-amber-400 font-bold">CASH / OFFLINE</span>
-                        ) : (
-                          <span className="text-[10px] text-text-muted italic">No proof</span>
-                        )}
+                          )}
+
+                          {/* Aadhar Photo */}
+                          {reg.aadhar_photo_url ? (
+                            <a href={reg.aadhar_photo_url} target="_blank" rel="noreferrer" title="Aadhar Card">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden border border-glass-border hover:border-primary transition-colors relative group">
+                                <img src={reg.aadhar_photo_url} alt="Aadhar" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                                  <ImageIcon className="w-3 h-3 text-white" />
+                                </div>
+                              </div>
+                            </a>
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg border border-glass-border flex flex-col items-center justify-center bg-surface/50" title="No Aadhar">
+                              <span className="text-[8px] text-text-muted uppercase">N/A</span>
+                            </div>
+                          )}
+
+                          {/* Payment Receipt */}
+                          {reg.proof_image_url && !reg.utr_number?.startsWith("OFFLINE") ? (
+                            <a href={reg.proof_image_url} target="_blank" rel="noreferrer" title="Payment Receipt">
+                              <div className="w-10 h-10 rounded-lg overflow-hidden border border-glass-border hover:border-primary transition-colors relative group">
+                                <img src={reg.proof_image_url} alt="Payment" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                                  <ImageIcon className="w-3 h-3 text-white" />
+                                </div>
+                              </div>
+                            </a>
+                          ) : reg.utr_number?.startsWith("OFFLINE") ? (
+                            <span className="text-[8px] text-amber-400 font-bold self-center">CASH</span>
+                          ) : (
+                            <div className="w-10 h-10 rounded-lg border border-glass-border flex flex-col items-center justify-center bg-surface/50" title="No Payment Receipt">
+                              <span className="text-[8px] text-text-muted uppercase">N/A</span>
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="px-4 py-4 text-center min-w-[110px]">
                         <span className={`px-2 py-1 text-[10px] font-bold uppercase rounded-full border whitespace-nowrap ${
