@@ -2,6 +2,7 @@
 
 import { MapPin, Mail, Phone, ExternalLink, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { FOOTER, BRAND, REGISTRATION_STEPS } from "@/data/camp";
 
 export function Footer() {
@@ -18,11 +19,8 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-[#111316] font-black text-xl shrink-0"
-                style={{ background: "linear-gradient(135deg, #ffb4a9, #ff5745)" }}
-              >
-                D
+              <div className="w-10 h-10 rounded-xl overflow-hidden shrink-0 shadow-[0_0_12px_rgba(255,255,255,0.1)]">
+                <Image src="/icon.jpeg" alt="Dheera Sports Foundation" width={40} height={40} className="w-full h-full object-cover" />
               </div>
               <div>
                 <span className="font-display font-black text-white tracking-widest uppercase text-lg leading-none block">
@@ -37,7 +35,7 @@ export function Footer() {
               {FOOTER.TAGLINE}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-subtle hover:text-primary transition-colors">
+              <a href="https://www.instagram.com/dheera.sports?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-subtle hover:text-primary transition-colors">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
               </a>
               <a href={`https://wa.me/${BRAND.WHATSAPP.replace(/[^0-9]/g, "")}`} className="w-10 h-10 rounded-full glass flex items-center justify-center text-text-subtle hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
