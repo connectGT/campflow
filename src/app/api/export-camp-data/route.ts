@@ -25,7 +25,7 @@ export async function GET() {
         slot_2_sport,
         slot_3_sport,
         created_at,
-        children ( name, age, grade ),
+        children ( name, age, grade, photo_url ),
         profiles ( full_name, email, phone )
       `);
 
@@ -183,11 +183,11 @@ export async function GET() {
     // 5. Add Master CSV to root of ZIP
     zip.file("00_Master_Database.csv", csvContent);
 
-    // 6. Generate ZIP blob safely for Vercel
-    const zipBlob = await zip.generateAsync({ type: "blob" });
+    // 6. Generate ZIP safely for Vercel/Node
+    const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
 
     // 7. Return ZIP response
-    return new NextResponse(zipBlob, {
+    return new NextResponse(zipBuffer, {
       status: 200,
       headers: {
         "Content-Type": "application/zip",
