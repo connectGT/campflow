@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Navbar() {
@@ -39,8 +40,8 @@ export function Navbar() {
           
           {/* Brand */}
           <Link href="/" className="flex items-center gap-2 z-50">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shrink-0">
-              <span className="text-white font-bold text-sm tracking-tighter">DS</span>
+            <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+              <Image src="/icon.jpeg" alt="Dheera Sports" width={36} height={36} className="w-full h-full object-cover" />
             </div>
             <span className="font-display font-bold text-xl tracking-tight hidden sm:block text-text-primary">
               Dheera<span className="text-text-muted font-normal">Sports</span>

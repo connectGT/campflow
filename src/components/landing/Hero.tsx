@@ -38,11 +38,8 @@ export function Hero() {
       {/* ── Top Contact Bar ── */}
       <div className="nav-blur border-b border-white/5 px-6 py-3 flex justify-between items-center text-sm relative z-20">
         <div className="flex items-center gap-2">
-          <div
-            className="w-7 h-7 rounded-full flex items-center justify-center text-[#111316] font-black text-xs shrink-0"
-            style={{ background: "linear-gradient(135deg, #ffb4a9, #ff5745)" }}
-          >
-            D
+          <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 shadow-[0_0_8px_rgba(255,255,255,0.15)]">
+            <Image src="/icon.jpeg" alt={BRAND.NAME} width={28} height={28} className="w-full h-full object-cover" />
           </div>
           <span className="font-display font-black text-white tracking-widest uppercase text-xs">
             {BRAND.NAME}

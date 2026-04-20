@@ -53,15 +53,6 @@ export function CTASection() {
           >
             {GWALIOR_PROMISE_COMMITMENT}
           </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="text-zinc-500 italic text-base mt-8"
-          >
-            {GWALIOR_HERITAGE_LINE}
-          </motion.p>
         </div>
 
         <motion.div
