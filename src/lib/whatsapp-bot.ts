@@ -52,7 +52,7 @@ export const MSG = {
     `⏰ Slot 2 — 8:00 AM – 9:00 AM\n` +
     `⏰ Slot 3 — 9:00 AM – 10:00 AM\n\n` +
     `*Available Sports:*\n` +
-    `🏊 Growth\n` +
+    `🏊 Swimming\n` +
     `🏏 Cricket\n` +
     `⚽ Football\n` +
     `🏀 Basketball\n` +

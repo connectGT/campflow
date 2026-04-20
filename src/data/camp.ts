@@ -57,7 +57,7 @@ export const IMPORTANT_DATES = [
 ];
 
 export const SPORTS = [
-  { id: "swimming",    name: "Growth",    emoji: "waves", seats_total: 40, coaches: 4, urgent: false, image: "/sport-growth.jpg", color: "#aacae6" },
+  { id: "swimming",    name: "Swimming",    emoji: "waves", seats_total: 40, coaches: 4, urgent: false, image: "/sport-swimming.jpg", color: "#aacae6" },
   { id: "football",    name: "Football",    emoji: "activity", seats_total: 25, coaches: 2, urgent: false, image: "/sport-football.jpg", color: "#ff5745" },
   { id: "cricket",     name: "Cricket",     emoji: "trophy", seats_total: 25, coaches: 2, urgent: false, image: "/sport-cricket.jpg", color: "#ff5745" },
   { id: "basketball",  name: "Basketball",  emoji: "target", seats_total: 15, coaches: 2, urgent: false, image: "/sport-basketball.jpg", color: "#ffb4a9" },

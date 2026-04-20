@@ -6,7 +6,7 @@ import { UserPlus, Loader2, ChevronDown, Sparkles, Upload, FileText, X, CheckCir
 
 const SPORTS = ["swimming", "football", "cricket", "basketball", "badminton", "self_defence"];
 const SPORT_LABELS: Record<string, string> = {
-  swimming: "🏊 Growth", football: "⚽ Football", cricket: "🏏 Cricket",
+  swimming: "🏊 Swimming", football: "⚽ Football", cricket: "🏏 Cricket",
   basketball: "🏀 Basketball", badminton: "🏸 Badminton", self_defence: "🥋 Self Defence"
 };
 const TRANSPORT_POINTS = ["Self Drop", "Maharaj Bada", "Chetakpuri", "Padav", "Collectorate"];
