@@ -94,7 +94,7 @@ export const INCLUSIONS_CORE = [
   { icon: "apple", title: "Nutritional Counselling",              desc: "They learn to fuel their body, not just fill it. A personalised nutrition guidance note goes home." },
   { icon: "brain", title: "Sports Psychology",   desc: "Pressure handling. Resilience. Focus. Goal-setting. Skills that transfer directly to the classroom — and to life." },
   { icon: "flower", title: "Daily Yoga Cool-Down",                 desc: "Flexibility, breathing, body awareness — ancient science applied to modern athletic performance. Habits that stay for life." },
-  { icon: "chart", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Growth progress, distance run, coordination score. Measurable transformation." },
+  { icon: "chart", title: "Day 1 vs Day 35 Athletic Assessment",  desc: "Parents see the change in numbers. Laps swum, distance run, coordination score. Measurable transformation." },
   { icon: "report", title: "Personal Performance Report",          desc: "Personality & performance evaluation tracked by our expert coaches across all 35 days." },
   { icon: "shirt", title: "Dheera T-Shirt",                      desc: "They wear the identity. They become part of something bigger than a summer holiday." },
   { icon: "trophy", title: "Competitions, Medals & Certificates", desc: "Public acknowledgement of 35 days of commitment. A moment they will remember for years." },
@@ -131,11 +131,11 @@ export const REGISTRATION_STEPS = [
 export const FOUNDING_DIRECTORS = [
   { name: "Abhinav Upadhyay", role: "Director", credentials: "National Swimmer, India", bio: "Secretary, Para Sports Association of Madhya Pradesh (State Body of Paralympic Committee of India). Founder-Director, Dheera Sports Foundation.", color: "#ff5745" },
   { name: "Abhisar Verma",    role: "Director", credentials: "International Swimmer, India", bio: "MBA in Sports Management — Real Madrid Graduate School, Spain. Founder-Director, Dheera Sports Foundation.", color: "#aacae6" },
-  { name: "Ashish Agarwal",   role: "Director", credentials: "Chartered Accountant (CA)", bio: "Joint Secretary — District Growth Association, Gwalior. Founder-Director, Dheera Sports Foundation.", color: "#ffb4a9" },
+  { name: "Ashish Agarwal",   role: "Director", credentials: "Chartered Accountant (CA)", bio: "Joint Secretary — District Swimming Association, Gwalior. Founder-Director, Dheera Sports Foundation.", color: "#ffb4a9" },
 ];
 
 export const EXPERT_TEAM = [
-  { name: "Shubham Upadhyay", role: "Head Coach — Growth", credentials: "Eklavya Awardee │ International Swimmer │ National Medalist │ National Record Holder", color: "#aacae6" },
+  { name: "Shubham Upadhyay", role: "Head Coach — Swimming", credentials: "Eklavya Awardee │ International Swimmer │ National Medalist │ National Record Holder", color: "#aacae6" },
   { name: "Dr. Sadhna Upadhyay", role: "Athlete Wellness & Health", credentials: "Homeopathic Doctor — Natural recovery, athlete health management", color: "#5ed9d6" },
   { name: "Deeksha Upadhyay", role: "Sports Psychology", credentials: "Sports Psychologist — Mental performance, pre-competition focus, athlete wellbeing", color: "#ffb4a9" },
   { name: "Rahul Khare", role: "Shooting Programme Lead", credentials: "National Medalist — Shooting", color: "#ff8a7d" },
@@ -192,7 +192,7 @@ export const WHATSAPP = {
 export const SANSKRIT_SHLOKA = "शरीरमाद्यं खलु धर्मसाधनम्";
 export const SANSKRIT_TRANSLATION = "The body is indeed the primary instrument of dharma.";
 export const BRAND_SECONDARY_TAGLINE = "Swim. Evolve. Conquer.";
-export const BRAND_IDENTITY_LINE = "We don't just train athletes. We mold the Dheeras.";
+export const BRAND_IDENTITY_LINE = "We don't just train swimmers. We mold the Dheeras.";
 export const BRAND_ONE_LINER = "Dheera Sports Foundation is not a sports academy. It is a movement.";
 
 export const DHEERA_WORD_MEANING = {
@@ -211,7 +211,7 @@ export const VISION_STATEMENT = "To create a generation of World-Class Athletes 
 export const VISION_DIMENSIONS = [
   {
     number: "01",
-    title: "World-Class Athletes — Built for Growth",
+    title: "World-Class Athletes — Not Just Good Swimmers",
     body: "We are building a pipeline. From a child who sees water for the first time in Gwalior — to a swimmer standing on the podium at the Asian Games, the World Championships, the Olympics. Every child who trains at Dheera is in that pipeline."
   },
   {
@@ -269,7 +269,7 @@ export const CORE_PILLARS = [
     icon: "🏊",
     title: "Aquatics — The Path to Gold",
     intro: "Water is where champions are forged. The pool is not a recreational facility at Dheera — it is a crucible. Every length swum is data. Every breath is measured. Every stroke is refined.",
-    infrastructure_note: "We are building the region's first Stainless Steel Growth Infrastructure — a 25m × 25m all-weather indoor pool. Stainless steel is the international standard for competition pools. It is hygienic, durable, and precise.",
+    infrastructure_note: "We are building the region's first Stainless Steel Swimming Infrastructure — a 25m × 25m all-weather indoor pool. Stainless steel is the international standard for competition pools. It is hygienic, durable, and precise.",
     sub_pillars: [
       {
         icon: "📊",
@@ -295,9 +295,9 @@ export const CORE_PILLARS = [
         icon: "🌍",
         title: "International Connectivity",
         points: [
-          "Regular webinars with global growth science experts",
+          "Regular webinars with global swimming science experts",
           "Exposure to international competition formats",
-          "Knowledge sharing with national growth federations",
+          "Knowledge sharing with national swimming federations",
           "Bridge between Gwalior's talent and the world's standards"
         ]
       }
@@ -360,12 +360,12 @@ export const CORE_PILLARS = [
       },
       {
         icon: "🏊",
-        title: "Growth as Public Health",
+        title: "Swimming as Public Health",
         points: [
-          "Community drives promoting growth as a life-saving skill — drowning prevention",
+          "Community drives promoting swimming as a life-saving skill — drowning prevention",
           "Free water safety camps twice yearly — open to all Gwalior residents",
           "'Every Child Swims' — partnership with government schools for structured access",
-          "Growth as preventive healthcare — cardiovascular, respiratory, mental wellness"
+          "Swimming as preventive healthcare — cardiovascular, respiratory, mental wellness"
         ]
       }
     ]
@@ -373,7 +373,7 @@ export const CORE_PILLARS = [
 ];
 
 export const SANGHA_HEADLINE = "It takes a village to raise a Champion.";
-export const SANGHA_SUBLINE = "The Dheera Collective — Parents · Adult Athletes · Mentors · Coaches — united by one shared purpose.";
+export const SANGHA_SUBLINE = "The Dheera Collective — Parents · Adult Swimmers · Mentors · Coaches — united by one shared purpose.";
 export const SANGHA_INTRO = "The most important thing we have built at Dheera is not the pool. It is not the coaching methodology. It is the Sangha.";
 export const SANGHA_DEFINITION = "Sangha — the ancient concept of community — is one of the three jewels of Indian philosophy, alongside Dharma (purpose) and Dhyana (awareness). In Sanskrit, Sangha means a community bound by shared values, mutual support, and collective aspiration.";
 
@@ -381,7 +381,7 @@ export const SANGHA_PILLARS = [
   {
     icon: "microscope",
     title: "Science of Existence",
-    body: "We move beyond basic fitness to educate our community on Body Science, Mind Science, and Energy Science. Through exclusive webinars with international growth science experts, we decode the physiology of excellence — and make it accessible to every family."
+    body: "We move beyond basic fitness to educate our community on Body Science, Mind Science, and Energy Science. Through exclusive webinars with international swimming science experts, we decode the physiology of excellence — and make it accessible to every family."
   },
   {
     icon: "handshake",
@@ -411,7 +411,7 @@ export const WHY_JOIN = [
   { icon: "brain", come_for: "Focus",      leave_with: "A mind that handles pressure, sets goals, and bounces back from failure — skills that will serve your child in every exam, interview, and relationship for the rest of their life." },
   { icon: "users", come_for: "Community",  leave_with: "A family — the Dheera Collective — that will stand with you, celebrate your child, and ensure their dream is never limited by your resources." },
   { icon: "sparkles", come_for: "Sports",     leave_with: "A philosophy — the understanding that the body is sacred, effort is worship, and greatness is not given but earned through disciplined daily action." },
-  { icon: "medal", come_for: "A Medal",    leave_with: "A legacy — the knowledge that your child is part of the movement that will one day put India on the Olympic growth podium." }
+  { icon: "medal", come_for: "A Medal",    leave_with: "A legacy — the knowledge that your child is part of the movement that will one day put India on the Olympic swimming podium." }
 ];
 
 export const GWALIOR_PROMISE_OPENER = "There is a child in Gwalior today — perhaps in Lashkar, perhaps in Morar, perhaps near the Fort — who wakes up every morning with a dream that is too big for the world they were born into.";
