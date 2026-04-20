@@ -41,5 +41,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# Service account key files (never commit these)
 dheera-sports-academy-*.json
-*.json
+*-service-account-*.json
