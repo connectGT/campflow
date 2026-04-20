@@ -43,25 +43,14 @@ export default async function AdminDashboardPage() {
     .in("payment_status", ["paid", "pending_approval", "rejected"])
     .order("created_at", { ascending: false });
 
-  // Fetch Real-time capacities
-  const { data: capacities } = await supabase
-    .from("realtime_sport_capacity")
-    .select("*");
-
-  const capacityMap = new Map();
-  if (capacities) {
-    capacities.forEach((cap: any) => {
-      capacityMap.set(cap.sport_id, parseInt(cap.total_seats_taken || 0));
-    });
-  }
-
   const paid = registrations?.filter((r: any) => r.payment_status === "paid") || [];
   const pending = registrations?.filter((r: any) => r.payment_status === "pending_approval") || [];
 
-  // Compute slot-wise counts from paid registrations
+  // Compute slot-wise counts incorporating BOTH paid and pending_approval (seat locks!)
   const slotMap: Record<string, [number, number, number]> = {};
   SPORTS.forEach(s => { slotMap[s.id] = [0, 0, 0]; });
-  paid.forEach((r: any) => {
+  
+  [...paid, ...pending].forEach((r: any) => {
     const norm = (v: string | null) => v?.toLowerCase().replace("-", "_").replace(" ", "_") || "";
     const s1 = norm(r.slot_1_sport); const s2 = norm(r.slot_2_sport); const s3 = norm(r.slot_3_sport);
     if (slotMap[s1]) slotMap[s1][0]++;

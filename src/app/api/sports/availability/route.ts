@@ -8,32 +8,41 @@ export async function GET() {
   try {
     const supabase = await createClient();
 
-    const { data: capacityData, error } = await supabase
-      .from("realtime_sport_capacity")
-      .select("*");
+    // Ensure seats are taken if payment was made ("paid") OR if screenshot was uploaded ("pending_approval").
+    // We also include active 15-minute temporary holds from the `seat_reservations` table!
+    const { data: regs } = await supabase
+      .from("registrations")
+      .select("slot_1_sport, slot_2_sport, slot_3_sport")
+      .in("payment_status", ["paid", "pending_approval"]);
 
-    if (error) {
-      console.error("[Availability] Error fetching capacities:", error);
-      return NextResponse.json({ error: "Failed to fetch availability" }, { status: 500 });
-    }
+    const { data: holds } = await supabase
+      .from("seat_reservations")
+      .select("sport_id, slot_id")
+      .gt("expires_at", new Date().toISOString());
 
-    // Process local static targets vs current DB usage
+    const usageMap: Record<string, number> = {};
+
+    regs?.forEach(r => {
+      const s1 = r.slot_1_sport; const s2 = r.slot_2_sport; const s3 = r.slot_3_sport;
+      if (s1) usageMap[`${s1}_slot_1`] = (usageMap[`${s1}_slot_1`] || 0) + 1;
+      if (s2) usageMap[`${s2}_slot_2`] = (usageMap[`${s2}_slot_2`] || 0) + 1;
+      if (s3) usageMap[`${s3}_slot_3`] = (usageMap[`${s3}_slot_3`] || 0) + 1;
+    });
+
+    holds?.forEach(h => {
+      const key = `${h.sport_id}_${h.slot_id}`;
+      usageMap[key] = (usageMap[key] || 0) + 1;
+    });
+
     const slots = ["slot_1", "slot_2", "slot_3"];
-    
-    // We construct an object: { "swimming": { "slot_1": { taken: 10, total: 40 }, "slot_2": ... } }
     const availability: Record<string, any> = {};
 
     localSports.forEach((sport) => {
       availability[sport.id] = {};
-      
-      // `seats_per_slot` defines exactly how many seats go to slot 1, 2, and 3.
       const slotCap = (sport as any).seats_per_slot || Math.floor(sport.seats_total / 3);
 
       slots.forEach((slot) => {
-        // find usage in DB
-        const usage = capacityData?.find((d) => d.sport_id === sport.id && d.slot_id === slot);
-        const taken = usage ? Number(usage.total_seats_taken) : 0;
-        
+        const taken = usageMap[`${sport.id}_${slot}`] || 0;
         availability[sport.id][slot] = {
           taken,
           total: slotCap,
