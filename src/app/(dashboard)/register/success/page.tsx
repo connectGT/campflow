@@ -18,10 +18,10 @@ export default function RegisterSuccessPage() {
         </motion.div>
 
         <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-          Registration <span className="gradient-text">Confirmed!</span>
+          Registration <span className="gradient-text">Under Review</span>
         </h1>
         <p className="text-text-muted text-lg mb-12">
-          Welcome to the Dheera Sports family. We've received your payment and secured your child's spot.
+          Welcome to the Dheera Sports family! We have received your payment screenshot and registration details. Please stay tuned while our team verifies your seat.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">

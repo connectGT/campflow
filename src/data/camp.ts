@@ -57,15 +57,15 @@ export const IMPORTANT_DATES = [
 ];
 
 export const SPORTS = [
-  { id: "swimming",    name: "Swimming",    emoji: "waves",    seats_total: 120, coaches: 4, urgent: false, image: "/sport-swimming.jpg",    color: "#aacae6" },
-  { id: "football",    name: "Football",    emoji: "activity",  seats_total: 80,  coaches: 2, urgent: false, image: "/sport-football.jpg",    color: "#ff5745" },
-  { id: "cricket",     name: "Cricket",     emoji: "trophy",    seats_total: 80,  coaches: 2, urgent: false, image: "/sport-cricket.jpg",     color: "#ff5745" },
-  { id: "basketball",  name: "Basketball",  emoji: "target",    seats_total: 40,  coaches: 2, urgent: false, image: "/sport-basketball.jpg",  color: "#ffb4a9" },
-  { id: "badminton",   name: "Badminton",   emoji: "zap",       seats_total: 20,  coaches: 1, urgent: true,  urgent_note: "Only 20 seats per slot — fills fast", image: "/sport-badminton.jpg",   color: "#5ed9d6" },
-  { id: "self_defence",name: "Self-Defence",emoji: "shield",    seats_total: 20,  coaches: 1, urgent: true,  urgent_note: "Only 20 seats per slot — fills fast", image: "/sport-self-defence.png", color: "#ff8a7d" },
+  { id: "swimming",    name: "Swimming",    emoji: "waves",    seats_total: 120, seats_per_slot: 40, coaches: 4, urgent: false, image: "/sport-swimming.jpg",    color: "#aacae6" },
+  { id: "football",    name: "Football",    emoji: "activity",  seats_total: 75,  seats_per_slot: 25, coaches: 2, urgent: false, image: "/sport-football.jpg",    color: "#ff5745" },
+  { id: "cricket",     name: "Cricket",     emoji: "trophy",    seats_total: 75,  seats_per_slot: 25, coaches: 2, urgent: false, image: "/sport-cricket.jpg",     color: "#ff5745" },
+  { id: "basketball",  name: "Basketball",  emoji: "target",    seats_total: 45,  seats_per_slot: 15, coaches: 2, urgent: false, image: "/sport-basketball.jpg",  color: "#ffb4a9" },
+  { id: "badminton",   name: "Badminton",   emoji: "zap",       seats_total: 30,  seats_per_slot: 10, coaches: 1, urgent: true,  urgent_note: "Only 10 seats per slot — fills fast", image: "/sport-badminton.jpg",   color: "#5ed9d6" },
+  { id: "self_defence",name: "Self-Defence",emoji: "shield",    seats_total: 30,  seats_per_slot: 10, coaches: 1, urgent: true,  urgent_note: "Only 10 seats per slot — fills fast", image: "/sport-self-defence.png", color: "#ff8a7d" },
 ];
 
-export const SPORTS_URGENT_BANNER = "⚡ Badminton and Self-Defence have only 20 seats per time slot — register early.";
+export const SPORTS_URGENT_BANNER = "⚡ Badminton and Self-Defence have only 10 seats per time slot — register early.";
 
 export const SPORT_COMBOS = [
   { name: "The Classic Athlete",    sports: ["swimming", "football", "cricket"] },

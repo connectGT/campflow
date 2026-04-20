@@ -97,12 +97,12 @@ async function lookupStatus(phone: string) {
 // ─── Fetch live SLOT-WISE seat availability ────────────────────────
 async function lookupSeats() {
   const SPORT_META: Record<string, { name: string; emoji: string; total: number }> = {
-    swimming:     { name: "Swimming",    emoji: "🏊", total: 120 },
-    football:     { name: "Football",    emoji: "⚽", total: 80  },
-    cricket:      { name: "Cricket",     emoji: "🏏", total: 80  },
-    basketball:   { name: "Basketball",  emoji: "🏀", total: 40  },
-    badminton:    { name: "Badminton",   emoji: "🏸", total: 20  },
-    self_defence: { name: "Self-Defence",emoji: "🥋", total: 20  },
+    swimming:     { name: "Swimming",    emoji: "🏊", total: 40 },
+    football:     { name: "Football",    emoji: "⚽", total: 25 },
+    cricket:      { name: "Cricket",     emoji: "🏏", total: 25 },
+    basketball:   { name: "Basketball",  emoji: "🏀", total: 15 },
+    badminton:    { name: "Badminton",   emoji: "🏸", total: 10 },
+    self_defence: { name: "Self-Defence",emoji: "🥋", total: 10 },
   };
 
   // Count how many PAID registrations have each sport in each time slot

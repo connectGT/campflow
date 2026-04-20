@@ -152,7 +152,7 @@ export function StepSportSelection() {
 
           // Availability Data
           const availData = availability[sport.id]?.[activeTab];
-          const remaining = availData ? availData.remaining : Math.floor(sport.seats_total / 3);
+          const remaining = availData ? availData.remaining : ((sport as any).seats_per_slot || Math.floor(sport.seats_total / 3));
           const isFull = remaining <= 0;
 
           const isDisabled = isTogglingSport || isSelectedInOtherSlot || (!isSelectedInThisSlot && isFull);
