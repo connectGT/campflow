@@ -205,12 +205,19 @@ export function StepPayment() {
               type="file" 
               ref={fileInputRef} 
               onChange={handleFileChange} 
-              accept="image/*" 
+              accept="image/*,application/pdf" 
               className="hidden" 
             />
             {preview ? (
-              <div className="relative group">
-                <img src={preview} alt="Success proof" className="max-h-64 mx-auto rounded-lg shadow-md" />
+              <div className="relative group flex items-center justify-center min-h-[200px]">
+                {screenshot?.type.includes("pdf") ? (
+                  <div className="flex flex-col items-center justify-center p-12 bg-white/5 rounded-xl border border-glass-border">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary mb-2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span className="font-bold text-sm tracking-widest text-primary">PDF DOCUMENT</span>
+                  </div>
+                ) : (
+                  <img src={preview} alt="Success proof" className="max-h-64 mx-auto rounded-lg shadow-md" />
+                )}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all rounded-lg">
                   <RefreshCcw className="text-white w-8 h-8" />
                 </div>
@@ -218,8 +225,8 @@ export function StepPayment() {
             ) : (
               <div className="py-6">
                 <Upload className="w-10 h-10 text-text-muted mx-auto mb-4" />
-                <p className="text-sm font-medium">Click to upload screenshot</p>
-                <p className="text-xs text-text-muted mt-1">PNG, JPG up to 5MB</p>
+                <p className="text-sm font-medium">Click to upload receipt</p>
+                <p className="text-xs text-text-muted mt-1">PNG, JPG, or PDF up to 5MB</p>
               </div>
             )}
           </div>

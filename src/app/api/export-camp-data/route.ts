@@ -56,20 +56,25 @@ export async function GET() {
     };
 
     // Helper functions
-    const fetchBlob = async (url: string | null) => {
+    const fetchBlobInfo = async (url: string | null) => {
       if (!url) return null;
       try {
         const res = await fetch(url);
-        if (res.ok) return await res.arrayBuffer();
+        if (res.ok) {
+          const contentType = res.headers.get("content-type") || "";
+          let ext = "jpg";
+          if (contentType.includes("pdf")) ext = "pdf";
+          else if (contentType.includes("png")) ext = "png";
+          else if (contentType.includes("webp")) ext = "webp";
+          
+          const arrayBuffer = await res.arrayBuffer();
+          // Explicitly wrap into a Node.js Buffer so JSZip doesn't drop the data inside Vercel's Node stream
+          return { buffer: Buffer.from(arrayBuffer), ext };
+        }
       } catch (e) {
-        console.error("Failed to fetch image:", url);
+        console.error("Failed to fetch image/pdf:", url);
       }
       return null;
-    };
-    
-    const getExt = (url: string) => {
-      const match = url.match(/\.([a-zA-Z0-9]+)(\?|$)/);
-      return match ? match[1] : "jpg";
     };
 
     // 4. Process all records
@@ -78,7 +83,8 @@ export async function GET() {
       const profile = record.profiles as any || {};
       const safeName = (child.name || "Unknown").replace(/[^a-zA-Z0-9]/g, "_");
       
-      const folderName = `Registrations/${safeName}_${record.id.slice(0, 8)}`;
+      const phoneLabel = profile.phone ? `+91${profile.phone}` : `ID-${record.id.slice(0,6)}`;
+      const folderName = `Registrations/${safeName}_${phoneLabel}`;
       const studentFolder = zip.folder(folderName);
       if (!studentFolder) continue;
 
@@ -94,16 +100,16 @@ export async function GET() {
       ];
       csvContent += row.map(escapeCsv).join(",") + "\n";
 
-      // 4b. Download Images securely
-      const [photoBuf, aadharBuf, receiptBuf] = await Promise.all([
-        fetchBlob(child.photo_url),
-        fetchBlob(record.aadhar_photo_url),
-        fetchBlob(record.proof_image_url)
+      // 4b. Download Media securely
+      const [photoInfo, aadharInfo, receiptInfo] = await Promise.all([
+        fetchBlobInfo(child.photo_url),
+        fetchBlobInfo(record.aadhar_photo_url),
+        fetchBlobInfo(record.proof_image_url)
       ]);
 
-      if (photoBuf) studentFolder.file(`01_Student_Photo.${getExt(child.photo_url)}`, photoBuf);
-      if (aadharBuf) studentFolder.file(`02_Aadhar_Card.${getExt(record.aadhar_photo_url)}`, aadharBuf);
-      if (receiptBuf) studentFolder.file(`03_Payment_Receipt.${getExt(record.proof_image_url)}`, receiptBuf);
+      if (photoInfo) studentFolder.file(`01_Student_Photo.${photoInfo.ext}`, photoInfo.buffer);
+      if (aadharInfo) studentFolder.file(`02_Aadhar_Card.${aadharInfo.ext}`, aadharInfo.buffer);
+      if (receiptInfo) studentFolder.file(`03_Payment_Receipt.${receiptInfo.ext}`, receiptInfo.buffer);
 
       // 4c. Generate `00_Student_Data_Sheet.html` natively
       const htmlSheet = `

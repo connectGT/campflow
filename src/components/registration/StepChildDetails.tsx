@@ -2,7 +2,7 @@
 
 import { useCartStore } from "@/store/cart.store";
 import { useState, useRef } from "react";
-import { ChevronRight, ChevronDown, Camera, Upload, X } from "lucide-react";
+import { ChevronRight, ChevronDown, Camera, Upload, X, FileText } from "lucide-react";
 import { TRANSPORT } from "@/data/camp";
 import { createClient } from "@/lib/supabase/client";
 
@@ -189,7 +189,14 @@ export function StepChildDetails() {
                 >
                   {photoPreview ? (
                     <>
-                      <img src={photoPreview} alt="Swimmer" className="w-full h-full object-cover" />
+                      {photoFile?.type.includes("pdf") ? (
+                        <div className="flex flex-col items-center justify-center w-full h-full bg-surface/50 text-primary">
+                          <FileText className="w-8 h-8 mb-1" />
+                          <span className="text-[10px] font-bold">PDF FILE</span>
+                        </div>
+                      ) : (
+                        <img src={photoPreview} alt="Swimmer" className="w-full h-full object-cover" />
+                      )}
                       {uploadingPhoto && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -210,17 +217,17 @@ export function StepChildDetails() {
                     className="flex items-center gap-2 px-4 py-2 bg-surface border border-glass-border hover:border-primary text-sm font-semibold rounded-xl transition-colors"
                   >
                     <Upload className="w-4 h-4" />
-                    {photoFile ? "Change Photo" : "Upload Photo"}
+                    {photoFile ? "Change File" : "Upload Photo"}
                   </button>
-                  <p className="text-xs text-text-muted mt-2">JPG or PNG, max 5 MB. Passport-style preferred.</p>
+                  <p className="text-xs text-text-muted mt-2">JPG, PNG, or PDF, max 5 MB.</p>
                   {photoUrl && !uploadingPhoto && (
-                    <p className="text-xs text-green-400 mt-1 font-semibold">✓ Photo uploaded</p>
+                    <p className="text-xs text-green-400 mt-1 font-semibold">✓ File uploaded</p>
                   )}
                 </div>
                 <input
                   ref={fileRef}
                   type="file"
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/jpeg,image/png,image/webp,application/pdf"
                   className="hidden"
                   onChange={e => { const f = e.target.files?.[0]; if (f) handlePhotoSelect(f); e.target.value = ""; }}
                 />
@@ -285,7 +292,14 @@ export function StepChildDetails() {
                 >
                   {aadharPreview ? (
                     <>
-                      <img src={aadharPreview} alt="Aadhar" className="w-full h-full object-cover" />
+                      {aadharFile?.type.includes("pdf") ? (
+                        <div className="flex flex-col items-center justify-center w-full h-full bg-surface/50 text-secondary">
+                          <FileText className="w-8 h-8 mb-1" />
+                          <span className="text-[10px] font-bold">PDF FILE</span>
+                        </div>
+                      ) : (
+                        <img src={aadharPreview} alt="Aadhar" className="w-full h-full object-cover" />
+                      )}
                       {uploadingAadhar && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                           <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -306,9 +320,9 @@ export function StepChildDetails() {
                     className="flex items-center gap-2 px-4 py-2 bg-surface border border-glass-border hover:border-primary text-sm font-semibold rounded-xl transition-colors"
                   >
                     <Upload className="w-4 h-4" />
-                    {aadharFile ? "Change Aadhar" : "Upload Aadhar"}
+                    {aadharFile ? "Change File" : "Upload Aadhar"}
                   </button>
-                  <p className="text-xs text-text-muted mt-2">JPG or PNG, max 5 MB. Front side of Aadhar card.</p>
+                  <p className="text-xs text-text-muted mt-2">JPG, PNG, or PDF, max 5 MB.</p>
                   {aadharUrl && !uploadingAadhar && (
                     <p className="text-xs text-green-400 mt-1 font-semibold">✓ Aadhar uploaded</p>
                   )}
@@ -316,7 +330,7 @@ export function StepChildDetails() {
                 <input
                   ref={aadharRef}
                   type="file"
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/jpeg,image/png,image/webp,application/pdf"
                   className="hidden"
                   onChange={e => { const f = e.target.files?.[0]; if (f) handleAadharSelect(f); e.target.value = ""; }}
                 />
