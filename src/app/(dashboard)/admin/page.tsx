@@ -11,6 +11,7 @@ import { OfflineRegistrationForm } from "@/components/admin/OfflineRegistrationF
 import { AdminTabbedContent } from "@/components/admin/AdminTabbedContent";
 import { createClient } from "@/lib/supabase/server";
 import { SPORTS, CAMP } from "@/data/camp";
+import { Icon } from "@/components/ui/IconMapping";
 
 function getExpectedToken() {
   const user = process.env.ADMIN_USERNAME || "";
@@ -132,11 +133,11 @@ export default async function AdminDashboardPage() {
                 <tbody className="divide-y divide-glass-border">
                   {SPORTS.map(sport => {
                     const [t1, t2, t3] = slotMap[sport.id] || [0, 0, 0];
-                    const r1 = Math.max(0, sport.seats_total - t1);
-                    const r2 = Math.max(0, sport.seats_total - t2);
-                    const r3 = Math.max(0, sport.seats_total - t3);
+                    const r1 = Math.max(0, sport.seats_per_slot - t1);
+                    const r2 = Math.max(0, sport.seats_per_slot - t2);
+                    const r3 = Math.max(0, sport.seats_per_slot - t3);
                     const totalRemaining = r1 + r2 + r3;
-                    const totalCapacity = sport.seats_total * 3;
+                    const totalCapacity = sport.seats_per_slot * 3;
                     const fillPct = Math.round(((totalCapacity - totalRemaining) / totalCapacity) * 100);
                     const totalColor = fillPct >= 90 ? "text-red-400" : fillPct >= 60 ? "text-yellow-400" : "text-green-400";
                     const barColor = fillPct >= 90 ? "#ef4444" : fillPct >= 60 ? "#f59e0b" : sport.color;
@@ -148,7 +149,7 @@ export default async function AdminDashboardPage() {
                           <span className={`font-bold text-base ${color}`}>
                             {remaining <= 0 ? "FULL" : remaining}
                           </span>
-                          <span className="text-text-muted text-xs"> /{sport.seats_total}</span>
+                          <span className="text-text-muted text-xs"> /{sport.seats_per_slot}</span>
                         </td>
                       );
                     };
@@ -156,7 +157,9 @@ export default async function AdminDashboardPage() {
                       <tr key={sport.id} className="hover:bg-surface/30 transition-colors">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
-                            <span className="text-lg">{sport.emoji}</span>
+                            <span className="text-primary w-5 h-5 flex items-center justify-center">
+                               <Icon name={sport.emoji} className="w-5 h-5" />
+                            </span>
                             <p className="font-semibold text-sm">{sport.name}</p>
                           </div>
                         </td>
