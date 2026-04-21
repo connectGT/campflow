@@ -194,12 +194,12 @@ export function StepChildDetails() {
 
         {/* ── Section 1: Swimmer ── */}
         <div>
-          <p className={sectionTitle}>👦 Swimmer's Information</p>
+          <p className={sectionTitle}>👦 Participant's Information</p>
           <div className="grid md:grid-cols-2 gap-5">
 
             {/* Photo Upload */}
             <div className="md:col-span-2">
-              <label className={labelClass}>Latest Photo of Swimmer <span className="text-red-400">*</span></label>
+              <label className={labelClass}>Latest Photo of Participant <span className="text-red-400">*</span></label>
               <div className="flex items-center gap-5">
                 {/* Preview */}
                 <div
@@ -256,7 +256,7 @@ export function StepChildDetails() {
 
             {/* Name */}
             <div className="md:col-span-2">
-              <label className={labelClass}>Name of Swimmer <span className="text-red-400">*</span></label>
+              <label className={labelClass}>Name of Participant <span className="text-red-400">*</span></label>
               <input type="text" className={inputClass} placeholder="e.g. Arjun Kumar Sharma" value={childName} onChange={(e) => setChildName(e.target.value)} />
             </div>
 
